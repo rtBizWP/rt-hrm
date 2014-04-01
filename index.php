@@ -44,7 +44,7 @@ if ( !defined( 'RT_HRM_PATH_TEMPLATES' ) ) {
 
 function rt_hrm_include() {
 
-	include_once RT_HRM_PATH_LIB . 'wp-helpers/wp-helpers.php';
+	include_once RT_HRM_PATH_LIB . 'wp-helpers.php';
 
 	include_once RT_HRM_PATH_HELPER . 'rthrm-functions.php';
 
