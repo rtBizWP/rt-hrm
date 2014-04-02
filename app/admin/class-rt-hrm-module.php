@@ -74,7 +74,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Calendar' ), __( 'Calendar' ), 'read_'.$this->post_type, 'rthrm-'.$this->post_type.'-calendar', array( $this, 'calendar_view' ) );
 			$rt_hrm_calendar->add_screen_id( $screen_id );
-			$rt_hrm_calendar->add_post_type( $this->post_type );
 			$rt_hrm_calendar->setup_calendar();
 		}
 
