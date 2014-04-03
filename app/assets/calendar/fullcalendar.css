@@ -607,46 +607,61 @@ table.fc-border-separate {
     -moz-box-shadow:5px 5px 5px #888;
     -webkit-box-shadow:5px 5px 5px #888;
     box-shadow:5px 5px 5px #888;
-    left: 45%;
+    left: 40%;
     position: fixed;
     top: 30%;
     z-index: 999;
     display: none;
-    width: 250px;
 }
 
 .leave-insert-dialog.item-overlay{
     display: block;
 }
 
-.leave-insert-dialog .leave-insert-dialog-title{
+.leave-insert-dialog .title{
     padding: 10px;
     border-bottom: 2px solid #888888;
 }
 
-.leave-insert-dialog .leave-insert-dialog-title h2{
+.leave-insert-dialog .title h2{
     font-size: 13px;
     font-style: italic;
     font-weight: normal;
 }
 
-.leave-insert-dialog .leave-insert-dialog-body{
+.leave-insert-dialog .body{
     padding: 10px;
 }
 
-.leave-insert-dialog .leave-insert-dialog-body .leave-insert-dialog-input,
-.leave-insert-dialog .leave-insert-dialog-body .leave-insert-dialog-label{
+.leave-insert-dialog .body .input,
+.leave-insert-dialog .body .label{
     margin-bottom: 10px;
     width: 100%;
     display: block;
 }
 
-.leave-insert-dialog .leave-insert-dialog-body .post-type-dropdown {
+.leave-insert-dialog table{
+    width: 100%;
+}
+
+.leave-insert-dialog table tr{
+   height: 50px;
+}
+
+.leave-insert-dialog .tblkey{
+    width: 20%;
+}
+
+.leave-insert-dialog .tblval{
+    width: 80%;
+}
+
+.leave-insert-dialog .body .post-type-dropdown {
     margin-bottom: 10px;
 }
 
-.leave-insert-dialog .leave-insert-dialog-controls{
+.leave-insert-dialog .controls{
     padding: 10px;
     border-top: 1px solid #888888;
 }
-	
+

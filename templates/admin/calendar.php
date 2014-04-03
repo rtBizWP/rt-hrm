@@ -28,24 +28,77 @@
 	</div> <!-- #poststuff -->
 
 </div><!-- .wrap -->
-<form method="POST" class="leave-insert-dialog leave-insert-dialog item-overlay leave-insert-overlay">
+<form method="POST" class="leave-insert-dialog">
 	<?php /* translators: %1$s = post type name, %2$s = date */ ?>
-	<div class="leave-insert-dialog-title">
-		<h2><?php echo sprintf( __( 'Schedule a %1$s for %2$s', 'edit-flow' ), 'rt_leave', 'date_formatted' ); ?></h2>
+	<div class="title">
+		<h2><?php echo __( 'Schedule a Leave', 'edit-flow' ); ?></h2>
 	</div>
-	<div class="leave-insert-dialog-body">
-		<input type="text" id="leave-user" class="leave-insert-dialog-input" name="leave-insert-dialog-leave-user" placeholder="<?php echo esc_attr( _x( 'User Name', 'User Name') ); ?>">
-		<input type="text" id="leave-start-date" class="leave-insert-dialog-input leave-start-date datepicker" name="leave-insert-dialog-leave-end-title" placeholder="<?php echo esc_attr( _x( 'Startiing date', 'Leave Start Date') ); ?>">
-		<input type="text" id="leave-end-date" class="leave-insert-dialog-input leave-end-date datepicker" name="leave-insert-dialog-leave-end-title" placeholder="<?php echo esc_attr( _x( 'Ending date', 'Leave End Date') ); ?>">
-		<label class="leave-insert-dialog-label" id="leave-days">2 days</label>
-		<select class="leave-insert-dialog-input" id="leave-type">
-			<option>Casual leave</option>
-			<option>Sick leave</option>
-		</select>
+	<div class="body">
+		<table>
+			<?php if ( $is_hrm_manager ) { ?>
+			<tr>
+				<td class="tblkey">
+					<label class="label">User</label>
+				</td>
+				<td class="tblval">
+					<input type="text" id="txtleave-user" class="input" name="leave_user" placeholder="<?php echo esc_attr( _x( 'User Name', 'User Name') ); ?>">
+				</td>
+			</tr>
+			<?php } ?>
+			<tr>
+				<td class="tblkey">
+					<label class="label span3">Start Date</label>
+				</td>
+				<td class="tblval">
+					<label class="label" id="lblleave-start-date"></label>
+					<input type="hidden" id="txtleave-start-date" class="input" name="leave_end_title" placeholder="<?php echo esc_attr( _x( 'Startiing date', 'Leave Start Date') ); ?>">
+				</td>
+			</tr>
+			<tr>
+				<td class="tblkey">
+					<label class="label">Leave Type</label>
+				</td>
+				<td class="tblval">
+					<select class="input" id="cmbleave-day-type">
+						<option value="full_day">Full-day</option>
+						<option value="half_day">Half-day</option>
+						<option value="other">Other</option>
+					</select>
+				</td>
+			</tr>
+			<tr id="tr-end-date" >
+				<td class="tblkey">
+					<label class="label span3">End Date</label>
+				</td>
+				<td class="tblval">
+					<input type="text" id="txtleave-end-date" class="input datepicker" name="leave_end_title" placeholder="<?php echo esc_attr( _x( 'Ending date', 'Leave End Date') ); ?>">
+				</td>
+			</tr>
+			<tr>
+				<td class="tblkey">
+					<label class="label">Leave Type</label>
+				</td>
+				<td class="tblval">
+					<select class="input" id="cmbleave-type">
+						<option>Casual leave</option>
+						<option>Sick leave</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td class="tblkey">
+					<label class="label">Description </label>
+				</td>
+				<td class="tblval">
+					<textarea class="input" name="leave_description"></textarea>
+				</td>
+			</tr>
+		</table>
 	</div>
-	<div class="leave-insert-dialog-controls">
+	<div class="controls">
 		<input type="submit" class="button left" value="<?php echo esc_html( sprintf( _x( 'Create %s', 'post type name', 'edit-flow' ), 'rt_leave' ) ); ?>">
 		<a class="button right" href="#"><?php echo esc_html( sprintf( _x( 'Edit %s', 'post type name', 'edit-flow' ), 'rt_leave' ) ); ?>&nbsp;&raquo;</a>
 	</div>
 	<div class="spinner">&nbsp;</div>
 </form>
+

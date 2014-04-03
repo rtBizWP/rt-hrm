@@ -63,7 +63,12 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 		}
 
 		function ui( $post_type ) {
-			rthrm_get_template( 'admin/calendar.php', array( 'post_type' => $post_type ) );
+			global $current_user;
+			$arg = array(
+				'post_type' => $post_type,
+				'is_hrm_manager' => in_array( 'rt_wp_hrm_manager', $current_user->roles )
+			);
+			rthrm_get_template( 'admin/calendar.php', $arg );
 		}
 
 		function render_calendar() {
