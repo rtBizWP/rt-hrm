@@ -73,6 +73,8 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 
 		function render_calendar() {
 			global $rt_calendar;
+			$rt_calendar->setDomElement("#calendar-container");
+			$rt_calendar->setPopupElement(".leave-insert-dialog");
 			$rt_calendar->render_calendar();
 		}
 

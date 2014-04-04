@@ -611,11 +611,6 @@ table.fc-border-separate {
     position: fixed;
     top: 30%;
     z-index: 999;
-    display: none;
-}
-
-.leave-insert-dialog.item-overlay{
-    display: block;
 }
 
 .leave-insert-dialog .title{
