@@ -27,7 +27,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		public function __construct() {
 			$this->get_custom_labels();
 			$this->get_custom_statuses();
-			$this->init_hrm();
+			add_action( 'init', array( $this, 'init_hrm' ) );
 			$this->hooks();
 		}
 
@@ -84,7 +84,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'option' => $this->post_type.'_per_page',
 			);
 			add_screen_option($option, $args);
-			//new Rt_HRM_Leads_List_View();
 		}
 
 		function register_custom_post( $menu_position ) {
@@ -208,7 +207,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 						</label>
 					</td>
 					<td>
-						<input type="text" id="txtleave-start-date" name="leave_start_date" class="datepicker"  value="<?php echo $leave_start_date ?>" size="25" />
+						<input type="text" id="txtleave-start-date" name="leave_start_date" class="datepicker" readonly  value="<?php echo $leave_start_date ?>" size="25" />
 					</td>
 				</tr>
 				<tr>
@@ -233,7 +232,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 						</label>
 					</td>
 					<td>
-						<input type="text" id="txtleave-end-date" name="leave_end_date" class="datepicker"  value="<?php echo $leave_end_date ?>" size="25" />
+						<input type="text" id="txtleave-end-date" name="leave_end_date" class="datepicker" readonly value="<?php echo $leave_end_date ?>" size="25" />
 					</td>
 				</tr>
 				<tr>

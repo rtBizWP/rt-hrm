@@ -24,7 +24,7 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 		public function __construct() {
 
 			$this->check_p2p_dependency();
-			$this->check_rt_contacts_dependecy();
+			$this->check_rt_biz_dependecy();
 
 			$this->init_globals();
 
@@ -50,15 +50,15 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 			}
 		}
 
-		function check_rt_contacts_dependecy() {
-			if ( ! class_exists( 'Rt_Contacts' ) ) {
-				add_action( 'admin_notices', array( $this, 'rt_contacts_admin_notice' ) );
+		function check_rt_biz_dependecy() {
+			if ( ! class_exists( 'Rt_Biz' ) ) {
+				add_action( 'admin_notices', array( $this, 'rt_biz_admin_notice' ) );
 			}
 		}
 
-		function rt_contacts_admin_notice() { ?>
+		function rt_biz_admin_notice() { ?>
 			<div class="updated">
-				<p><?php _e( sprintf( 'WordPress HRM : It seems that WordPress Contacts plugin is not installed or activated. Please %s / %s it.', '<a href="'.admin_url( 'plugin-install.php?tab=search&s=rt-contacts' ).'">'.__( 'install' ).'</a>', '<a href="'.admin_url( 'plugins.php' ).'">'.__( 'activate' ).'</a>' ) ); ?></p>
+				<p><?php _e( sprintf( 'WordPress HRM : It seems that WordPress rt-biz plugin is not installed or activated. Please %s / %s it.', '<a href="'.admin_url( 'plugin-install.php?tab=search&s=rt-biz' ).'">'.__( 'install' ).'</a>', '<a href="'.admin_url( 'plugins.php' ).'">'.__( 'activate' ).'</a>' ) ); ?></p>
 			</div>
 		<?php }
 
