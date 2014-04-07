@@ -34,7 +34,7 @@
 		<h2><?php echo __( 'Schedule a Leave', 'edit-flow' ); ?></h2>
 	</div>
 	<div class="body">
-		<table>
+		<table class="form-table">
 			<?php if ( $is_hrm_manager ) { ?>
 			<tr>
 				<td class="tblkey">
@@ -51,7 +51,7 @@
 				</td>
 				<td class="tblval">
 					<label class="label" id="lblleave-start-date"></label>
-					<input type="hidden" id="txtleave-start-date" class="input" name="leave_end_title" placeholder="<?php echo esc_attr( _x( 'Startiing date', 'Leave Start Date') ); ?>">
+					<input type="hidden" id="txtleave-start-date" class="input" name="leave_start_date" placeholder="<?php echo esc_attr( _x( 'Starting date', 'Leave Start Date') ); ?>">
 				</td>
 			</tr>
 			<tr>
@@ -59,7 +59,7 @@
 					<label class="label">Leave Type</label>
 				</td>
 				<td class="tblval">
-					<select class="input" id="cmbleave-day-type">
+					<select class="input" id="cmbleave-day-type" name="leave-day-type">
 						<option value="full_day">Full-day</option>
 						<option value="half_day">Half-day</option>
 						<option value="other">Other</option>
@@ -71,7 +71,7 @@
 					<label class="label span3">End Date</label>
 				</td>
 				<td class="tblval">
-					<input type="text" id="txtleave-end-date" class="input datepicker" name="leave_end_title" placeholder="<?php echo esc_attr( _x( 'Ending date', 'Leave End Date') ); ?>">
+					<input type="text" id="txtleave-end-date" class="input datepicker" name="leave_end_date" placeholder="<?php echo esc_attr( _x( 'Ending date', 'Leave End Date') ); ?>">
 				</td>
 			</tr>
 			<tr>
@@ -79,7 +79,7 @@
 					<label class="label">Leave Type</label>
 				</td>
 				<td class="tblval">
-					<select class="input" id="cmbleave-type">
+					<select class="input" id="cmbleave-type" name="leave-type">
 						<option>Casual leave</option>
 						<option>Sick leave</option>
 					</select>
