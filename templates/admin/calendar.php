@@ -28,7 +28,7 @@
 	</div> <!-- #poststuff -->
 
 </div><!-- .wrap -->
-<form method="POST" class="leave-insert-dialog">
+<form id="form-add-leave" method="POST" class="leave-insert-dialog" action="">
 	<?php /* translators: %1$s = post type name, %2$s = date */ ?>
 	<div class="title">
 		<h2><?php echo __( 'Schedule a Leave', 'edit-flow' ); ?></h2>
@@ -66,7 +66,7 @@
 					</select>
 				</td>
 			</tr>
-			<tr id="tr-end-date" >
+			<tr id="tr-end-date" style="display: none" >
 				<td class="tblkey">
 					<label class="label span3">End Date</label>
 				</td>
@@ -96,7 +96,7 @@
 		</table>
 	</div>
 	<div class="controls">
-		<input type="submit" class="button left" value="<?php echo esc_html( sprintf( _x( 'Create %s', 'post type name', 'edit-flow' ), 'rt_leave' ) ); ?>">
+		<input type="submit" class="button left" name="form-add-leave" value="<?php echo esc_html( sprintf( _x( 'Create %s', 'post type name', 'edit-flow' ), 'rt_leave' ) ); ?>">
 		<a class="button right" href="#"><?php echo esc_html( sprintf( _x( 'Edit %s', 'post type name', 'edit-flow' ), 'rt_leave' ) ); ?>&nbsp;&raquo;</a>
 	</div>
 	<div class="spinner">&nbsp;</div>
