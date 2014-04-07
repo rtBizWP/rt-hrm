@@ -27,28 +27,11 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 		var $default;
 		var $dom_element;
 		var $popup_element;
-		var $event;
 
 		/**
-		 *
+		 * constructor
 		 */
 		public function __construct() {
-			$this->event= array(
-				array(
-					'title'=> 'Dipesh: Leave',
-					'start'=>'2014-04-04',
-					'end'=> '2014-04-07',
-					'color'=> 'green',
-					'textColor'=> 'black',
-				),
-				array(
-					'title'=> 'udit: Leave',
-					'end'=> '2014-04-05',
-					'color'=> 'red',
-					'textColor'=> 'black',
-				),
-			);
-
 			$this->default = array(
 				'header'=> array(
 					'left' => 'prev,next today',
@@ -57,12 +40,16 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 				),
 				'defaultView' => 'month',
 				'editable' => false,
-				'events' => $this->event,
+				'events' => '',
 			);
 		}
 
 		/**
-		 * @param mixed $dom_element
+		 * set Dom Target element id or class where the calendar is to be displayed
+		 * Ex #form-leave  #=id
+		 *    .form-leave .=class
+		 *
+		 * @param String $dom_element
 		 */
 		public function setDomElement($dom_element)
 		{
@@ -70,15 +57,21 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 		}
 
 		/**
-		 * @param mixed $event
+		 * set events which render on calendar
+		 *
+		 * @param array $event
 		 */
 		public function setEvent($event)
 		{
-			$this->event = $event;
+			$this->default['events'] = $event;
 		}
 
 		/**
-		 * @param mixed $popup_element
+		 * set element id or class of element which is open in popup
+		 * Ex #form-leave  #=id
+		 *    .form-leave .=class
+		 *
+		 * @param String $popup_element
 		 */
 		public function setPopupElement($popup_element)
 		{
