@@ -11,7 +11,8 @@ if ( ! class_exists( 'RT_Theme_Update_Info' ) ):
 	/**
 	 * A simple container class for holding information about an available update.
 	 */
-	class RT_Theme_Update_Info {
+	class RT_Theme_Update_Info
+	{
 		public $version; //Version number.
 		public $details_url; //The URL where the user can learn more about this version.
 		public $download_url; //The download URL for this version of the theme. Optional.
@@ -23,15 +24,16 @@ if ( ! class_exists( 'RT_Theme_Update_Info' ) ):
 		 *
 		 * @return RT_Theme_Update_Info New instance of ThemeUpdate, or NULL on error.
 		 */
-		public static function from_json( $json ) {
+		public static function from_json( $json )
+		{
 			$apiResponse = json_decode( $json );
-			if ( empty( $apiResponse ) || ! is_object( $apiResponse ) ) {
+			if ( empty( $apiResponse ) || ! is_object( $apiResponse ) ){
 				return null;
 			}
 
 			//Very, very basic validation.
 			$valid = isset( $apiResponse->version ) && ! empty( $apiResponse->version ) && isset( $apiResponse->download_url ) && ! empty( $apiResponse->download_url );
-			if ( ! $valid ) {
+			if ( ! $valid ){
 				return null;
 			}
 
@@ -48,10 +50,11 @@ if ( ! class_exists( 'RT_Theme_Update_Info' ) ):
 		 *
 		 * @return array
 		 */
-		public function to_wp_format() {
+		public function to_wp_format()
+		{
 			$update = array( 'new_version' => $this->version, 'url' => $this->details_url, );
 
-			if ( ! empty( $this->download_url ) ) {
+			if ( ! empty( $this->download_url ) ){
 				$update[ 'package' ] = $this->download_url;
 			}
 
