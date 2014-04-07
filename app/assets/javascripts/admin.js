@@ -33,11 +33,11 @@ jQuery(document).ready(function($) {
 			return false;
 		},
 		leaveTimeChange : function(){
-			$('#tr-end-date').hide();
 			$('#cmbleave-day-type').live('change',function(){
 				if ( $(this).val()=='other' ) {
 					$('#tr-end-date').show();
 				}else{
+					$('#txtleave-end-date').val('');
 					$('#tr-end-date').hide();
 				}
 			})
