@@ -30,6 +30,9 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
 			if( ( isset( $post->post_type ) && $post->post_type == $rt_hrm_module->post_type )
 					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
 					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == $rt_hrm_module->post_type ) ) {
+
+				wp_enqueue_style('rthrm-admin-css', RT_HRM_URL . 'app/assets/css/admin.css', false, RT_HRM_VERSION, 'all');
+
 				wp_enqueue_script( 'jquery' );
 				wp_enqueue_script( 'jquery-ui-datepicker' );
 				wp_enqueue_script('rthrm-admin-js', RT_HRM_URL . 'app/assets/javascripts/admin.js','jquery', RT_HRM_VERSION, true);
@@ -69,7 +72,7 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
 				wp_localize_script( 'rthrm-admin-js', 'rthrm_user_edit', array($user_edit) );
 
 			} else {
-
+				wp_localize_script( 'rthrm-admin-js', 'rthrm_user_edit', array('') );
 			}
 		}
 
