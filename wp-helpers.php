@@ -11,10 +11,10 @@ $rt_autoloader_file = realpath( dirname( __FILE__ ) ) . '/rt-wp-autoloader/class
 if ( file_exists( $rt_autoloader_file ) ){
 	include_once $rt_autoloader_file ;
 }
+define( 'WP_HELPER_FILE', __FILE__ );
 /**
  * Initiate Loader class
  */
 if ( class_exists( 'RT_WP_Autoload' ) ){
 	$GLOBALS[ 'wp_helper_loader' ] = new RT_WP_Autoload();
 }
-
