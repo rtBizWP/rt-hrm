@@ -618,41 +618,8 @@ table.fc-border-separate {
     border-bottom: 2px solid #888888;
 }
 
-.leave-insert-dialog .title h2{
-    font-size: 13px;
-    font-style: italic;
-    font-weight: normal;
-}
-
 .leave-insert-dialog .body{
     padding: 10px;
-}
-
-.leave-insert-dialog .body .input,
-.leave-insert-dialog .body .label{
-    margin-bottom: 10px;
-    width: 100%;
-    display: block;
-}
-
-.leave-insert-dialog table{
-    width: 100%;
-}
-
-.leave-insert-dialog table tr{
-   height: 50px;
-}
-
-.leave-insert-dialog .tblkey{
-    width: 20%;
-}
-
-.leave-insert-dialog .tblval{
-    width: 80%;
-}
-
-.leave-insert-dialog .body .post-type-dropdown {
-    margin-bottom: 10px;
 }
 
 .leave-insert-dialog .controls{
