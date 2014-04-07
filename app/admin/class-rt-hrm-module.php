@@ -48,18 +48,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 		function hooks() {
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
-			add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
-			add_filter( 'post_row_actions', array( $this, 'post_row_action' ), 10, 2 );
-		}
-
-		function post_row_action( $action, $post ) {
-			$post_type = get_post_type( $post );
-			if ( $post_type != $this->post_type ) {
-				return $action;
-			}
-			$title = __( 'Edit' );
-			$action['edit'] = "<a href='" . admin_url("edit.php?post_type={$this->post_type}&page=rthrm-add-{$this->post_type}&{$this->post_type}_id=" . $post->ID) . "' title='" . $title . "'>" . $title . "</a>";
-			return $action;
+			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
+			add_action('save_post', array( $this, 'save_leave_meta' ), 1, 2);
 		}
 
 		function register_custom_pages() {
@@ -97,21 +87,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			//new Rt_HRM_Leads_List_View();
 		}
 
-		function custom_pages_order($menu_order) {
-			global $submenu;
-			if ( isset( $submenu['edit.php?post_type='.$this->post_type] ) && !empty( $submenu['edit.php?post_type='.$this->post_type] ) ) {
-				$module_menu = $submenu['edit.php?post_type='.$this->post_type];
-				foreach ( $module_menu as $p_key => $item ) {
-					$key = array_search( 'rthrm-'.$this->post_type.'-dashboard', $item );
-					if ( $key != FALSE ) {
-						$submenu['edit.php?post_type='.$this->post_type] = array( 2 => $submenu['edit.php?post_type='.$this->post_type][$p_key] ) + $submenu['edit.php?post_type='.$this->post_type];
-						unset($submenu['edit.php?post_type='.$this->post_type][$p_key]);
-					}
-				}
-			}
-			return $menu_order;
-		}
-
 		function register_custom_post( $menu_position ) {
 			$hrm_logo_url = get_site_option( 'rthrm_logo_url' );
 
@@ -126,7 +101,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'show_ui' => true, // Show the UI in admin panel
 				'menu_icon' => $hrm_logo_url,
 				'menu_position' => $menu_position,
-				'supports' => array('title', 'editor', 'comments', 'custom-fields'),
+				'supports' => array('title', 'editor',),
 				'capability_type' => $this->post_type,
 			);
 			register_post_type( $this->post_type, $args );
@@ -201,5 +176,108 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 
 		}
+
+		function add_custom_metabox(){
+
+			add_meta_box(
+				'leave_meta_box',
+				__( 'Additional Information' ),
+				array( $this, 'ui_metabox' ),
+				$this->post_type,
+				'advanced'
+				,'high'
+			);
+		}
+
+		function ui_metabox( $post ){
+			// Add an nonce field so we can check for it later.
+			wp_nonce_field( 'rthrm_leave_additional_details_meta', 'rthrm_leave_additional_details_meta_nonce' );
+
+			// Use get_post_meta to retrieve an existing value from the database.
+			$leave_meta=get_post_meta( $post->ID, 'leave_meta', FALSE )[0];
+			$leave_start_date = $leave_meta['leave_start_date'];
+			$leave_end_date = $leave_meta['leave_end_date'];
+
+			?>
+			<table class="form-table rthrm-container">
+				<tbody>
+				<tr>
+					<td>
+						<label for="txtleave-start-date">
+							<?php _e( 'Starting date', 'Leave Start Date' ); ?>
+						</label>
+					</td>
+					<td>
+						<input type="text" id="txtleave-start-date" name="leave_start_date" class="datepicker"  value="<?php echo $leave_start_date ?>" size="25" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="txtleave-end-date">
+							<?php _e( 'Leave-day  Type', 'Leave-Day Type' ); ?>
+						</label>
+					</td>
+					<td>
+						<select id="cmbleave-day-type" name="leave_day_type">
+							<option value="full_day">Full-day</option>
+							<option value="half_day">Half-day</option>
+							<option value="other">Other</option>
+						</select>
+					</td>
+				</tr>
+
+				<tr id="tr-end-date" <?php if ( !isset( $leave_end_date ) || empty( $leave_end_date) ) { echo "style='display:none'"; } ?> >
+					<td>
+						<label for="txtleave-end-date">
+							<?php _e( 'Ending date', 'Leave End Date' ); ?>
+						</label>
+					</td>
+					<td>
+						<input type="text" id="txtleave-end-date" name="leave_end_date" class="datepicker"  value="<?php echo $leave_end_date ?>" size="25" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="txtleave-end-date">
+							<?php _e( 'Leave Type', 'Leave Type' ); ?>
+						</label>
+					</td>
+					<td>
+						<select id="cmbleave-type" name="leave_type">
+							<option>Casual leave</option>
+							<option>Sick leave</option>
+						</select>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+
+		<?php
+		}
+
+		function save_leave_meta($post_id, $post){
+			/**/
+			global $rt_hrm_module;
+			if ( !wp_verify_nonce( $_POST['rthrm_leave_additional_details_meta_nonce'], 'rthrm_leave_additional_details_meta' ) ) {
+				return $post->ID;
+			}
+			if ( !current_user_can( 'edit_' . $rt_hrm_module->post_type, $post->ID ))
+				return $post->ID;
+			if( $post->post_type == 'revision' ) return;
+			$leave_meta['leave_start_date'] = $_POST['leave_start_date'];
+			$leave_meta['leave_end_date'] = $_POST['leave_end_date'];
+			if ( isset( $leave_meta ) && !empty( $leave_meta ) ) {
+				if ( get_post_meta( $post->ID, 'leave_meta', FALSE ) ) {
+					update_post_meta( $post->ID, 'leave_meta', $leave_meta );
+				} else {
+					add_post_meta( $post->ID, 'leave_meta', $leave_meta );
+				}
+			}else {
+				delete_post_meta( $post->ID, 'leave_meta' );
+			}
+			var_dump( $leave_meta['leave_start_date'] );
+
+		}
+
 	}
 }
