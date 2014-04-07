@@ -73,8 +73,24 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 
 		function render_calendar() {
 			global $rt_calendar;
+			$event= array(
+				array(
+					'title'=> 'Dipesh: Leave',
+					'start'=>'2014-04-04',
+					'end'=> '2014-04-07',
+					'color'=> 'green',
+					'textColor'=> 'black',
+				),
+				array(
+					'title'=> 'udit: Leave',
+					'end'=> '2014-04-05',
+					'color'=> 'red',
+					'textColor'=> 'black',
+				),
+			);
 			$rt_calendar->setDomElement("#calendar-container");
 			$rt_calendar->setPopupElement(".leave-insert-dialog");
+			$rt_calendar->setEvent($event);
 			$rt_calendar->render_calendar();
 		}
 
