@@ -64,4 +64,4 @@ function rt_hrm_init() {
 	$rt_wp_hrm = new RT_WP_HRM();
 
 }
-add_action( 'init', 'rt_hrm_init', 1 );
+add_action( 'rt_biz_init', 'rt_hrm_init', 1 );
