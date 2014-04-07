@@ -1,6 +1,29 @@
 rthrm_user_edit = rthrm_user_edit[0];
 
 jQuery(document).ready(function($) {
+
+
+	function addError(element, message) {
+		$(element).addClass("error");
+		if ($(element).next().length > 0) {
+			if ($(element).next().hasClass("error")) {
+				$(element).next().html(message);
+			} else {
+				$(element).after("<small class='error'>" + message + "</small>");
+			}
+		} else {
+			$(element).after("<small class='error'>" + message + "</small>");
+		}
+	}
+	function removeError(element) {
+		$(element).removeClass("error");
+		if ($(element).next().length > 0) {
+			if ($(element).next().hasClass("error")) {
+				$(element).next().remove();
+			}
+		}
+	}
+
 	var rtHRMAdmin = {
 		/**
 		 *
@@ -9,6 +32,12 @@ jQuery(document).ready(function($) {
 			rtHRMAdmin.initDatePicker();
 			rtHRMAdmin.initRtCalenderMethod();
 			rtHRMAdmin.leaveTimeChange();
+			rtHRMAdmin.add_leave_validate();
+
+			rtHRMAdmin.eleLevaeStartDate = $("#txtleave-start-date");
+			rtHRMAdmin.eleLevaeDayType = $("#cmbleave-day-type");
+			rtHRMAdmin.eleLevaeEndDate = $("#txtleave-end-date");
+
 		},
 		initDatePicker : function(){
 			//call datepicker
@@ -30,6 +59,9 @@ jQuery(document).ready(function($) {
 			rtHRMAdmin.$leave_start_day.val( moment(date).format('DD/MM/YYYY') );
 			rtHRMAdmin.$leave_end_day.val( moment(date).format('DD/MM/YYYY') );
 
+			//remove if any error visible
+			removeError(rtHRMAdmin.eleLevaeStartDate);
+			removeError(rtHRMAdmin.eleLevaeEndDate);
 			return false;
 		},
 		leaveTimeChange : function(){
@@ -41,6 +73,27 @@ jQuery(document).ready(function($) {
 					$('#tr-end-date').hide();
 				}
 			})
+		},
+		add_leave_validate : function(){
+			$("#post, #form-add-leave").submit(function(e) {
+				try {
+					if ($(rtHRMAdmin.eleLevaeStartDate).val().trim() == "") {
+						addError(rtHRMAdmin.eleLevaeStartDate, "Please Enter the Leave Start Date");
+						return false;
+					}
+					removeError(rtHRMAdmin.eleLevaeStartDate);
+					if( $(rtHRMAdmin.eleLevaeDayType).val().trim() == "other" ){
+						if ($(rtHRMAdmin.eleLevaeEndDate).val().trim() == "") {
+							addError(rtHRMAdmin.eleLevaeEndDate, "Please Enter the Leave End Date");
+							return false;
+						}
+					}
+					removeError(rtHRMAdmin.eleLevaeEndDate);
+				} catch (e) {
+					console.log(e);
+					return false;
+				}
+			});
 		}
 	}
 	rtHRMAdmin.init();

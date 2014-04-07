@@ -1,3 +1,13 @@
 #ui-datepicker-div{
     margin-top: 0px;
 }
+.error small, small.error {
+    background: none repeat scroll 0 0 #C60F13;
+    color: #FFFFFF;
+    display: block;
+    font-size: 0.75em;
+    font-weight: bold;
+    margin-bottom: 1em;
+    margin-top: 0.688em;
+    padding: 0.375em 0.25em;
+}

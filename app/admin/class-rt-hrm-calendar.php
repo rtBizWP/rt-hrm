@@ -56,9 +56,14 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 		*/
 		function page_actions() {
 			global $rt_hrm_module;
-
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthrm-'.$rt_hrm_module->post_type.'-calendar_view' ) {
-
+			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthrm-'.$rt_hrm_module->post_type.'-calendar' && isset( $_REQUEST['form-add-leave'] ) && !empty( $_REQUEST['form-add-leave'] ) ) {
+				$leave_user = $_REQUEST['leave_user'];
+				$leave_start_date = $_REQUEST['leave_start_date'];
+				$leave_day_type = $_REQUEST['leave-day-type'];
+				$leave_end_date = $_REQUEST['leave_end_date'];
+				$leave_type = $_REQUEST['leave-type'];
+				$leave_description = $_REQUEST['leave_description'];
+				var_dump($_REQUEST['form-add-leave']);
 			}
 		}
 
