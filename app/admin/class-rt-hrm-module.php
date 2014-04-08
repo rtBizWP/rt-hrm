@@ -200,52 +200,43 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			?>
 			<table class="form-table rthrm-container">
 				<tbody>
+				<?php
+					global $rt_hrm_module,$rt_hrm_attributes;
+					$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
+					foreach ( $attributes as $attr ){
+						?>
+						<tr>
+							<td>
+								<label for="<?php echo $attr->attribute_name ?>">
+									<?php echo $attr->attribute_label; ?>
+								</label>
+							</td>
+							<td>
+								<?php $rt_hrm_attributes->render_taxonomy( $attr, isset($post->ID) ? $post->ID : '', true ); ?>
+							</td>
+						</tr>
+						<?php
+					}
+
+				?>
 				<tr>
 					<td>
-						<label for="txtleave-start-date">
+						<label for="leave-start-date">
 							<?php _e( 'Starting date', 'Leave Start Date' ); ?>
 						</label>
 					</td>
 					<td>
-						<input type="text" id="txtleave-start-date" name="leave_start_date" class="datepicker" readonly  value="<?php echo $leave_start_date ?>" size="25" />
+						<input type="text" id="leave-start-date" name="post[leave-start-date]" class="datepicker" readonly  value="<?php echo $leave_start_date ?>" size="25" />
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<label for="txtleave-end-date">
-							<?php _e( 'Leave-day  Type', 'Leave-Day Type' ); ?>
-						</label>
-					</td>
-					<td>
-						<select id="cmbleave-day-type" name="leave_day_type">
-							<option value="full_day">Full-day</option>
-							<option value="half_day">Half-day</option>
-							<option value="other">Other</option>
-						</select>
-					</td>
-				</tr>
-
 				<tr id="tr-end-date" <?php if ( !isset( $leave_end_date ) || empty( $leave_end_date) ) { echo "style='display:none'"; } ?> >
 					<td>
-						<label for="txtleave-end-date">
+						<label for="leave-end-date">
 							<?php _e( 'Ending date', 'Leave End Date' ); ?>
 						</label>
 					</td>
 					<td>
-						<input type="text" id="txtleave-end-date" name="leave_end_date" class="datepicker" readonly value="<?php echo $leave_end_date ?>" size="25" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="txtleave-end-date">
-							<?php _e( 'Leave Type', 'Leave Type' ); ?>
-						</label>
-					</td>
-					<td>
-						<select id="cmbleave-type" name="leave_type">
-							<option>Casual leave</option>
-							<option>Sick leave</option>
-						</select>
+						<input type="text" id="leave-end-date" name="post[leave-end-date]" class="datepicker" readonly value="<?php echo $leave_end_date ?>" size="25" />
 					</td>
 				</tr>
 				</tbody>
