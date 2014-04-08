@@ -34,9 +34,10 @@ jQuery(document).ready(function($) {
 			rtHRMAdmin.leaveTimeChange();
 			rtHRMAdmin.add_leave_validate();
 
-			rtHRMAdmin.eleLevaeStartDate = $("#txtleave-start-date");
-			rtHRMAdmin.eleLevaeDayType = $("#cmbleave-day-type");
-			rtHRMAdmin.eleLevaeEndDate = $("#txtleave-end-date");
+			rtHRMAdmin.LblLeaveStartDate = $('#lblleave-start-date')
+			rtHRMAdmin.eleLevaeStartDate = $("#leave-start-date");
+			rtHRMAdmin.eleLevaeDayType = $("#leave-day-type");
+			rtHRMAdmin.eleLevaeEndDate = $("#leave-end-date");
 
 		},
 		initDatePicker : function(){
@@ -51,13 +52,9 @@ jQuery(document).ready(function($) {
 			$('#calendar-container').on('rtBeforePopup', rtHRMAdmin.rtHrmBeforePopup );
 		},
 		rtHrmBeforePopup : function( e, self, date, jsEvent, view ){
-			rtHRMAdmin.$lbl_leave_start_day = $('#lblleave-start-date')
-			rtHRMAdmin.$leave_start_day = $('#txtleave-start-date');
-			rtHRMAdmin.$leave_end_day = $('#txtleave-end-date');
-
-			rtHRMAdmin.$lbl_leave_start_day.text( moment(date).format('MMMM DD YYYY') );
-			rtHRMAdmin.$leave_start_day.val( moment(date).format('DD/MM/YYYY') );
-			rtHRMAdmin.$leave_end_day.val( moment(date).format('DD/MM/YYYY') );
+			rtHRMAdmin.LblLeaveStartDate.text( moment(date).format('MMMM DD YYYY') );
+			rtHRMAdmin.eleLevaeStartDate.val( moment(date).format('DD/MM/YYYY') );
+			rtHRMAdmin.eleLevaeEndDate.val( moment(date).format('DD/MM/YYYY') );
 
 			//remove if any error visible
 			removeError(rtHRMAdmin.eleLevaeStartDate);
@@ -65,11 +62,11 @@ jQuery(document).ready(function($) {
 			return false;
 		},
 		leaveTimeChange : function(){
-			$('#cmbleave-day-type').live('change',function(){
-				if ( $(this).val()=='other' ) {
+			$('#leave-day-type').live('change',function(){
+				if ( $('#leave-day-type option:selected').text()=='Other' || $('#leave-day-type option:selected').text()=='other' ) {
 					$('#tr-end-date').show();
 				}else{
-					$('#txtleave-end-date').val('');
+					$('#leave-end-date').val('');
 					$('#tr-end-date').hide();
 				}
 			})
