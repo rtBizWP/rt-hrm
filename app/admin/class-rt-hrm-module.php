@@ -254,8 +254,16 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			if ( !current_user_can( 'edit_' . $rt_hrm_module->post_type, $post->ID ))
 				return $post->ID;
 			if( $post->post_type == 'revision' ) return;
-			$leave_meta['leave_start_date'] = $_POST['leave_start_date'];
-			$leave_meta['leave_end_date'] = $_POST['leave_end_date'];
+			$leave_meta =  $_POST['post'];
+
+			global $rt_hrm_module,$rt_hrm_attributes;
+
+			$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
+			foreach ( $attributes as $attr ){
+				$attr->attribute_store_as = 'taxonomy';
+				$rt_hrm_attributes->save_attributes( $attr, isset($post->ID) ? $post->ID : '', $leave_meta );
+			}
+
 			if ( isset( $leave_meta ) && !empty( $leave_meta ) ) {
 				if ( get_post_meta( $post->ID, 'leave_meta', FALSE ) ) {
 					update_post_meta( $post->ID, 'leave_meta', $leave_meta );
@@ -265,7 +273,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			}else {
 				delete_post_meta( $post->ID, 'leave_meta' );
 			}
-			var_dump( $leave_meta['leave_start_date'] );
 
 		}
 
