@@ -17,6 +17,9 @@ if ( ! defined( 'ABSPATH' ) )
  * @author Dipesh
  */
 if( !class_exists( 'Rt_HRM_Module' ) ) {
+	/**
+	 * Class Rt_HRM_Module
+	 */
 	class Rt_HRM_Module {
 
 		var $post_type = 'rt_leave';
@@ -189,14 +192,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
 
 		function ui_metabox( $post ){
-			// Add an nonce field so we can check for it later.
 			wp_nonce_field( 'rthrm_leave_additional_details_meta', 'rthrm_leave_additional_details_meta_nonce' );
 
-			// Use get_post_meta to retrieve an existing value from the database.
-			$leave_meta=get_post_meta( $post->ID, 'leave_meta', FALSE )[0];
-			$leave_start_date = $leave_meta['leave_start_date'];
-			$leave_end_date = $leave_meta['leave_end_date'];
-
+			$leave_duration = get_post_meta( $post->ID, 'leave-duration', false);
+			$leave_start_date = get_post_meta( $post->ID, 'leave-start-date', false);
+			$leave_end_date = get_post_meta( $post->ID, 'leave-end-date', false);
 			?>
 			<table class="form-table rthrm-container">
 				<tbody>
@@ -212,31 +212,45 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 								</label>
 							</td>
 							<td>
-								<?php $rt_hrm_attributes->render_taxonomy( $attr, isset($post->ID) ? $post->ID : '', true ); ?>
+								<?php $rt_hrm_attributes->render_attribute( $attr, isset($post->ID) ? $post->ID : '', true ); ?>
 							</td>
 						</tr>
 						<?php
 					}
-
 				?>
 				<tr>
 					<td>
-						<label for="leave-start-date">
-							<?php _e( 'Starting date', 'Leave Start Date' ); ?>
-						</label>
+						<label for="leave-duration">Duration</label>
 					</td>
 					<td>
-						<input type="text" id="leave-start-date" name="post[leave-start-date]" class="datepicker" readonly  value="<?php echo $leave_start_date ?>" size="25" />
+						<select id="leave-duration" name="post[leave-duration]" class="rt-form-select">
+							<option value="full-day" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'full-day' ) { echo 'selected'; } ?> >Full Day</option>
+							<option value="half-day" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'half-day' ) { echo 'selected'; } ?>>Half Day</option>
+							<option value="other" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'other' ) { echo 'selected'; } ?>>Other</option>
+						</select>
 					</td>
 				</tr>
-				<tr id="tr-end-date" <?php if ( !isset( $leave_end_date ) || empty( $leave_end_date) ) { echo "style='display:none'"; } ?> >
+				<tr>
 					<td>
-						<label for="leave-end-date">
-							<?php _e( 'Ending date', 'Leave End Date' ); ?>
-						</label>
+						<label for="leave-start-date">Start Date</label>
 					</td>
 					<td>
-						<input type="text" id="leave-end-date" name="post[leave-end-date]" class="datepicker" readonly value="<?php echo $leave_end_date ?>" size="25" />
+
+						<div >
+							<input id="leave-start-date" name="post[leave-start-date]"  class="rt-form-text datepicker" placeholder="Select Start Date" readonly="readonly" value="<?php if ( isset( $leave_start_date ) && !empty( $leave_start_date ) ) { echo $leave_start_date[0]; }  ?>" type="text">
+						</div>
+					</td>
+				</tr>
+
+				<tr <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] != 'other' ) { echo "style='display:none'"; } ?> >
+					<td>
+						<label for="leave-end-date">End Date</label>
+					</td>
+					<td>
+
+						<div>
+							<input id="leave-end-date" name="post[leave-end-date]" class="rt-form-text datepicker" placeholder="Select End Date" readonly="readonly" value="<?php if ( isset( $leave_end_date ) && !empty( $leave_end_date ) ) { echo $leave_end_date[0]; }  ?>" type="text">
+						</div>
 					</td>
 				</tr>
 				</tbody>
@@ -246,32 +260,28 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
 
 		function save_leave_meta($post_id, $post){
-			/**/
-			global $rt_hrm_module;
-			if ( !wp_verify_nonce( $_POST['rthrm_leave_additional_details_meta_nonce'], 'rthrm_leave_additional_details_meta' ) ) {
-				return $post->ID;
-			}
-			if ( !current_user_can( 'edit_' . $rt_hrm_module->post_type, $post->ID ))
-				return $post->ID;
-			if( $post->post_type == 'revision' ) return;
-			$leave_meta =  $_POST['post'];
-
 			global $rt_hrm_module,$rt_hrm_attributes;
+			if ( !wp_verify_nonce( $_POST['rthrm_leave_additional_details_meta_nonce'], 'rthrm_leave_additional_details_meta' ) ) {
+				return $post_id;
+			}
+			if ( !current_user_can( 'edit_' . $rt_hrm_module->post_type, $post_id ))
+				return $post_id;
+			if( $post->post_type == 'revision' ) return;
+
+			$leave_meta = $_POST['post'];
 
 			$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
 			foreach ( $attributes as $attr ){
 				$attr->attribute_store_as = 'taxonomy';
-				$rt_hrm_attributes->save_attributes( $attr, isset($post->ID) ? $post->ID : '', $leave_meta );
+				$rt_hrm_attributes->save_attributes( $attr, isset($post_id) ? $post_id : '', $leave_meta );
 			}
+			update_post_meta( $post_id, 'leave-duration', $leave_meta['leave-duration'] );
+			update_post_meta( $post_id, 'leave-start-date', $leave_meta['leave-start-date'] );
 
-			if ( isset( $leave_meta ) && !empty( $leave_meta ) ) {
-				if ( get_post_meta( $post->ID, 'leave_meta', FALSE ) ) {
-					update_post_meta( $post->ID, 'leave_meta', $leave_meta );
-				} else {
-					add_post_meta( $post->ID, 'leave_meta', $leave_meta );
-				}
+			if ( $leave_meta['leave-duration'] == 'other' ){
+				update_post_meta( $post_id, 'leave-end-date', $leave_meta['leave-end-date'] );
 			}else {
-				delete_post_meta( $post->ID, 'leave_meta' );
+				delete_post_meta( $post_id, 'leave-end-date' );
 			}
 
 		}
