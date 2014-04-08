@@ -55,15 +55,35 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 		* This calls the add_meta_boxes hooks, adds screen options and enqueues the postbox.js script.
 		*/
 		function page_actions() {
-			global $rt_hrm_module;
+			global $rt_hrm_module, $rt_hrm_attributes;
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthrm-'.$rt_hrm_module->post_type.'-calendar' && isset( $_REQUEST['form-add-leave'] ) && !empty( $_REQUEST['form-add-leave'] ) ) {
-				$leave_user = $_REQUEST['leave_user'];
-				$leave_start_date = $_REQUEST['leave_start_date'];
-				$leave_day_type = $_REQUEST['leave-day-type'];
-				$leave_end_date = $_REQUEST['leave_end_date'];
-				$leave_type = $_REQUEST['leave-type'];
-				$leave_description = $_REQUEST['leave_description'];
-				var_dump($_REQUEST['form-add-leave']);
+
+				$leave_meta = $_REQUEST['post'];
+
+				$newLeave = array(
+					'comment_status' =>  'closed',
+					'post_author' => get_current_user_id(),
+					'post_date' => date('Y-m-d H:i:s'),
+					'post_content' => $leave_meta['leave_description'],
+					'post_status' => 'pending',
+					'post_title' => $leave_meta['leave_user'],
+					'post_type' => $rt_hrm_module->post_type,
+				);
+
+				$newLeaveID = wp_insert_post($newLeave);
+
+				$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
+				foreach ( $attributes as $attr ){
+					$rt_hrm_attributes->save_attributes( $attr, isset($newLeaveID) ? $newLeaveID : '', $leave_meta );
+				}
+				update_post_meta( $newLeaveID, 'leave-duration', $leave_meta['leave-duration'] );
+				update_post_meta( $newLeaveID, 'leave-start-date', $leave_meta['leave-start-date'] );
+
+				if ( $leave_meta['leave-duration'] == 'other' ){
+					update_post_meta( $newLeaveID, 'leave-end-date', $leave_meta['leave-end-date'] );
+				}else {
+					delete_post_meta( $newLeaveID, 'leave-end-date' );
+				}
 			}
 		}
 
