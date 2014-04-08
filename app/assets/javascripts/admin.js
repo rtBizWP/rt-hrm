@@ -29,16 +29,15 @@ jQuery(document).ready(function($) {
 		 *
 		 */
 		init : function(){
-			rtHRMAdmin.initDatePicker();
-			rtHRMAdmin.initRtCalenderMethod();
-			rtHRMAdmin.leaveTimeChange();
-			rtHRMAdmin.add_leave_validate();
-
 			rtHRMAdmin.LblLeaveStartDate = $('#lblleave-start-date')
 			rtHRMAdmin.eleLevaeStartDate = $("#leave-start-date");
-			rtHRMAdmin.eleLevaeDayType = $("#leave-day-type");
+			rtHRMAdmin.eleLevaeDayType = $("#leave-duration");
 			rtHRMAdmin.eleLevaeEndDate = $("#leave-end-date");
 
+			rtHRMAdmin.initDatePicker();
+			rtHRMAdmin.initRtCalenderMethod();
+			rtHRMAdmin.leaveDayChange();
+			rtHRMAdmin.add_leave_validate();
 		},
 		initDatePicker : function(){
 			//call datepicker
@@ -61,13 +60,19 @@ jQuery(document).ready(function($) {
 			removeError(rtHRMAdmin.eleLevaeEndDate);
 			return false;
 		},
-		leaveTimeChange : function(){
-			$('#leave-day-type').live('change',function(){
-				if ( $('#leave-day-type option:selected').text()=='Other' || $('#leave-day-type option:selected').text()=='other' ) {
-					$('#tr-end-date').show();
+		leaveDayChange : function(){
+			if ( rtHRMAdmin.eleLevaeDayType.val()=='Other' || rtHRMAdmin.eleLevaeDayType.val()=='other' ) {
+				rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().show();
+			}else{
+				rtHRMAdmin.eleLevaeEndDate.val('');
+				rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().hide();
+			}
+			rtHRMAdmin.eleLevaeDayType.live('change',function(){
+				if ( $(this).val()=='Other' || $(this).val()=='other' ) {
+					rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().show();
 				}else{
-					$('#leave-end-date').val('');
-					$('#tr-end-date').hide();
+					rtHRMAdmin.eleLevaeEndDate.val('');
+					rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().hide();
 				}
 			})
 		},
