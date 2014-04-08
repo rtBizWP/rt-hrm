@@ -53,6 +53,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
 			add_action('save_post', array( $this, 'save_leave_meta' ), 1, 2);
+			add_action('wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
 		}
 
 		function register_custom_pages() {
@@ -140,23 +141,18 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		function get_custom_statuses() {
 			$this->statuses = array(
 				array(
-					'slug' => 'new',
-					'name' => 'New',
-					'description' => 'New Leave application is created',
-				),
-				array(
 					'slug' => 'pending',
-					'name' => 'pending',
+					'name' => 'Pending Review',
 					'description' => 'Leave application is pending',
 				),
 				array(
 					'slug' => 'approved',
-					'name' => 'approved',
+					'name' => 'Approved',
 					'description' => 'Leave application is approved',
 				),
 				array(
 					'slug' => 'rejected',
-					'name' => 'rejected',
+					'name' => 'Rejected',
 					'description' => 'Leave application is rejected',
 				),
 			);
@@ -272,7 +268,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 			$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
 			foreach ( $attributes as $attr ){
-				$attr->attribute_store_as = 'taxonomy';
 				$rt_hrm_attributes->save_attributes( $attr, isset($post_id) ? $post_id : '', $leave_meta );
 			}
 			update_post_meta( $post_id, 'leave-duration', $leave_meta['leave-duration'] );
@@ -284,6 +279,37 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				delete_post_meta( $post_id, 'leave-end-date' );
 			}
 
+		}
+
+		function add_leave_custom_status(){
+			global $post,$rt_hrm_module;
+			$complete = '';
+			$label = '';
+			if($post->post_type == $rt_hrm_module->post_type){
+				$option='';
+				foreach ( $rt_hrm_module->get_custom_statuses() as $status ){
+					if($post->post_status == $status['slug']){
+						$complete = " selected='selected'";
+						$label = "<span id='post-status-display'>" .  $status['name'] . '</span>';
+					}else{
+						$complete = '';
+					}
+					$option .= "<option value='" . $status['slug'] . "' ".$complete.">"  .  $status['name'] .  "</option>";
+				}
+				echo '<script>
+		        jQuery(document).ready(function($) {
+		            $("select#post_status").html("'.$option.'");
+		            $(".inline-edit-status select").html("'.$option.'");
+		            $(".misc-pub-section label").html("'.$label.'");
+					$("#publish").hide();
+					$("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
+					$("#save-publish").click(function(){
+						$("#publish").click();
+					});
+		      });
+
+		      </script>';
+			}
 		}
 
 	}
