@@ -34,55 +34,69 @@
 		<h2><?php echo __( 'Schedule a Leave', 'edit-flow' ); ?></h2>
 	</div>
 	<div class="body">
-		<table class="form-table">
+		<table class="form-table rthrm-container">
+			<tbody>
 			<?php if ( $is_hrm_manager ) { ?>
-			<tr>
-				<td class="tblkey">
-					<label class="label">User</label>
-				</td>
-				<td class="tblval">
-					<input type="text" id="txtleave-user" class="input" name="leave_user" placeholder="<?php echo esc_attr( _x( 'User Name', 'User Name') ); ?>">
-				</td>
-			</tr>
+				<tr>
+					<td class="tblkey">
+						<label class="label">User</label>
+					</td>
+					<td class="tblval">
+						<input type="text" id="leave-user" class="rt-form-text" name="post[leave_user]" placeholder="<?php echo esc_attr( _x( 'User Name', 'User Name') ); ?>">
+					</td>
+				</tr>
 			<?php } ?>
+			<?php
+			global $rt_hrm_module,$rt_hrm_attributes;
+			$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
+			foreach ( $attributes as $attr ){
+				?>
+				<tr>
+					<td>
+						<label for="<?php echo $attr->attribute_name ?>">
+							<?php echo $attr->attribute_label; ?>
+						</label>
+					</td>
+					<td>
+						<?php $rt_hrm_attributes->render_attribute( $attr,'', true ); ?>
+					</td>
+				</tr>
+			<?php
+			}
+			?>
 			<tr>
-				<td class="tblkey">
-					<label class="label span3">Start Date</label>
+				<td>
+					<label for="leave-duration">Duration</label>
 				</td>
-				<td class="tblval">
-					<label class="label" id="lblleave-start-date"></label>
-					<input type="hidden" id="txtleave-start-date" class="input" name="leave_start_date" placeholder="<?php echo esc_attr( _x( 'Starting date', 'Leave Start Date') ); ?>">
-				</td>
-			</tr>
-			<tr>
-				<td class="tblkey">
-					<label class="label">Leave Type</label>
-				</td>
-				<td class="tblval">
-					<select class="input" id="cmbleave-day-type" name="leave-day-type">
-						<option value="full_day">Full-day</option>
-						<option value="half_day">Half-day</option>
+				<td>
+					<select id="leave-duration" name="post[leave-duration]" class="rt-form-select">
+						<option value="full-day">Full Day</option>
+						<option value="half-day">Half Day</option>
 						<option value="other">Other</option>
 					</select>
 				</td>
 			</tr>
-			<tr id="tr-end-date" style="display: none" >
-				<td class="tblkey">
-					<label class="label span3">End Date</label>
+			<tr>
+				<td>
+					<label for="leave-start-date">Start Date</label>
 				</td>
-				<td class="tblval">
-					<input type="text" id="txtleave-end-date" class="input datepicker" name="leave_end_date" placeholder="<?php echo esc_attr( _x( 'Ending date', 'Leave End Date') ); ?>">
+				<td>
+					<label id="lblleave-start-date"></label>
+					<div >
+						<input id="leave-start-date" name="post[leave-start-date]"  class="rt-form-text" placeholder="Select Start Date" readonly="readonly" value="" type="hidden">
+					</div>
 				</td>
 			</tr>
-			<tr>
-				<td class="tblkey">
-					<label class="label">Leave Type</label>
+
+			<tr style="display: none;">
+				<td>
+					<label for="leave-end-date">End Date</label>
 				</td>
-				<td class="tblval">
-					<select class="input" id="cmbleave-type" name="leave-type">
-						<option>Casual leave</option>
-						<option>Sick leave</option>
-					</select>
+				<td>
+
+					<div>
+						<input id="leave-end-date" name="post[leave-end-date]" class="rt-form-text datepicker" placeholder="Select End Date" readonly="readonly" value="" type="text">
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -90,9 +104,10 @@
 					<label class="label">Description </label>
 				</td>
 				<td class="tblval">
-					<textarea class="input" name="leave_description"></textarea>
+					<textarea id="leave_description"  class="rt-form-text" name="post[leave_description]"></textarea>
 				</td>
 			</tr>
+			</tbody>
 		</table>
 	</div>
 	<div class="controls">
