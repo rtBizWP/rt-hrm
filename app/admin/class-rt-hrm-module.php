@@ -284,23 +284,21 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		function add_leave_custom_status(){
 			global $post,$rt_hrm_module;
 			$complete = '';
-			$label = '';
 			if($post->post_type == $rt_hrm_module->post_type){
 				$option='';
 				foreach ( $rt_hrm_module->get_custom_statuses() as $status ){
 					if($post->post_status == $status['slug']){
 						$complete = " selected='selected'";
-						$label = '' .  $status['name'] . '';
 					}else{
 						$complete = '';
 					}
-					$option .= "<option value='" . $status['slug'] . "' ".$complete.">"  .  $status['name'] .  "</option>";
+					$option .= "<option value='" . $status['slug'] . "' " . $complete . ">"  .  $status['name'] .  "</option>";
 				}
 				echo '<script>
 		        jQuery(document).ready(function($) {
-		            $("select#post_status").html("'.$option.'");
-		            $(".inline-edit-status select").html("'.$option.'");
-		            $("#post-status-display").html("'.$label.'");
+		            $("select#post_status").html("'. $option .'");
+		            $(".inline-edit-status select").html("'. $option .'");
+		            $("#post-status-display").html("'. $post->post_status .'");
 					$("#publish").hide();
 					$("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
 					$("#save-publish").click(function(){
