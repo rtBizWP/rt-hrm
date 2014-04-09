@@ -8,6 +8,14 @@
  * @author Dipesh
  */
 
+/**
+ * Call for template
+ * @param $template_name
+ * @param $args
+ * @param string $template_path
+ * @param string $default_path
+ * @return mixed
+ */
 function rthrm_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
 
 	if ( $args && is_array($args) )
@@ -22,6 +30,13 @@ function rthrm_get_template( $template_name, $args = array(), $template_path = '
 	do_action( 'rthrm_after_template_part', $template_name, $template_path, $located, $args );
 }
 
+/**
+ * Call for local template
+ * @param $template_name
+ * @param string $template_path
+ * @param string $default_path
+ * @return mixed
+ */
 function rthrm_locate_template( $template_name, $template_path = '', $default_path = '' ) {
 
 	global $rt_wp_hrm;
@@ -44,6 +59,11 @@ function rthrm_locate_template( $template_name, $template_path = '', $default_pa
 	return apply_filters('rthrm_locate_template', $template, $template_name, $template_path);
 }
 
+/**
+ * Call for sanitize taxonomy name
+ * @param $taxonomy
+ * @return mixed|string
+ */
 function rthrm_sanitize_taxonomy_name( $taxonomy ) {
 	$taxonomy = strtolower( stripslashes( strip_tags( $taxonomy ) ) );
 	$taxonomy = preg_replace( '/&.+?;/', '', $taxonomy ); // Kill entities
@@ -53,14 +73,29 @@ function rthrm_sanitize_taxonomy_name( $taxonomy ) {
 	return $taxonomy;
 }
 
+/**
+ * Call for hrm taxonomy name
+ * @param $name
+ * @return string
+ */
 function rthrm_attribute_taxonomy_name( $name ) {
 	return 'rt_' . rthrm_sanitize_taxonomy_name( $name );
 }
 
+/**
+ * Call for hrm post type  name
+ * @param $name
+ * @return string
+ */
 function rthrm_post_type_name( $name ) {
 	return 'rt_' . rthrm_sanitize_taxonomy_name( $name );
 }
 
+/**
+ * Call for get all attributes of HRM
+ * @param string $attribute_store_as
+ * @return array
+ */
 function rthrm_get_all_attributes( $attribute_store_as = '' ) {
 	global $rt_attributes_model;
 	$attrs = $rt_attributes_model->get_all_attributes();
@@ -78,6 +113,12 @@ function rthrm_get_all_attributes( $attribute_store_as = '' ) {
 	return $newAttr;
 }
 
+/**
+ * Call for get attribute of HRM
+ * @param $post_type
+ * @param string $attribute_store_as
+ * @return array
+ */
 function rthrm_get_attributes( $post_type, $attribute_store_as = '' ) {
 	global $rt_attributes_relationship_model, $rt_attributes_model;
 	$relations = $rt_attributes_relationship_model->get_relations_by_post_type( $post_type );
@@ -101,6 +142,13 @@ function rthrm_get_attributes( $post_type, $attribute_store_as = '' ) {
 
 
 /*     * ********* Post Term To String **** */
+/**
+ * Call to convert post_terms to string
+ * @param $postid
+ * @param $taxonomy
+ * @param string $termsep
+ * @return string
+ */
 function rthrm_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 	$termsArr = get_the_terms( $postid, $taxonomy );
 	$tmpStr = '';
@@ -115,16 +163,30 @@ function rthrm_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 }
 /*     * ********* Post Term To String **** */
 
+/**
+ * Call for extract key for attributes
+ * @param $attr
+ * @return mixed
+ */
 function rthrm_extract_key_from_attributes( $attr ) {
 	return $attr->attribute_name;
 }
 
+/**
+ * call for get table name
+ * @return string
+ */
 function rthrm_get_lead_table_name() {
 
 	global $wpdb, $blog_id;
 	return $wpdb->prefix . ( ( is_multisite() ) ? $blog_id.'_' : '' ) . 'rt_wp_hrm_hrm_index';
 }
 
+/**
+ * Call for get user id
+ * @param $user
+ * @return mixed
+ */
 function rthrm_get_user_ids( $user ) {
 	return $user->ID;
 }

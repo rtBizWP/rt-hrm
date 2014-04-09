@@ -17,11 +17,20 @@ if ( ! defined( 'ABSPATH' ) )
  * @author Dipesh
  */
 if ( ! class_exists( 'RT_WP_HRM' ) ) {
-	class RT_WP_HRM {
+    /**
+     * Class RT_WP_HRM
+     */
+    class RT_WP_HRM {
 
-		public $templateURL;
+        /**
+         * @var
+         */
+        public $templateURL;
 
-		public function __construct() {
+        /**
+         * Call for dependency check and other hooks
+         */
+        public function __construct() {
 
 			$this->check_p2p_dependency();
 			$this->check_rt_biz_dependecy();
@@ -34,7 +43,10 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'loadScripts' ) );
 		}
 
-		function admin_init() {
+        /**
+         * Call for admin initialization
+         */
+        function admin_init() {
 			$this->templateURL = apply_filters('rthrm_template_url', 'rthrm/');
 
 			$this->update_database();
@@ -44,31 +56,46 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 
 		}
 
-		function check_p2p_dependency() {
+        /**
+         * Check posts 2 posts plugin dependency
+         */
+        function check_p2p_dependency() {
 			if ( ! class_exists( 'P2P_Box_Factory' ) ) {
 				add_action( 'admin_notices', array( $this, 'p2p_admin_notice' ) );
 			}
 		}
 
-		function check_rt_biz_dependecy() {
+        /**
+         * Check rt-biz plugin dependency
+         */
+        function check_rt_biz_dependecy() {
 			if ( ! class_exists( 'Rt_Biz' ) ) {
 				add_action( 'admin_notices', array( $this, 'rt_biz_admin_notice' ) );
 			}
 		}
 
-		function rt_biz_admin_notice() { ?>
+        /**
+         * Display notice for rt-biz plugin if not found
+         */
+        function rt_biz_admin_notice() { ?>
 			<div class="updated">
 				<p><?php _e( sprintf( 'WordPress HRM : It seems that WordPress rt-biz plugin is not installed or activated. Please %s / %s it.', '<a href="'.admin_url( 'plugin-install.php?tab=search&s=rt-biz' ).'">'.__( 'install' ).'</a>', '<a href="'.admin_url( 'plugins.php' ).'">'.__( 'activate' ).'</a>' ) ); ?></p>
 			</div>
 		<?php }
 
-		function p2p_admin_notice() { ?>
+        /**
+         * Display notice for posts 2 posts plugin if not found
+         */
+        function p2p_admin_notice() { ?>
 			<div class="updated">
 				<p><?php _e( sprintf( 'WordPress HRM : It seems that Posts 2 Posts plugin is not installed or activated. Please %s / %s it.', '<a href="'.admin_url( 'plugin-install.php?tab=search&s=posts-2-posts' ).'">'.__( 'install' ).'</a>', '<a href="'.admin_url( 'plugins.php' ).'">'.__( 'activate' ).'</a>' ) ); ?></p>
 			</div>
 		<?php }
 
-		function init_globals() {
+        /**
+         * initialization of all classes
+         */
+        function init_globals() {
 			global $rt_hrm_plugin_info, $rt_hrm_roles, $rt_hrm_module, $rt_hrm_dashboard, $rt_hrm_calendar, $rt_calendar, $rt_hrm_attributes, $rt_form;
 
 			$rt_hrm_plugin_info = new RT_Plugin_Info( trailingslashit( RT_HRM_PATH ) . 'index.php' );
@@ -84,15 +111,24 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 
 		}
 
-		function init() {
+        /**
+         *
+         */
+        function init() {
 		}
 
-		function update_database() {
+        /**
+         *
+         */
+        function update_database() {
 			$updateDB = new RT_DB_Update( trailingslashit( RT_HRM_PATH ) . 'index.php', trailingslashit( RT_HRM_PATH ) . 'schema' );
 			$updateDB->do_upgrade();
 		}
 
-		function loadScripts() {
+        /**
+         * Load script & style fot rt-hrm plugin
+         */
+        function loadScripts() {
 			global $wp_query, $rt_hrm_module;
 
 			if ( !isset($wp_query->query_vars['name']) ) {
@@ -130,7 +166,10 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 			$this->localize_scripts();
 		}
 
-		function localize_scripts() {
+        /**
+         * Load localize script for rt-hrm plugin
+         */
+        function localize_scripts() {
 
 			$unique_id = $_REQUEST['rthrm_unique_id'];
 			$args = array(
