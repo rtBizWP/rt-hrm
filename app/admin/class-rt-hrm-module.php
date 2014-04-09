@@ -290,7 +290,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				foreach ( $rt_hrm_module->get_custom_statuses() as $status ){
 					if($post->post_status == $status['slug']){
 						$complete = " selected='selected'";
-						$label = "<span id='post-status-display'>" .  $status['name'] . '</span>';
+						$label = '' .  $status['name'] . '';
 					}else{
 						$complete = '';
 					}
@@ -300,7 +300,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		        jQuery(document).ready(function($) {
 		            $("select#post_status").html("'.$option.'");
 		            $(".inline-edit-status select").html("'.$option.'");
-		            $(".misc-pub-section label").html("'.$label.'");
+		            $("#post-status-display").html("'.$label.'");
 					$("#publish").hide();
 					$("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
 					$("#save-publish").click(function(){

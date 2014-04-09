@@ -31,6 +31,7 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
 					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
 					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == $rt_hrm_module->post_type ) ) {
 
+                wp_enqueue_style('rthrm-jquery-ui-css', RT_HRM_URL . 'app/assets/css/jquery-ui-1.9.2.custom.css', false, RT_HRM_VERSION, 'all');
 				wp_enqueue_style('rthrm-admin-css', RT_HRM_URL . 'app/assets/css/admin.css', false, RT_HRM_VERSION, 'all');
 
 				wp_enqueue_script( 'jquery' );
@@ -50,8 +51,8 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
 
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthrm-'.$rt_hrm_module->post_type.'-calendar' ) {
 
-				wp_enqueue_style('rt-hrm-calendar-css', RT_HRM_URL . 'app/assets/calendar/fullcalendar.css', false, RT_HRM_VERSION, 'all');
-				wp_enqueue_script('rt-hrm-calendar-js', RT_HRM_URL . 'app/assets/calendar/fullcalendar.js','jquery', "", true);
+				wp_enqueue_style('rt-hrm-calendar-css', RT_HRM_URL . 'app/lib/rt-calendar/calendar/fullcalendar.css', false, RT_HRM_VERSION, 'all');
+				wp_enqueue_script('rt-hrm-calendar-js', RT_HRM_URL . 'app/lib/rt-calendar/calendar/fullcalendar.js','jquery', "", true);
 			}
 
 
