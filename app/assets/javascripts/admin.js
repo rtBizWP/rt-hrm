@@ -49,6 +49,7 @@ jQuery(document).ready(function($) {
 		},
 		initRtCalenderMethod : function(){
 			$('#calendar-container').on('rtBeforePopup', rtHRMAdmin.rtHrmBeforePopup );
+            $('#calendar-container').on('rtEventClick', rtHRMAdmin.rtHrmEventClick );
 		},
 		rtHrmBeforePopup : function( e, self, date, jsEvent, view ){
 			rtHRMAdmin.LblLeaveStartDate.text( moment(date).format('MMMM DD YYYY') );
@@ -60,6 +61,9 @@ jQuery(document).ready(function($) {
 			removeError(rtHRMAdmin.eleLevaeEndDate);
 			return false;
 		},
+        rtHrmEventClick : function ( e, self, event, element ){
+            window.location = adminurl + "post.php?post=" + event.leave_id + "&action=edit";
+        },
 		leaveDayChange : function(){
 			if ( rtHRMAdmin.eleLevaeDayType.val()=='Other' || rtHRMAdmin.eleLevaeDayType.val()=='other' ) {
 				rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().show();

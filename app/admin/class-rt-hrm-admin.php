@@ -69,6 +69,7 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
 					$user_edit = true;
 				}
 				wp_localize_script( 'rthrm-admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
+                wp_localize_script( 'rthrm-admin-js', 'adminurl', admin_url() );
 				wp_localize_script( 'rthrm-admin-js', 'rthrm_post_type', $_REQUEST['post_type'] );
 				wp_localize_script( 'rthrm-admin-js', 'rthrm_user_edit', array($user_edit) );
 

@@ -84,6 +84,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 				}else {
 					delete_post_meta( $newLeaveID, 'leave-end-date' );
 				}
+                wp_redirect( admin_url( 'edit.php?post_type=rt_leave&page=rthrm-rt_leave-calendar' ) );
 			}
 		}
 
@@ -97,22 +98,47 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 		}
 
 		function render_calendar() {
-			global $rt_calendar;
-			$event= array(
-				array(
-					'title'=> 'Dipesh: Leave',
-					'start'=>'2014-04-04',
-					'end'=> '2014-04-07',
-					'color'=> 'green',
-					'textColor'=> 'black',
-				),
-				array(
-					'title'=> 'udit: Leave',
-					'end'=> '2014-04-05',
-					'color'=> 'red',
-					'textColor'=> 'black',
-				),
-			);
+			global $rt_calendar, $rt_hrm_module;
+
+            $args = array('post_type' => $rt_hrm_module->post_type,'post_status' => 'pending,approved,rejected');
+            $the_query = new WP_Query( $args );
+            $event= array();
+            while ( $the_query->have_posts() ) : $the_query->the_post();
+
+                // Leave Status
+                $color='';
+                if ( get_post_status() == 'approved'){
+                    $color='green';
+                }elseif (get_post_status() == 'rejected' ){
+                    $color='red';
+                } elseif (get_post_status() == 'pending' ){
+                    $color='yellow';
+                }
+
+
+                $leaveStartDate = DateTime::createFromFormat( 'd/m/Y', get_post_meta( get_the_id(), 'leave-start-date', false )[0] );
+                $leaveStartDate = $leaveStartDate->format('Y-m-d');
+                $leaveEndDate = get_post_meta( get_the_id(), 'leave-end-date', false)[0];
+                if ( isset( $leaveEndDate) && !empty ( $leaveEndDate )  ){
+                    $leaveEndDate = DateTime::createFromFormat( 'd/m/Y', $leaveEndDate );
+                    $leaveEndDate = $leaveEndDate->format('Y-m-d');
+                }else{
+                    $leaveEndDate = $leaveStartDate;
+                }
+
+                //Leave
+                $temp=array(
+                    'title'=> get_the_title(),
+                    'start'=> $leaveStartDate,
+                    'end'=> $leaveEndDate,
+                    'color'=> $color,
+                    'textColor'=> 'black',
+                    'leave_id' => get_the_id(),
+                );
+                $event[]=$temp;
+            endwhile;
+            wp_reset_postdata();
+
 			$rt_calendar->setDomElement("#calendar-container");
 			$rt_calendar->setPopupElement(".leave-insert-dialog");
 			$rt_calendar->setEvent($event);
