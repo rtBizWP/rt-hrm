@@ -17,16 +17,34 @@ if ( ! defined( 'ABSPATH' ) )
  * @author Dipesh
  */
 if ( !class_exists( 'Rt_HRM_Dashboard' ) ) {
-	class Rt_HRM_Dashboard {
+    /**
+     * Class Rt_HRM_Dashboard
+     */
+    class Rt_HRM_Dashboard {
 
-		var $screen_id;
-		var $charts = array();
+        /**
+         * Variable for Dashboard page screen id
+         * @var string
+         */
+        var $screen_id;
 
-		public function __construct() {
+        /**
+         * Variable for Charts data
+         * @var array
+         */
+        var $charts = array();
+
+        /**
+         * Object initialization
+         */
+        public function __construct() {
 			$this->screen_id = '';
 		}
 
-		function setup_dashboard() {
+        /**
+         * dd hooks for dashboard page
+         */
+        function setup_dashboard() {
 			/* Add callbacks for this screen only */
 			add_action( 'load-'.$this->screen_id, array( $this, 'page_actions' ), 9 );
 			add_action( 'admin_footer-'.$this->screen_id, array( $this, 'footer_scripts' ) );
@@ -36,7 +54,7 @@ if ( !class_exists( 'Rt_HRM_Dashboard' ) ) {
 		}
 
 		/**
-		 *
+		 * Setter method for screen id
 		 */
 		function add_screen_id( $screen_id ) {
 			$this->screen_id = $screen_id;
@@ -50,12 +68,12 @@ if ( !class_exists( 'Rt_HRM_Dashboard' ) ) {
 			<script> postboxes.add_postbox_toggles(pagenow);</script>
 		<?php }
 
-		/*
-		* Actions to be taken prior to page loading. This is after headers have been set.
-		* call on load-$hook
-		* This calls the add_meta_boxes hooks, adds screen options and enqueues the postbox.js script.
-		*/
-		function page_actions() {
+        /**
+         * Actions to be taken prior to page loading. This is after headers have been set.
+         * his calls the add_meta_boxes hooks, adds screen options and enqueues the postbox.js script.
+         * call on load-$hook
+         */
+        function page_actions() {
 			global $rt_hrm_module;
 
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthrm-'.$rt_hrm_module->post_type.'-dashboard' ) {
@@ -67,12 +85,19 @@ if ( !class_exists( 'Rt_HRM_Dashboard' ) ) {
 			}
 		}
 
-		function ui( $post_type ) {
+        /**
+         * render dashboard template
+         * @param $post_type
+         */
+        function ui( $post_type ) {
 			//rthrm_get_template( 'admin/dashboard.php', array( 'post_type' => $post_type ) );
 			echo 'Dashboard';
 		}
 
-		function render_google_charts() {
+        /**
+         * render dashboard google charts on dashboard
+         */
+        function render_google_charts() {
 			global $rt_reports;
 			//$rt_reports->render_chart( $this->charts );
 		}

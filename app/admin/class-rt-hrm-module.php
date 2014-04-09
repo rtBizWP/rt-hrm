@@ -22,19 +22,44 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 	 */
 	class Rt_HRM_Module {
 
-		var $post_type = 'rt_leave';
-		var $name = 'HRM';
-		var $labels = array();
-		var $statuses = array();
+        /**
+         * slug for leave CPT
+         * @var string
+         */
+        var $post_type = 'rt_leave';
 
-		public function __construct() {
+        /**
+         * Module Name
+         * @var string
+         */
+        var $name = 'HRM';
+
+        /**
+         * Array of labels for leave CPT
+         * @var array
+         */
+        var $labels = array();
+
+        /**
+         * Array of statuses for leave CPT
+         * @var array
+         */
+        var $statuses = array();
+
+        /**
+         * Object initialization
+         */
+        public function __construct() {
 			$this->get_custom_labels();
 			$this->get_custom_statuses();
 			add_action( 'init', array( $this, 'init_hrm' ) );
 			$this->hooks();
 		}
 
-		function init_hrm() {
+        /**
+         * call for register leave CPT & its status
+         */
+        function init_hrm() {
 			$menu_position = 30;
 			$this->register_custom_post( $menu_position );
 			$this->register_custom_statuses();
@@ -49,14 +74,20 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 		}
 
-		function hooks() {
+        /**
+         * Apply hook for leave CPT
+         */
+        function hooks() {
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
 			add_action('save_post', array( $this, 'save_leave_meta' ), 1, 2);
 			add_action('wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
 		}
 
-		function register_custom_pages() {
+        /**
+         * Register custom pages for HRM module [ Dashboard | Calendar ]
+         */
+        function register_custom_pages() {
 			global $rt_hrm_dashboard, $rt_hrm_calendar;
 
 			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Dashboard' ), __( 'Dashboard' ), 'read_'.$this->post_type, 'rthrm-'.$this->post_type.'-dashboard', array( $this, 'dashboard' ) );
@@ -71,26 +102,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$rt_hrm_calendar->setup_calendar();
 		}
 
-		function footer_scripts() { ?>
-			<script>postboxes.add_postbox_toggles(pagenow);</script>
-		<?php }
-
-		function leads_table_set_option($status, $option, $value) {
-			return $value;
-		}
-
-		function add_screen_options() {
-
-			$option = 'per_page';
-			$args = array(
-				'label' => $this->labels['all_items'],
-				'default' => 10,
-				'option' => $this->post_type.'_per_page',
-			);
-			add_screen_option($option, $args);
-		}
-
-		function register_custom_post( $menu_position ) {
+        /**
+         * Register leave cpt for HRM module
+         * @param $menu_position
+         */
+        function register_custom_post( $menu_position ) {
 			$hrm_logo_url = get_site_option( 'rthrm_logo_url' );
 
 			if ( empty( $hrm_logo_url ) ) {
@@ -110,7 +126,10 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			register_post_type( $this->post_type, $args );
 		}
 
-		function register_custom_statuses() {
+        /**
+         * Register Status for leave
+         */
+        function register_custom_statuses() {
 			foreach ($this->statuses as $status) {
 
 				register_post_status($status['slug'], array(
@@ -122,7 +141,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			}
 		}
 
-		function get_custom_labels() {
+        /**
+         * Getter method for leave CPT labels
+         * @return array
+         */
+        function get_custom_labels() {
 			$this->labels = array(
 				'name' => __( 'Leave' ),
 				'singular_name' => __( 'Leave' ),
@@ -138,7 +161,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			return $this->labels;
 		}
 
-		function get_custom_statuses() {
+        /**
+         * Getter method for leave CPT status
+         * @return array
+         */
+        function get_custom_statuses() {
 			$this->statuses = array(
 				array(
 					'slug' => 'pending',
@@ -159,23 +186,35 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			return $this->statuses;
 		}
 
-		function calendar_view(){
+        /**
+         * Call for calendar view
+         */
+        function calendar_view(){
 			global $rt_hrm_calendar;
 			$rt_hrm_calendar->ui( $this->post_type );
 		}
 
-		function dashboard() {
+        /**
+         * Call for HRM dashboard
+         */
+        function dashboard() {
 			global $rt_hrm_dashboard;
 			$rt_hrm_dashboard->ui( $this->post_type );
 		}
 
-		function add_dashboard_widgets() {
+        /**
+         *
+         */
+        function add_dashboard_widgets() {
 			global $rt_hrm_dashboard;
 
 
 		}
 
-		function add_custom_metabox(){
+        /**
+         * Add meta-box for leave CPT
+         */
+        function add_custom_metabox(){
 
 			add_meta_box(
 				'leave_meta_box',
@@ -187,7 +226,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			);
 		}
 
-		function ui_metabox( $post ){
+        /**
+         * Additional leave details metabox UI
+         * @param $post
+         */
+        function ui_metabox( $post ){
 			wp_nonce_field( 'rthrm_leave_additional_details_meta', 'rthrm_leave_additional_details_meta_nonce' );
 
 			$leave_duration = get_post_meta( $post->ID, 'leave-duration', false);
@@ -255,7 +298,13 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		<?php
 		}
 
-		function save_leave_meta($post_id, $post){
+        /**
+         * Save meta-box values for leave CPT
+         * @param $post_id
+         * @param $post
+         * @return mixed
+         */
+        function save_leave_meta($post_id, $post){
 			global $rt_hrm_module,$rt_hrm_attributes;
 			if ( !wp_verify_nonce( $_POST['rthrm_leave_additional_details_meta_nonce'], 'rthrm_leave_additional_details_meta' ) ) {
 				return $post_id;
@@ -281,7 +330,10 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 		}
 
-		function add_leave_custom_status(){
+        /**
+         * Manage Custom statuses for leave CPT
+         */
+        function add_leave_custom_status(){
 			global $post,$rt_hrm_module;
 			$complete = '';
 			if($post->post_type == $rt_hrm_module->post_type){

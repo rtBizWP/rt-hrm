@@ -17,9 +17,16 @@ if ( ! defined( 'ABSPATH' ) )
  * @author dipesh
  */
 if( !class_exists( 'Rt_HRM_Roles' ) ) {
-	class Rt_HRM_Roles {
+    /**
+     * Class Rt_HRM_Roles
+     */
+    class Rt_HRM_Roles {
 
-		public $global_caps = array(
+        /**
+         * Global cap for HRM module
+         * @var array
+         */
+        public $global_caps = array(
 			'manage_wp_hrm' => 'manage_wp_hrm',
 			'manage_attributes' => 'manage_attributes',
 
@@ -31,7 +38,10 @@ if( !class_exists( 'Rt_HRM_Roles' ) ) {
 			'manage_wp_hrm_settings' => 'manage_wp_hrm_settings',
 		);
 
-		public function __construct() {
+        /**
+         * Register role & add hook for display HRM role on User profile
+         */
+        public function __construct() {
 			$this->register_roles();
 
 			add_action( 'edit_user_profile', array( $this, 'add_access_profile_fields' ), 1 );
@@ -40,13 +50,21 @@ if( !class_exists( 'Rt_HRM_Roles' ) ) {
 			add_filter( 'editable_roles', array( $this, 'remove_wp_hrm_roles' ) );
 		}
 
-		function remove_wp_hrm_roles( $roles ) {
+        /**
+         * Call for Remove HRM roles
+         * @param $roles
+         * @return mixed
+         */
+        function remove_wp_hrm_roles( $roles ) {
 			unset( $roles['rt_wp_hrm_manager'] );
 			// Add admin & user roles
 			return $roles;
 		}
 
-		function register_roles() {
+        /**
+         * Register role for HRM module & handle reset role request
+         */
+        function register_roles() {
 
 			if ( isset( $_REQUEST['rt_wp_hrm_reset_roles'] ) && ! empty( $_REQUEST['rt_wp_hrm_reset_roles'] ) ) {
 				remove_role( 'rt_wp_hrm_manager' );
@@ -109,7 +127,11 @@ if( !class_exists( 'Rt_HRM_Roles' ) ) {
 			// Add caps for admin & user too
 		}
 
-		function add_access_profile_fields( $user ) {
+        /**
+         * Render HRM Role select box on user profile page
+         * @param $user
+         */
+        function add_access_profile_fields( $user ) {
 			$current_user = new WP_User( get_current_user_id() );
 			if ( $current_user->has_cap( 'create_users' ) ) {
 				if ( in_array( 'rt_wp_hrm_manager', $user->roles ) ) {
@@ -136,7 +158,12 @@ if( !class_exists( 'Rt_HRM_Roles' ) ) {
 			}
 		}
 
-		function update_access_profile_fields( $user_id, $old_data ) {
+        /**
+         * Hendle user HRM module role update request
+         * @param $user_id
+         * @param $old_data
+         */
+        function update_access_profile_fields( $user_id, $old_data ) {
 			if ( current_user_can( 'create_users' ) ) {
 				$user = new WP_User( $user_id );
 				if ( isset( $_REQUEST['rt_wp_hrm_role'] ) ) {

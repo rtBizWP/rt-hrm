@@ -17,15 +17,28 @@ if ( ! defined( 'ABSPATH' ) )
  * @author Dipesh
  */
 if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
-	class Rt_HRM_Calendar {
+    /**
+     * Class Rt_HRM_Calendar
+     */
+    class Rt_HRM_Calendar {
 
-		var $screen_id;
+        /**
+         * Variable for calendar page screen id
+         * @var string
+         */
+        var $screen_id;
 
-		public function __construct() {
+        /**
+         * Object initialization
+         */
+        public function __construct() {
 			$this->screen_id = '';
 		}
 
-		function setup_calendar() {
+        /**
+         *  Add hooks for calendar page like page action or render calendar
+         */
+        function setup_calendar() {
 			/* Add callbacks for this screen only */
 			add_action( 'load-'.$this->screen_id, array( $this, 'page_actions' ), 9 );
 			add_action( 'admin_footer-'.$this->screen_id, array( $this, 'footer_scripts' ) );
@@ -35,7 +48,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 		}
 
 		/**
-		 *
+		 * Setter method for screen id
 		 */
 		function add_screen_id( $screen_id ) {
 			$this->screen_id = $screen_id;
@@ -49,12 +62,12 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 
 		<?php }
 
-		/*
-		* Actions to be taken prior to page loading. This is after headers have been set.
-		* call on load-$hook
-		* This calls the add_meta_boxes hooks, adds screen options and enqueues the postbox.js script.
-		*/
-		function page_actions() {
+        /**
+         * Actions to be taken prior to page loading. This is after headers have been set.
+         * Handle calendar page event
+         * call on load-$hook
+         */
+        function page_actions() {
 			global $rt_hrm_module, $rt_hrm_attributes;
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthrm-'.$rt_hrm_module->post_type.'-calendar' && isset( $_REQUEST['form-add-leave'] ) && !empty( $_REQUEST['form-add-leave'] ) ) {
 
@@ -88,7 +101,12 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 			}
 		}
 
-		function ui( $post_type ) {
+
+        /**
+         * render calendar template
+         * @param $post_type
+         */
+        function ui( $post_type ) {
 			global $current_user;
 			$arg = array(
 				'post_type' => $post_type,
@@ -97,7 +115,11 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 			rthrm_get_template( 'admin/calendar.php', $arg );
 		}
 
-		function render_calendar() {
+        /**
+         * Render calendar event
+         * call on rthrm_after_calendar hook in template -> admin -> calendar.php
+         */
+        function render_calendar() {
 			global $rt_calendar, $rt_hrm_module;
 
             $args = array('post_type' => $rt_hrm_module->post_type,'post_status' => 'pending,approved,rejected');

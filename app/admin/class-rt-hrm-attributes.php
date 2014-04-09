@@ -14,18 +14,31 @@ if ( ! defined( 'ABSPATH' ) )
 /**
  * Description of Rt_HRM_Attributes
  *
- * @author udit
+ * @author dipesh
  */
 if( !class_exists( 'Rt_HRM_Attributes' ) ) {
-	class Rt_HRM_Attributes {
+    /**
+     * Class Rt_HRM_Attributes
+     */
+    class Rt_HRM_Attributes {
 
-		var $attributes_page_slug = 'rthrm-attributes';
+        /**
+         * Slug for attributes page
+         * @var string
+         */
+        var $attributes_page_slug = 'rthrm-attributes';
 
-		public function __construct() {
+        /**
+         * Object initialization
+         */
+        public function __construct() {
 			add_action( 'init', array( $this, 'init_attributes' ) );
 		}
 
-		function init_attributes() {
+        /**
+         * Create object of rt-attributes classes & Add attributes page for leave [Custom post type]
+         */
+        function init_attributes() {
 			global $rt_attributes, $rt_hrm_plugin_info, $rt_hrm_roles, $rt_hrm_module, $rt_attributes_model, $rt_attributes_relationship_model;
 			$rt_attributes = new RT_Attributes( $rt_hrm_plugin_info->name );
 			$terms_caps = array(
@@ -39,7 +52,13 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			$rt_attributes_relationship_model = new RT_Attributes_Relationship_Model();
 		}
 
-		function attribute_diff( $attr, $post_id, $newLead ) {
+        /**
+         * @param $attr
+         * @param $post_id
+         * @param $newLead
+         * @return string
+         */
+        function attribute_diff( $attr, $post_id, $newLead ) {
 
 			$diffHTML = '';
 			switch ( $attr->attribute_store_as ) {
@@ -56,7 +75,13 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			return $diffHTML;
 		}
 
-		function taxonomy_diff( $attr, $post_id, $newLead ) {
+        /**
+         * @param $attr
+         * @param $post_id
+         * @param $newLead
+         * @return string
+         */
+        function taxonomy_diff( $attr, $post_id, $newLead ) {
 			$diffHTML = '';
 			switch ( $attr->attribute_render_type ) {
 //				case 'autocomplete':
@@ -118,7 +143,13 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			return $diffHTML;
 		}
 
-		function meta_diff( $attr, $post_id, $newLead ) {
+        /**
+         * @param $attr
+         * @param $post_id
+         * @param $newLead
+         * @return string
+         */
+        function meta_diff( $attr, $post_id, $newLead ) {
 			$diffHTML = '';
 
 			$oldattr = get_post_meta( $post_id, $attr->attribute_name, true );
@@ -129,7 +160,12 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			return $diffHTML;
 		}
 
-		function save_attributes( $attr, $post_id, $newLead ) {
+        /**
+         * @param $attr
+         * @param $post_id
+         * @param $newLead
+         */
+        function save_attributes( $attr, $post_id, $newLead ) {
 			switch ( $attr->attribute_store_as ) {
 				case 'taxonomy':
 					if ( !isset( $newLead[$attr->attribute_name] ) ) {
@@ -146,7 +182,12 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			}
 		}
 
-		function render_attribute( $attr, $post_id, $edit = true ) {
+        /**
+         * @param $attr
+         * @param $post_id
+         * @param bool $edit
+         */
+        function render_attribute( $attr, $post_id, $edit = true ) {
 			switch ( $attr->attribute_store_as ) {
 				case 'taxonomy':
 					$this->render_taxonomy( $attr, $post_id, $edit );
@@ -160,7 +201,12 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			}
 		}
 
-		function render_taxonomy( $attr, $post_id, $edit = true ) {
+        /**
+         * @param $attr
+         * @param $post_id
+         * @param bool $edit
+         */
+        function render_taxonomy( $attr, $post_id, $edit = true ) {
 			switch ( $attr->attribute_render_type ) {
 //				case 'autocomplete':
 //					break;
@@ -240,7 +286,12 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			}
 		}
 
-		function render_meta( $attr, $post_id, $edit = true ) {
+        /**
+         * @param $attr
+         * @param $post_id
+         * @param bool $edit
+         */
+        function render_meta( $attr, $post_id, $edit = true ) {
 			switch ( $attr->attribute_render_type ) {
 				case 'dropdown':
 					$options = array();
@@ -332,7 +383,11 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			}
 		}
 
-		function render_dropdown( $attr, $options ) {
+        /**
+         * @param $attr
+         * @param $options
+         */
+        function render_dropdown( $attr, $options ) {
 			global $rt_form;
 			$args = array(
 				'id' => $attr->attribute_name,
@@ -343,7 +398,11 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			echo $rt_form->get_select( $args );
 		}
 
-		function render_rating_stars( $attr, $options ) {
+        /**
+         * @param $attr
+         * @param $options
+         */
+        function render_rating_stars( $attr, $options ) {
 			global $rt_form;
 			$args = array(
 				'id' => $attr->attribute_name,
@@ -357,7 +416,11 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			echo $rt_form->get_radio( $args );
 		}
 
-		function render_checklist( $attr, $options ) {
+        /**
+         * @param $attr
+         * @param $options
+         */
+        function render_checklist( $attr, $options ) {
 			global $rt_form;
 			$args = array(
 				'id' => $attr->attribute_name,
@@ -368,7 +431,11 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			echo $rt_form->get_checkbox( $args );
 		}
 
-		function render_date( $attr, $value ) {
+        /**
+         * @param $attr
+         * @param $value
+         */
+        function render_date( $attr, $value ) {
 			global $rt_form;
 			$args = array(
 				'id' => $attr->attribute_name,
@@ -391,7 +458,11 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			echo $rt_form->get_hidden( $args );
 		}
 
-		function render_datetime( $attr, $value ) {
+        /**
+         * @param $attr
+         * @param $value
+         */
+        function render_datetime( $attr, $value ) {
 			global $rt_form;
 			$args = array(
 				'id' => $attr->attribute_name,
@@ -414,7 +485,11 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			echo $rt_form->get_hidden( $args );
 		}
 
-		function render_currency( $attr, $value ) {
+        /**
+         * @param $attr
+         * @param $value
+         */
+        function render_currency( $attr, $value ) {
 			global $rt_form;
 			$args = array(
 				'name' => 'post['.$attr->attribute_name.']',
@@ -423,7 +498,11 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 			echo $rt_form->get_textbox( $args );
 		}
 
-		function render_text( $attr, $value ) {
+        /**
+         * @param $attr
+         * @param $value
+         */
+        function render_text( $attr, $value ) {
 			global $rt_form;
 			$args = array(
 				'name' => 'post['.$attr->attribute_name.']',

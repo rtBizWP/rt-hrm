@@ -17,14 +17,24 @@ if ( ! defined( 'ABSPATH' ) )
  * @author Dipesh
  */
 if( !class_exists( 'Rt_HRM_Admin' ) ) {
-	class Rt_HRM_Admin {
-		public function __construct() {
+    /**
+     * Class Rt_HRM_Admin
+     */
+    class Rt_HRM_Admin {
+
+        /**
+         * Object initialization
+         */
+        public function __construct() {
 			if ( is_admin() ) {
 				$this->hooks();
 			}
 		}
 
-		function load_styles_scripts() {
+        /**
+         * Load script & style fot rt-hrm plugin
+         */
+        function load_styles_scripts() {
 			global $post, $rt_hrm_module;
 			$pagearray = array( 'rthrm-'.$rt_hrm_module->post_type.'-calendar' );
 			if( ( isset( $post->post_type ) && $post->post_type == $rt_hrm_module->post_type )
@@ -59,7 +69,10 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
 			$this->localize_scripts();
 		}
 
-		function localize_scripts() {
+        /**
+         * Load localize script for rt-hrm plugin
+         */
+        function localize_scripts() {
 			global $rt_hrm_module;
 
 			$pagearray = array( 'rthrm-add-'.$rt_hrm_module->post_type, 'rthrm-'.$rt_hrm_module->post_type.'-calendar' );
@@ -78,7 +91,10 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
 			}
 		}
 
-		function hooks() {
+        /**
+         * Apply hooks
+         */
+        function hooks() {
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_styles_scripts' ) );
 
 			add_action( 'admin_menu', array( $this, 'register_menu' ), 1 );
@@ -86,19 +102,31 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
 
 		}
 
-		function register_menu() {
+        /**
+         *
+         */
+        function register_menu() {
 
 		}
 
-		function register_toolbar_menu( $admin_bar ) {
+        /**
+         * @param $admin_bar
+         */
+        function register_toolbar_menu( $admin_bar ) {
 
 		}
 
-		function user_settings_ui() {
+        /**
+         *
+         */
+        function user_settings_ui() {
 
 		}
 
-		function settings_ui() {
+        /**
+         *
+         */
+        function settings_ui() {
 
 		}
 	}
