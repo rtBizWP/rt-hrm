@@ -82,6 +82,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
 			add_action('save_post', array( $this, 'save_leave_meta' ), 1, 2);
 			add_action('wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
+
+            add_action( 'wp_ajax_seach_employees_name', array( $this, 'employees_autocomplete_ajax' ) );
 		}
 
         /**
@@ -120,7 +122,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'show_ui' => true, // Show the UI in admin panel
 				'menu_icon' => $hrm_logo_url,
 				'menu_position' => $menu_position,
-				'supports' => array('title', 'editor',),
+				'supports' => array('title',),
 				'capability_type' => $this->post_type,
 			);
 			register_post_type( $this->post_type, $args );
@@ -231,14 +233,28 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * @param $post
          */
         function ui_metabox( $post ){
+            global $current_user;
 			wp_nonce_field( 'rthrm_leave_additional_details_meta', 'rthrm_leave_additional_details_meta_nonce' );
 
-			$leave_duration = get_post_meta( $post->ID, 'leave-duration', false);
+            $leave_user = get_post_meta( $post->ID, 'leave-user', false);
+            $leave_user_id = get_post_meta( $post->ID, 'leave-user-id', false);
+            $leave_duration = get_post_meta( $post->ID, 'leave-duration', false);
 			$leave_start_date = get_post_meta( $post->ID, 'leave-start-date', false);
 			$leave_end_date = get_post_meta( $post->ID, 'leave-end-date', false);
 			?>
 			<table class="form-table rthrm-container">
 				<tbody>
+                <?php if ( in_array( 'rt_wp_hrm_manager', $current_user->roles ) ) { ?>
+                    <tr>
+                        <td class="tblkey">
+                            <label class="label">Employee Name</label>
+                        </td>
+                        <td class="tblval">
+                            <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; }  ?>">
+                            <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; }  ?>">
+                        </td>
+                    </tr>
+                <?php } ?>
 				<?php
 					global $rt_hrm_module,$rt_hrm_attributes;
 					$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
@@ -292,6 +308,14 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 						</div>
 					</td>
 				</tr>
+                <tr>
+                    <td>
+                        <label class="label">Description </label>
+                    </td>
+                    <td>
+                        <textarea id="content" class="rt-form-text" name="content" style="resize: none;width: 100%; height: 75px;" aria-hidden="true"><?php echo $post->post_content ?></textarea>
+                    </td>
+                </tr>
 				</tbody>
 			</table>
 
@@ -319,7 +343,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			foreach ( $attributes as $attr ){
 				$rt_hrm_attributes->save_attributes( $attr, isset($post_id) ? $post_id : '', $leave_meta );
 			}
-			update_post_meta( $post_id, 'leave-duration', $leave_meta['leave-duration'] );
+            update_post_meta( $post_id, 'leave-user', $leave_meta['leave-user'] );
+            update_post_meta( $post_id, 'leave-user-id', $leave_meta['leave-user-id'] );
+            update_post_meta( $post_id, 'leave-duration', $leave_meta['leave-duration'] );
 			update_post_meta( $post_id, 'leave-start-date', $leave_meta['leave-start-date'] );
 
 			if ( $leave_meta['leave-duration'] == 'other' ){
@@ -356,11 +382,37 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					$("#save-publish").click(function(){
 						$("#publish").click();
 					});
+					$("#title").attr("readonly","readonly");
+					$("#leave-user").blur(function(){
+					    if($("#leave-user").val().length > 0){
+					        $("#title-prompt-text").addClass("screen-reader-text");
+                            $("#title").val( $("#leave-user").val() + " Leave");
+                        }else{
+                            $("#title-prompt-text").removeClass("screen-reader-text");
+                            $("#title").val("");
+                        }
+					});
 		      });
 
 		      </script>';
 			}
 		}
+
+        function employees_autocomplete_ajax(){
+            if ( ! isset($_POST['query'] ) ) {
+                wp_die( 'Invalid request Data' );
+            }
+            $query = $_POST['query'];
+
+            $results = rt_biz_search_employees($query);
+            $arrReturn = array();
+            foreach ($results as $author) {
+                $arrReturn[] = array("id" => $author->ID, "label" => $author->post_title);
+            }
+            header('Content-Type: application/json');
+            echo json_encode($arrReturn);
+            die(0);
+        }
 
 	}
 }

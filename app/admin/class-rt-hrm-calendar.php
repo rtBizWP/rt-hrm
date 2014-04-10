@@ -79,7 +79,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 					'post_date' => date('Y-m-d H:i:s'),
 					'post_content' => $leave_meta['leave_description'],
 					'post_status' => 'pending',
-					'post_title' => $leave_meta['leave_user'],
+					'post_title' => $leave_meta['leave-user'] . ' Leave',
 					'post_type' => $rt_hrm_module->post_type,
 				);
 
@@ -89,7 +89,10 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 				foreach ( $attributes as $attr ){
 					$rt_hrm_attributes->save_attributes( $attr, isset($newLeaveID) ? $newLeaveID : '', $leave_meta );
 				}
-				update_post_meta( $newLeaveID, 'leave-duration', $leave_meta['leave-duration'] );
+
+                update_post_meta( $newLeaveID, 'leave-user', $leave_meta['leave-user'] );
+                update_post_meta( $newLeaveID, 'leave-user-id', $leave_meta['leave-user-id'] );
+                update_post_meta( $newLeaveID, 'leave-duration', $leave_meta['leave-duration'] );
 				update_post_meta( $newLeaveID, 'leave-start-date', $leave_meta['leave-start-date'] );
 
 				if ( $leave_meta['leave-duration'] == 'other' ){

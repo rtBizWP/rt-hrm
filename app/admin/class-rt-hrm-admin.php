@@ -44,8 +44,14 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
                 wp_enqueue_style('rthrm-jquery-ui-css', RT_HRM_URL . 'app/assets/css/jquery-ui-1.9.2.custom.css', false, RT_HRM_VERSION, 'all');
 				wp_enqueue_style('rthrm-admin-css', RT_HRM_URL . 'app/assets/css/admin.css', false, RT_HRM_VERSION, 'all');
 
-				wp_enqueue_script( 'jquery' );
-				wp_enqueue_script( 'jquery-ui-datepicker' );
+                if( !wp_script_is('jquery-ui-datepicker') ) {
+                    wp_enqueue_script( 'jquery-ui-datepicker' );
+                }
+
+                if( !wp_script_is('jquery-ui-autocomplete') ) {
+                    wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2',true);
+                }
+
 				wp_enqueue_script('rthrm-admin-js', RT_HRM_URL . 'app/assets/javascripts/admin.js','jquery', RT_HRM_VERSION, true);
 				wp_enqueue_script('rt-hrm-moment-js', RT_HRM_URL . 'app/assets/javascripts/moment.min.js','jquery', "", true);
 

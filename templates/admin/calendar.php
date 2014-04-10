@@ -39,10 +39,11 @@
 			<?php if ( $is_hrm_manager ) { ?>
 				<tr>
 					<td class="tblkey">
-						<label class="label">User</label>
+						<label class="label">Employee Name</label>
 					</td>
 					<td class="tblval">
-						<input type="text" id="leave-user" class="rt-form-text" name="post[leave_user]" placeholder="<?php echo esc_attr( _x( 'User Name', 'User Name') ); ?>">
+                        <input type="text" id="leave-user" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete">
+                        <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text">
 					</td>
 				</tr>
 			<?php } ?>
