@@ -29,7 +29,10 @@ jQuery(document).ready(function($) {
 		 *
 		 */
 		init : function(){
-			rtHRMAdmin.LblLeaveStartDate = $('#lblleave-start-date')
+			rtHRMAdmin.eleLeaveUserID = $('#leave-user-id');
+			rtHRMAdmin.eleLeaveUser = $('.user-autocomplete');
+            rtHRMAdmin.eleLeaveType = $('input[name="post[leave-type][]"]:checked');
+			rtHRMAdmin.lblLeaveStartDate = $('#lblleave-start-date');
 			rtHRMAdmin.eleLevaeStartDate = $("#leave-start-date");
 			rtHRMAdmin.eleLevaeDayType = $("#leave-duration");
 			rtHRMAdmin.eleLevaeEndDate = $("#leave-end-date");
@@ -38,6 +41,7 @@ jQuery(document).ready(function($) {
 			rtHRMAdmin.initRtCalenderMethod();
 			rtHRMAdmin.leaveDayChange();
 			rtHRMAdmin.add_leave_validate();
+            rtHRMAdmin.autocompleteUser();
 		},
 		initDatePicker : function(){
 			//call datepicker
@@ -52,7 +56,7 @@ jQuery(document).ready(function($) {
             $('#calendar-container').on('rtEventClick', rtHRMAdmin.rtHrmEventClick );
 		},
 		rtHrmBeforePopup : function( e, self, date, jsEvent, view ){
-			rtHRMAdmin.LblLeaveStartDate.text( moment(date).format('MMMM DD YYYY') );
+			rtHRMAdmin.lblLeaveStartDate.text( moment(date).format('MMMM DD YYYY') );
 			rtHRMAdmin.eleLevaeStartDate.val( moment(date).format('DD/MM/YYYY') );
 			rtHRMAdmin.eleLevaeEndDate.val( moment(date).format('DD/MM/YYYY') );
 
@@ -83,13 +87,21 @@ jQuery(document).ready(function($) {
 		add_leave_validate : function(){
 			$("#post, #form-add-leave").submit(function(e) {
 				try {
-					if ($(rtHRMAdmin.eleLevaeStartDate).val().trim() == "") {
+                    if ( typeof(rtHRMAdmin.eleLeaveUserID.val()) == "undefined" || rtHRMAdmin.eleLeaveUserID.val().trim() == "" || rtHRMAdmin.eleLeaveUser.length > 1) {
+                        addError(rtHRMAdmin.eleLeaveUserID, "Please Enter valid Employee Name");
+                        return false;
+                    }
+                    if ( typeof(rtHRMAdmin.eleLeaveType.val()) == "undefined" || rtHRMAdmin.eleLeaveType.val().trim() == "" ) {
+                        addError($('#leave-type-0').parent().parent().parent(), "Please Select Leave Type");
+                        return false;
+                    }
+                    if (typeof(rtHRMAdmin.eleLevaeStartDate.val()) == "undefined" || rtHRMAdmin.eleLevaeStartDate.val().trim() == "") {
 						addError(rtHRMAdmin.eleLevaeStartDate, "Please Enter the Leave Start Date");
 						return false;
 					}
 					removeError(rtHRMAdmin.eleLevaeStartDate);
-					if( $(rtHRMAdmin.eleLevaeDayType).val().trim() == "other" ){
-						if ($(rtHRMAdmin.eleLevaeEndDate).val().trim() == "") {
+					if( rtHRMAdmin.eleLevaeDayType.val().trim() == "other" ){
+						if (rtHRMAdmin.eleLevaeEndDate.val().trim() == "") {
 							addError(rtHRMAdmin.eleLevaeEndDate, "Please Enter the Leave End Date");
 							return false;
 						}
@@ -100,7 +112,41 @@ jQuery(document).ready(function($) {
 					return false;
 				}
 			});
-		}
+		},
+        autocompleteUser : function(){
+            if(rtHRMAdmin.eleLeaveUser.length > 0){
+                rtHRMAdmin.eleLeaveUser.autocomplete({
+                    source: function( request, response ) {
+                        rtHRMAdmin.eleLeaveUserID.val("");
+                        $.ajax({
+                            url: ajaxurl,
+                            dataType: "json",
+                            type:'post',
+                            data: {
+                                action: "seach_employees_name",
+                                maxRows: 10,
+                                query: request.term
+                            },
+                            success: function( data ) {
+                                response( $.map( data, function( item ) {
+                                    return {
+                                        id: item.id ,
+                                        label:item.label
+                                    }
+                                }));
+                            }
+                        });
+                    },minLength: 2,
+                    select: function(event, ui) {
+                        rtHRMAdmin.eleLeaveUser.val(ui.item.label);
+                        rtHRMAdmin.eleLeaveUserID.val(ui.item.id);
+                        return false;
+                    }
+                }).data("ui-autocomplete")._renderItem = function(ul, item) {
+                    return $("<li></li>").data("ui-autocomplete-item", item).append("<a class='ac-subscribe-selected'>" +  item.label + "</a>").appendTo(ul);
+                };
+            }
+        }
 	}
 	rtHRMAdmin.init();
 });
