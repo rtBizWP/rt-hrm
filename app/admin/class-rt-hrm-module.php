@@ -362,7 +362,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
         function add_leave_custom_status(){
 			global $post,$rt_hrm_module;
 			$complete = '';
-			if($post->post_type == $rt_hrm_module->post_type){
+			if( isset( $post) && !empty( $post ) && $post->post_type == $rt_hrm_module->post_type){
 				$option='';
 				foreach ( $rt_hrm_module->get_custom_statuses() as $status ){
 					if($post->post_status == $status['slug']){
