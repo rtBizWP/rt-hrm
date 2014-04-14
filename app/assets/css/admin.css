@@ -45,3 +45,6 @@
     border-top: 1px solid #888888;
 }
 
+.hide{
+    display: none;
+}

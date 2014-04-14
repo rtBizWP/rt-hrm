@@ -60,11 +60,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * call for register leave CPT & its status
          */
         function init_hrm() {
-			$menu_position = 30;
+			$menu_position = 32;
 			$this->register_custom_post( $menu_position );
 			$this->register_custom_statuses();
 
-			$settings = get_site_option( 'rt_wp_hrm_settings', false );
+			$settings = get_site_option( 'rt_hrm_settings', false );
 			if ( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' && function_exists( 'rt_contacts_register_person_connection' ) ) {
 				rt_contacts_register_person_connection( $this->post_type, $this->labels['name'] );
 			}
@@ -92,14 +92,16 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
         function register_custom_pages() {
 			global $rt_hrm_dashboard, $rt_hrm_calendar;
 
-			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Dashboard' ), __( 'Dashboard' ), 'read_'.$this->post_type, 'rthrm-'.$this->post_type.'-dashboard', array( $this, 'dashboard' ) );
+            $author_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' ) : '';
+
+			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Dashboard' ), __( 'Dashboard' ), $author_cap, 'rthrm-'.$this->post_type.'-dashboard', array( $this, 'dashboard' ) );
 			$rt_hrm_dashboard->add_screen_id( $screen_id );
 			$rt_hrm_dashboard->setup_dashboard();
 
 			/* Metaboxes for dashboard widgets */
 			add_action( 'add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
 
-			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Calendar' ), __( 'Calendar' ), 'read_'.$this->post_type, 'rthrm-'.$this->post_type.'-calendar', array( $this, 'calendar_view' ) );
+			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Calendar' ), __( 'Calendar' ), $author_cap, 'rthrm-'.$this->post_type.'-calendar', array( $this, 'calendar_view' ) );
 			$rt_hrm_calendar->add_screen_id( $screen_id );
 			$rt_hrm_calendar->setup_calendar();
 		}
@@ -241,20 +243,25 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             $leave_duration = get_post_meta( $post->ID, 'leave-duration', false);
 			$leave_start_date = get_post_meta( $post->ID, 'leave-start-date', false);
 			$leave_end_date = get_post_meta( $post->ID, 'leave-end-date', false);
+
+            $current_employee = rt_biz_get_contact_for_wp_user( get_current_user_id( ) );
+            if ( isset( $current_employee ) && !empty( $current_employee ) ){
+                $current_employee=$current_employee[0];
+            }
 			?>
 			<table class="form-table rthrm-container">
 				<tbody>
-                <?php if ( in_array( 'rt_wp_hrm_manager', $current_user->roles ) ) { ?>
-                    <tr>
+
+                    <tr  <?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { ?>  class="hide" <?php } ?>>
                         <td class="tblkey">
                             <label class="label">Employee Name</label>
                         </td>
                         <td class="tblval">
-                            <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; }  ?>">
-                            <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; }  ?>">
+                            <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { echo $current_employee->post_title; }  ?>">
+                            <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { echo $current_employee->ID; }  ?>">
                         </td>
                     </tr>
-                <?php } ?>
+
 				<?php
 					global $rt_hrm_module,$rt_hrm_attributes;
 					$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );

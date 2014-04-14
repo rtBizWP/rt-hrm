@@ -17,6 +17,12 @@ if ( !defined( 'RT_HRM_VERSION' ) ) {
      */
     define( 'RT_HRM_VERSION', '0.0.0' );
 }
+if ( !defined( 'RT_HRM_TEXT_DOMAIN' ) ) {
+    /**
+     * define HRM text domain
+     */
+    define( 'RT_HRM_TEXT_DOMAIN', 'rt_hrm' );
+}
 if ( !defined( 'RT_HRM_PATH' ) ) {
     /**
      * define HRM plugin path

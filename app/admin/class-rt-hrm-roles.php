@@ -42,12 +42,14 @@ if( !class_exists( 'Rt_HRM_Roles' ) ) {
          * Register role & add hook for display HRM role on User profile
          */
         public function __construct() {
-			$this->register_roles();
+            $this->remove_hrm_roles();
+
+			/*$this->register_roles();
 
 			add_action( 'edit_user_profile', array( $this, 'add_access_profile_fields' ), 1 );
 			add_action( 'show_user_profile', array( $this, 'add_access_profile_fields' ), 1 );
 			add_action( 'profile_update', array( $this, 'update_access_profile_fields' ), 10, 2 );
-			add_filter( 'editable_roles', array( $this, 'remove_wp_hrm_roles' ) );
+			add_filter( 'editable_roles', array( $this, 'remove_wp_hrm_roles' ) );*/
 		}
 
         /**
@@ -60,6 +62,18 @@ if( !class_exists( 'Rt_HRM_Roles' ) ) {
 			// Add admin & user roles
 			return $roles;
 		}
+
+        /**
+         * Call for Remove HRM roles
+         */
+        function remove_hrm_roles( ) {
+            $users = get_users( array( 'role' => 'rt_wp_hrm_manager' ) );
+            foreach ( $users as $user ) {
+                $u_obj = new WP_User( $user );
+                $u_obj->remove_role( 'rt_wp_hrm_manager' );
+            }
+            remove_role( 'rt_wp_hrm_manager' );
+        }
 
         /**
          * Register role for HRM module & handle reset role request

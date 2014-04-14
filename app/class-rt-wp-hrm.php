@@ -30,9 +30,8 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
         /**
          * Call for dependency check and other hooks
          */
-        public function __construct() {
+        public function     __construct() {
 
-			$this->check_p2p_dependency();
 			$this->check_rt_biz_dependecy();
 
 			$this->init_globals();
@@ -57,15 +56,6 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 		}
 
         /**
-         * Check posts 2 posts plugin dependency
-         */
-        function check_p2p_dependency() {
-			if ( ! class_exists( 'P2P_Box_Factory' ) ) {
-				add_action( 'admin_notices', array( $this, 'p2p_admin_notice' ) );
-			}
-		}
-
-        /**
          * Check rt-biz plugin dependency
          */
         function check_rt_biz_dependecy() {
@@ -84,25 +74,18 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 		<?php }
 
         /**
-         * Display notice for posts 2 posts plugin if not found
-         */
-        function p2p_admin_notice() { ?>
-			<div class="updated">
-				<p><?php _e( sprintf( 'WordPress HRM : It seems that Posts 2 Posts plugin is not installed or activated. Please %s / %s it.', '<a href="'.admin_url( 'plugin-install.php?tab=search&s=posts-2-posts' ).'">'.__( 'install' ).'</a>', '<a href="'.admin_url( 'plugins.php' ).'">'.__( 'activate' ).'</a>' ) ); ?></p>
-			</div>
-		<?php }
-
-        /**
          * initialization of all classes
          */
         function init_globals() {
-			global $rt_hrm_plugin_info, $rt_hrm_roles, $rt_hrm_module, $rt_hrm_dashboard, $rt_hrm_calendar, $rt_calendar, $rt_hrm_attributes, $rt_form;
+			global $rt_hrm_plugin_info, $rt_hrm_roles, $rt_hrm_module, $rt_hrm_dashboard, $rt_hrm_calendar,
+                   $rt_calendar, $rt_hrm_attributes, $rt_form, $rt_hrm_acl;
 
 			$rt_hrm_plugin_info = new RT_Plugin_Info( trailingslashit( RT_HRM_PATH ) . 'index.php' );
 			$rt_form = new Rt_Form();
 
 			$rt_hrm_module = new Rt_HRM_Module();
 			$rt_hrm_roles = new Rt_HRM_Roles();
+            $rt_hrm_acl = new Rt_HRM_ACL();
 			$rt_hrm_dashboard = new Rt_HRM_Dashboard();
 			$rt_hrm_calendar = new Rt_HRM_Calendar();
 			$rt_calendar = new RT_Calendar();

@@ -39,15 +39,17 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
          * Create object of rt-attributes classes & Add attributes page for leave [Custom post type]
          */
         function init_attributes() {
-			global $rt_attributes, $rt_hrm_plugin_info, $rt_hrm_roles, $rt_hrm_module, $rt_attributes_model, $rt_attributes_relationship_model;
-			$rt_attributes = new RT_Attributes( $rt_hrm_plugin_info->name );
-			$terms_caps = array(
-				'manage_terms' => $rt_hrm_roles->global_caps['manage_rthrm_terms'],
-				'edit_terms' => $rt_hrm_roles->global_caps['edit_rthrm_terms'],
-				'delete_terms' => $rt_hrm_roles->global_caps['delete_rthrm_terms'],
-				'assign_terms' => $rt_hrm_roles->global_caps['assign_rthrm_terms'],
-			);
-			$rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type='.$rt_hrm_module->post_type, '', $rt_hrm_roles->global_caps['manage_attributes'], $terms_caps, $render_type = true, $storage_type = true, $orderby = true );
+			global $rt_attributes, $rt_hrm_module, $rt_attributes_model, $rt_attributes_relationship_model;
+            $rt_attributes = new RT_Attributes( RT_HRM_TEXT_DOMAIN );
+            $admin_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) : '';
+            $editor_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) : '';
+            $terms_caps = array(
+                'manage_terms' => $editor_cap,
+                'edit_terms'   => $editor_cap,
+                'delete_terms' => $editor_cap,
+                'assign_terms' => $editor_cap,
+            );
+			$rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type='.$rt_hrm_module->post_type, '', $admin_cap, $terms_caps, $render_type = true, $storage_type = true, $orderby = true );
 			$rt_attributes_model = new RT_Attributes_Model();
 			$rt_attributes_relationship_model = new RT_Attributes_Relationship_Model();
 		}

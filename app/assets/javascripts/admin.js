@@ -91,7 +91,7 @@ jQuery(document).ready(function($) {
                         addError(rtHRMAdmin.eleLeaveUserID, "Please Enter valid Employee Name");
                         return false;
                     }
-                    if ( typeof(rtHRMAdmin.eleLeaveType.val()) == "undefined" || rtHRMAdmin.eleLeaveType.val().trim() == "" ) {
+                    if ( $('input[name="post[leave-type][]"]:checked').val() == "undefined" || $('input[name="post[leave-type][]"]:checked').val().trim() == "" ) {
                         addError($('#leave-type-0').parent().parent().parent(), "Please Select Leave Type");
                         return false;
                     }

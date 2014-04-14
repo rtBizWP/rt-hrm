@@ -111,9 +111,14 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
          */
         function ui( $post_type ) {
 			global $current_user;
+            $current_employee = rt_biz_get_contact_for_wp_user( get_current_user_id( ) );
+            if ( isset( $current_employee ) && !empty( $current_employee ) ){
+                $current_employee=$current_employee[0];
+            }
 			$arg = array(
 				'post_type' => $post_type,
-				'is_hrm_manager' => in_array( 'rt_wp_hrm_manager', $current_user->roles )
+				'is_hrm_manager' => current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ),
+                'current_employee' => $current_employee
 			);
 			rthrm_get_template( 'admin/calendar.php', $arg );
 		}

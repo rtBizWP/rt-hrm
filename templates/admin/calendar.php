@@ -36,20 +36,18 @@
 	<div class="body">
 		<table class="form-table rthrm-container">
 			<tbody>
-			<?php if ( $is_hrm_manager ) { ?>
-				<tr>
+				<tr <tr  <?php if ( ! $is_hrm_manager ) { ?>  class="hide" <?php } ?> >
 					<td class="tblkey">
 						<label class="label">Employee Name</label>
 					</td>
 					<td class="tblval">
-                        <input type="text" id="leave-user" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete">
-                        <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text">
+                        <input type="text" id="leave-user" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php  if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { echo $current_employee->post_title; } ?>">
+                        <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { echo $current_employee->ID; } ?>">
 					</td>
 				</tr>
-			<?php } ?>
 			<?php
-			global $rt_hrm_module,$rt_hrm_attributes;
-			$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
+			global $rt_hrm_attributes;
+			$attributes = rthrm_get_attributes( $post_type );
 			foreach ( $attributes as $attr ){
 				?>
 				<tr>
