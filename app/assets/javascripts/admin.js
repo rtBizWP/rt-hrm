@@ -89,21 +89,20 @@ jQuery(document).ready(function($) {
 				try {
                     if ( typeof(rtHRMAdmin.eleLeaveUserID.val()) == "undefined" || rtHRMAdmin.eleLeaveUserID.val().trim() == "" || rtHRMAdmin.eleLeaveUser.length > 1) {
                         addError(rtHRMAdmin.eleLeaveUserID, "Please Enter valid Employee Name");
-                        return false;
-                    }
-                    if ( $('input[name="post[leave-type][]"]:checked').val() == "undefined" || $('input[name="post[leave-type][]"]:checked').val().trim() == "" ) {
-                        addError($('#leave-type-0').parent().parent().parent(), "Please Select Leave Type");
+                        rtHRMAdmin.removeLodingOnNewPost();
                         return false;
                     }
                     if (typeof(rtHRMAdmin.eleLevaeStartDate.val()) == "undefined" || rtHRMAdmin.eleLevaeStartDate.val().trim() == "") {
 						addError(rtHRMAdmin.eleLevaeStartDate, "Please Enter the Leave Start Date");
-						return false;
+                        rtHRMAdmin.removeLodingOnNewPost();
+                        return false;
 					}
 					removeError(rtHRMAdmin.eleLevaeStartDate);
 					if( rtHRMAdmin.eleLevaeDayType.val().trim() == "other" ){
 						if (rtHRMAdmin.eleLevaeEndDate.val().trim() == "") {
 							addError(rtHRMAdmin.eleLevaeEndDate, "Please Enter the Leave End Date");
-							return false;
+                            rtHRMAdmin.removeLodingOnNewPost();
+                            return false;
 						}
 					}
 					removeError(rtHRMAdmin.eleLevaeEndDate);
@@ -146,7 +145,13 @@ jQuery(document).ready(function($) {
                     return $("<li></li>").data("ui-autocomplete-item", item).append("<a class='ac-subscribe-selected'>" +  item.label + "</a>").appendTo(ul);
                 };
             }
+        },
+        removeLodingOnNewPost : function(){
+            $('#save-action #save-post').removeClass('button-disabled');
+            $('#save-action #save-post').val('Save Draft');
+            $('#save-action span').attr('style','display: none;');
         }
+
 	}
 	rtHRMAdmin.init();
 });
