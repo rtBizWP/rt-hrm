@@ -129,8 +129,10 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
          */
         function render_calendar() {
 			global $rt_calendar, $rt_hrm_module;
-
             $args = array('post_type' => $rt_hrm_module->post_type,'post_status' => 'pending,approved,rejected');
+            if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) )  ) {
+                $args['author'] = get_current_user_id();
+            }
             $the_query = new WP_Query( $args );
             $event= array();
             while ( $the_query->have_posts() ) : $the_query->the_post();

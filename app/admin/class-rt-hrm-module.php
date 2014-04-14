@@ -29,6 +29,12 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
         var $post_type = 'rt_leave';
 
         /**
+         * menu position for HRM
+         * @var string
+         */
+        var $menu_position = 32;
+
+        /**
          * Module Name
          * @var string
          */
@@ -47,11 +53,18 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
         var $statuses = array();
 
         /**
+         * Array of statuses for leave CPT
+         * @var array
+         */
+        var $custom_menu_order = array();
+
+        /**
          * Object initialization
          */
         public function __construct() {
 			$this->get_custom_labels();
 			$this->get_custom_statuses();
+            $this->get_custom_menu_order();
 			add_action( 'init', array( $this, 'init_hrm' ) );
 			$this->hooks();
 		}
@@ -60,8 +73,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * call for register leave CPT & its status
          */
         function init_hrm() {
-			$menu_position = 32;
-			$this->register_custom_post( $menu_position );
+
+			$this->register_custom_post( $this->menu_position );
 			$this->register_custom_statuses();
 
 			$settings = get_site_option( 'rt_hrm_settings', false );
@@ -79,6 +92,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          */
         function hooks() {
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
+            add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
 			add_action('save_post', array( $this, 'save_leave_meta' ), 1, 2);
 			add_action('wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
@@ -191,6 +205,21 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
 
         /**
+         * Getter method for HRM Custom menu order
+         * @return array
+         */
+        function get_custom_menu_order(){
+            $this->custom_menu_order = array(
+                'rthrm-rt_leave-dashboard',
+                'rthrm-rt_leave-calendar',
+                'edit.php?post_type='.$this->post_type,
+                'post-new.php?post_type='.$this->post_type,
+                'edit-tags.php?taxonomy=',
+                'rthrm-attributes'
+            );
+        }
+
+        /**
          * Call for calendar view
          */
         function calendar_view(){
@@ -214,6 +243,25 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 
 		}
+
+        function custom_pages_order( $menu_order ) {
+            global $submenu;
+            global $menu;
+            if ( isset( $submenu['edit.php?post_type='.$this->post_type] ) && !empty( $submenu['edit.php?post_type='.$this->post_type] ) ) {
+                $module_menu = $submenu['edit.php?post_type='.$this->post_type];
+                $is_employee = false;
+                $current_employee = rt_biz_get_contact_for_wp_user( get_current_user_id( ) );
+                if ( isset( $current_employee ) && !empty( $current_employee ) ){
+                    $is_employee = true;
+                }
+                if ( ! $is_employee ){
+                    unset($submenu['edit.php?post_type='.$this->post_type]);
+                    unset($menu[$this->menu_position]);
+                }
+            }
+            return $menu_order;
+        }
+
 
         /**
          * Add meta-box for leave CPT
