@@ -389,6 +389,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					$("#save-publish").click(function(){
 						$("#publish").click();
 					});
+					$("#title").val( $("#leave-user").val() + " Leave");
 					$("#title").attr("readonly","readonly");
 					$("#leave-user").blur(function(){
 					    if($("#leave-user").val().length > 0){
