@@ -78,7 +78,7 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				'name' => __( 'Settings' ), // Name of the menu item
 				'title' => __( 'Settings' ), // Title displayed on the top of the admin panel
 				'parent' => 'edit.php?post_type='.$rt_hrm_module->post_type, // id of parent, if blank, then this is a top level menu
-				'id' => 'rthrm-settings', // Unique ID of the menu item
+				'id' => RT_WP_HRM::$settings_page_slug, // Unique ID of the menu item
 				'capability' => $admin_cap, // User role
 //				'icon' => $logo_url, // Menu icon for top level menus only http://melchoyce.github.io/dashicons/
 				'position' => 10, // Menu position. Can be used for both top and sub level menus
@@ -98,6 +98,23 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				'example' => 'http://google.com/icon.png', // An example value for this field, will be displayed in a <code>
 				'livepreview' => '', // jQuery script to update something in the site. For theme customizer only
 			) );
+			$general_tab->createOption( array(
+				'type' => 'save'
+			) );
+			$doc_tab = $settings_page->createTab( array(
+				'name' => __( 'Documents' ), // Name of the tab
+				'id' => 'documents', // Unique ID of the tab
+				'title' => __( 'Documents' ), // Title to display in the admin panel when tab is active
+			) );
+//			$doc_tab->createOption( array(
+//				'name' => __( 'Icon (Logo) URL' ), // Name of the option
+//				'desc' => 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in WordPress HRM', // Description of the option
+//				'id' => 'logo_url', // Unique ID of the option
+//				'type' => 'text', //
+//				'default' => RT_HRM_URL . 'app/assets/img/hrm-16X16.png', // Menu icon for top level menus only
+//				'example' => 'http://google.com/icon.png', // An example value for this field, will be displayed in a <code>
+//				'livepreview' => '', // jQuery script to update something in the site. For theme customizer only
+//			) );
 			$general_tab->createOption( array(
 				'type' => 'save'
 			) );

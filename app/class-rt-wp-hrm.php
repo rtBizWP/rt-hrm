@@ -27,6 +27,8 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
          */
         public $templateURL;
 
+		static $settings_page_slug = 'rthrm-settings';
+
         /**
          * Call for dependency check and other hooks
          */
