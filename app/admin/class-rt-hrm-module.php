@@ -254,9 +254,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                     $is_employee = true;
                 }
                 unset($submenu['edit.php?post_type='.$this->post_type]);
-                if ( ! $is_employee ){
+                if ( ! $is_employee && ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ){
                     unset($menu[$this->menu_position]);
-                }elseif ( $is_employee ){
+                }elseif ( $is_employee || current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ){
                     $new_index=5;
                     foreach( $this->custom_menu_order as  $key => $item ){
                         foreach ( $module_menu as $p_key => $menu_item ){

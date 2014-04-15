@@ -56,7 +56,7 @@ jQuery(document).ready(function($) {
             $('#calendar-container').on('rtEventClick', rtHRMAdmin.rtHrmEventClick );
 		},
 		rtHrmBeforePopup : function( e, self, date, jsEvent, view ){
-			rtHRMAdmin.lblLeaveStartDate.text( moment(date).format('MMMM DD YYYY') );
+			rtHRMAdmin.lblLeaveStartDate.text( moment(date).format('MMMM DD YYYY, dddd') );
 			rtHRMAdmin.eleLevaeStartDate.val( moment(date).format('DD/MM/YYYY') );
 			rtHRMAdmin.eleLevaeEndDate.val( moment(date).format('DD/MM/YYYY') );
 
