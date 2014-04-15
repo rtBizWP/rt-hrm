@@ -182,17 +182,17 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          */
         function get_custom_statuses() {
 			$this->statuses = array(
-				array(
+				'pending' => array(
 					'slug' => 'pending',
 					'name' => 'Pending Review',
 					'description' => 'Leave application is pending',
 				),
-				array(
+                'approved' =>array(
 					'slug' => 'approved',
 					'name' => 'Approved',
 					'description' => 'Leave application is approved',
 				),
-				array(
+                'rejected' =>array(
 					'slug' => 'rejected',
 					'name' => 'Rejected',
 					'description' => 'Leave application is rejected',
@@ -400,7 +400,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          */
         function save_leave_meta($post_id, $post){
 			global $rt_hrm_module,$rt_hrm_attributes;
-			if ( !wp_verify_nonce( $_POST['rthrm_leave_additional_details_meta_nonce'], 'rthrm_leave_additional_details_meta' ) ) {
+            if ( !isset( $_POST['rthrm_leave_additional_details_meta_nonce'] ) || !wp_verify_nonce( $_POST['rthrm_leave_additional_details_meta_nonce'], 'rthrm_leave_additional_details_meta' ) ) {
 				return $post_id;
 			}
 			if ( !current_user_can( 'edit_' . $rt_hrm_module->post_type, $post_id ))
@@ -430,11 +430,16 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * Manage Custom statuses for leave CPT
          */
         function add_leave_custom_status(){
-			global $post, $rt_hrm_module, $pagenow;
+			global $post, $pagenow;
 			$complete = '';
-			if( isset( $post) && !empty( $post ) && $post->post_type == $rt_hrm_module->post_type){
+			if( isset( $post) && !empty( $post ) && $post->post_type == $this->post_type){
 				$option='';
-				foreach ( $rt_hrm_module->get_custom_statuses() as $status ){
+                $custom_statuses = $this->get_custom_statuses();
+                if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) {
+                    unset($custom_statuses['approved']);
+                    unset($custom_statuses['rejected']);
+                }
+                foreach ( $custom_statuses as $status ){
 					if($post->post_status == $status['slug']){
 						$complete = " selected='selected'";
 					}else{
@@ -442,7 +447,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					}
 					$option .= "<option value='" . $status['slug'] . "' " . $complete . ">"  .  $status['name'] .  "</option>";
 				}
-                if ( $pagenow == 'post-new.php' ){
+                if ( $pagenow == 'post-new.php' || $pagenow == 'post.php' ){
                     echo '<script>
                         jQuery(document).ready(function($) {
                             $("select#post_status").html("'. $option .'");
@@ -455,13 +460,13 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                             });
                             if($("#leave-user").val().length > 0){
                                 $("#title-prompt-text").addClass("screen-reader-text");
-                                $("#title").val( $("#leave-user").val() + " Leave");
+                                $("#title").val("Leave: " + $("#leave-user").val());
                             }
                             $("#title").attr("readonly","readonly");
                             $("#leave-user").blur(function(){
                                 if($("#leave-user").val().length > 0){
                                     $("#title-prompt-text").addClass("screen-reader-text");
-                                    $("#title").val( $("#leave-user").val() + " Leave");
+                                    $("#title").val("Leave: " + $("#leave-user").val());
                                 }else{
                                     $("#title-prompt-text").removeClass("screen-reader-text");
                                     $("#title").val("");

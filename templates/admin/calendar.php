@@ -57,7 +57,7 @@
 						</label>
 					</td>
 					<td>
-						<?php echo rthrm_render_attribute( $attr, $post_id, $edit  ) ?>
+						<?php echo rthrm_render_attribute( $attr, '', true) ?>
 					</td>
 				</tr>
 			<?php
@@ -110,7 +110,7 @@
 		</table>
 	</div>
 	<div class="controls">
-		<input type="submit" class="button left" name="form-add-leave" value="<?php echo esc_html( sprintf( _x( 'Create %s', 'post type name', 'edit-flow' ), 'rt_leave' ) ); ?>">
+		<input type="submit" class="button left" name="form-add-leave" value="<?php echo esc_html( sprintf( _x( 'Create %s', 'post type name', 'edit-flow' ), rthrm_leave_label() ) ); ?>">
 	</div>
 	<div class="spinner">&nbsp;</div>
 </form>
