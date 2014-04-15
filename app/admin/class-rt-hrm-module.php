@@ -125,18 +125,15 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * @param $menu_position
          */
         function register_custom_post( $menu_position ) {
-			$hrm_logo_url = get_site_option( 'rthrm_logo_url' );
 
-			if ( empty( $hrm_logo_url ) ) {
-				$hrm_logo_url = RT_HRM_URL.'app/assets/img/hrm-16X16.png';
-			}
+			$logo_url = Rt_HRM_Settings::$settings['logo_url'];
 
 			$args = array(
 				'labels' => $this->labels,
 				'public' => false,
 				'publicly_queryable' => false,
 				'show_ui' => true, // Show the UI in admin panel
-				'menu_icon' => $hrm_logo_url,
+				'menu_icon' => $logo_url,
 				'menu_position' => $menu_position,
 				'supports' => array('title',),
 				'capability_type' => $this->post_type,

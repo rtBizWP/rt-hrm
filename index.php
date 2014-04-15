@@ -8,7 +8,7 @@
   Author: rtCamp
   Author URI: http://rtcamp.com
   License: GPL
-  Text Domain: rt-hrm
+  Text Domain: rt_hrm
  */
 
 if ( !defined( 'RT_HRM_VERSION' ) ) {
@@ -87,13 +87,14 @@ function rt_hrm_include() {
 
 	include_once RT_HRM_PATH_HELPER . 'rthrm-functions.php';
 
-	global $rthrm_app_autoload, $rthrm_admin_autoload, $rthrm_models_autoload, $rthrm_helper_autoload, $rt_calendar_autoload, $rt_form_autoload;
+	global $rthrm_app_autoload, $rthrm_admin_autoload, $rthrm_models_autoload, $rthrm_helper_autoload, $rt_calendar_autoload, $rt_form_autoload, $rtb_settings_autoload;
 	$rthrm_app_autoload = new RT_WP_Autoload( RT_HRM_PATH_APP );
 	$rthrm_admin_autoload = new RT_WP_Autoload( RT_HRM_PATH_ADMIN );
 	$rthrm_models_autoload = new RT_WP_Autoload( RT_HRM_PATH_MODELS );
 	$rthrm_helper_autoload = new RT_WP_Autoload( RT_HRM_PATH_HELPER );
 	$rt_form_autoload = new RT_WP_Autoload( RT_HRM_PATH_LIB . 'rtformhelpers/' );
 	$rt_calendar_autoload = new RT_WP_Autoload( RT_HRM_PATH_LIB . 'rt-calendar/' );
+	$rtb_settings_autoload = new RT_WP_Autoload( RT_HRM_PATH . 'app/settings/' );
 }
 
 /**
