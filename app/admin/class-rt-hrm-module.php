@@ -210,12 +210,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          */
         function get_custom_menu_order(){
             $this->custom_menu_order = array(
-                'rthrm-rt_leave-dashboard',
-                'rthrm-rt_leave-calendar',
-                'edit.php?post_type='.$this->post_type,
-                'post-new.php?post_type='.$this->post_type,
-                'edit-tags.php?taxonomy=',
-                'rthrm-attributes'
+                'Dashboard',
+                'Calendar',
+                'Leaves',
+                'Add Leave',
+                'Attributes',
             );
         }
 
@@ -254,9 +253,26 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                 if ( isset( $current_employee ) && !empty( $current_employee ) ){
                     $is_employee = true;
                 }
-                if ( ! $is_employee ){
-                    unset($submenu['edit.php?post_type='.$this->post_type]);
+                unset($submenu['edit.php?post_type='.$this->post_type]);
+                if ( ! $is_employee && ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ){
                     unset($menu[$this->menu_position]);
+                }elseif ( $is_employee || current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ){
+                    $new_index=5;
+                    foreach( $this->custom_menu_order as  $key => $item ){
+                        foreach ( $module_menu as $p_key => $menu_item ){
+                            if ( in_array( $item, $menu_item ) ) {
+                                $submenu['edit.php?post_type='.$this->post_type][$new_index] = $menu_item;
+                                unset ( $module_menu[$p_key] );
+                                $new_index += 5;
+                            }
+                        }
+                    }
+                    foreach( $module_menu as $p_key => $menu_item ){
+                        $menu_item[0]= '---'.$menu_item[0];
+                        $submenu['edit.php?post_type='.$this->post_type][$new_index] = $menu_item;
+                        unset ( $module_menu[$p_key] );
+                        $new_index += 5;
+                    }
                 }
             }
             return $menu_order;
@@ -415,7 +431,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * Manage Custom statuses for leave CPT
          */
         function add_leave_custom_status(){
-			global $post,$rt_hrm_module;
+			global $post, $rt_hrm_module, $pagenow;
 			$complete = '';
 			if( isset( $post) && !empty( $post ) && $post->post_type == $rt_hrm_module->post_type){
 				$option='';
@@ -427,33 +443,40 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					}
 					$option .= "<option value='" . $status['slug'] . "' " . $complete . ">"  .  $status['name'] .  "</option>";
 				}
-				echo '<script>
-		        jQuery(document).ready(function($) {
-		            $("select#post_status").html("'. $option .'");
-		            $(".inline-edit-status select").html("'. $option .'");
-		            $("#post-status-display").html("'. $post->post_status .'");
-					$("#publish").hide();
-					$("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
-					$("#save-publish").click(function(){
-						$("#publish").click();
-					});
-					if($("#leave-user").val().length > 0){
-					    $("#title-prompt-text").addClass("screen-reader-text");
-					    $("#title").val( $("#leave-user").val() + " Leave");
-					}
-					$("#title").attr("readonly","readonly");
-					$("#leave-user").blur(function(){
-					    if($("#leave-user").val().length > 0){
-					        $("#title-prompt-text").addClass("screen-reader-text");
-                            $("#title").val( $("#leave-user").val() + " Leave");
-                        }else{
-                            $("#title-prompt-text").removeClass("screen-reader-text");
-                            $("#title").val("");
-                        }
-					});
-		      });
-
-		      </script>';
+                if ( $pagenow == 'post-new.php' ){
+                    echo '<script>
+                        jQuery(document).ready(function($) {
+                            $("select#post_status").html("'. $option .'");
+                            $(".inline-edit-status select").html("'. $option .'");
+                            $("#post-status-display").html("'. $post->post_status .'");
+                            $("#publish").hide();
+                            $("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
+                            $("#save-publish").click(function(){
+                                $("#publish").click();
+                            });
+                            if($("#leave-user").val().length > 0){
+                                $("#title-prompt-text").addClass("screen-reader-text");
+                                $("#title").val( $("#leave-user").val() + " Leave");
+                            }
+                            $("#title").attr("readonly","readonly");
+                            $("#leave-user").blur(function(){
+                                if($("#leave-user").val().length > 0){
+                                    $("#title-prompt-text").addClass("screen-reader-text");
+                                    $("#title").val( $("#leave-user").val() + " Leave");
+                                }else{
+                                    $("#title-prompt-text").removeClass("screen-reader-text");
+                                    $("#title").val("");
+                                }
+                            });
+                        });
+                        </script>';
+                }elseif (  $pagenow == 'edit.php' ){
+                    echo '<script>
+                        jQuery(document).ready(function($) {
+                            $("select[name=_status]").html("'. $option .'");
+                        });
+                         </script>';
+                }
 			}
 		}
 
