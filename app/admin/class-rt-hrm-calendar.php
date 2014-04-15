@@ -79,7 +79,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 					'post_date' => date('Y-m-d H:i:s'),
 					'post_content' => $leave_meta['leave_description'],
 					'post_status' => 'pending',
-					'post_title' => $leave_meta['leave-user'] . ' Leave',
+					'post_title' => ' Leave: ' . $leave_meta['leave-user'],
 					'post_type' => $rt_hrm_module->post_type,
 				);
 
@@ -144,7 +144,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
                 }elseif (get_post_status() == 'rejected' ){
                     $color='red';
                 } elseif (get_post_status() == 'pending' ){
-                    $color='yellow';
+                    $color='';
                 }
 
                 $leaveStartDate = get_post_meta( get_the_id(), 'leave-start-date', false );
@@ -169,7 +169,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
                     'start'=> $leaveStartDate,
                     'end'=> $leaveEndDate,
                     'color'=> $color,
-                    'textColor'=> 'black',
+                    'textColor'=> 'white',
                     'leave_id' => get_the_id(),
                 );
                 $event[]=$temp;
