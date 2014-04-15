@@ -77,10 +77,9 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
          * initialization of all classes
          */
         function init_globals() {
-			global $rt_hrm_plugin_info, $rt_hrm_module, $rt_hrm_dashboard, $rt_hrm_calendar,
+			global $rt_hrm_module, $rt_hrm_dashboard, $rt_hrm_calendar,
                    $rt_calendar, $rt_hrm_attributes, $rt_form, $rt_hrm_acl;
 
-			$rt_hrm_plugin_info = new RT_Plugin_Info( trailingslashit( RT_HRM_PATH ) . 'index.php' );
 			$rt_form = new Rt_Form();
 
 			$rt_hrm_module = new Rt_HRM_Module();
