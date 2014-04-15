@@ -47,7 +47,6 @@
 					</td>
 				</tr>
 			<?php
-			global $rt_hrm_attributes;
 			$attributes = rthrm_get_attributes( $post_type );
 			foreach ( $attributes as $attr ){
 				?>
@@ -58,7 +57,7 @@
 						</label>
 					</td>
 					<td>
-						<?php $rt_hrm_attributes->render_attribute( $attr,'', true ); ?>
+						<?php echo rthrm_render_attribute( $attr, $post_id, $edit  ) ?>
 					</td>
 				</tr>
 			<?php

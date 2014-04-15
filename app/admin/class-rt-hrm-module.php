@@ -209,12 +209,13 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * @return array
          */
         function get_custom_menu_order(){
+            global $rt_hrm_attributes;
             $this->custom_menu_order = array(
-                'Dashboard',
-                'Calendar',
-                'Leaves',
-                'Add Leave',
-                'Attributes',
+                'rthrm-'.$this->post_type.'-dashboard',
+                'rthrm-'.$this->post_type.'-calendar',
+                'edit.php?post_type='.$this->post_type,
+                'post-new.php?post_type='.$this->post_type,
+                $rt_hrm_attributes->attributes_page_slug,
             );
         }
 
@@ -258,7 +259,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                     unset($menu[$this->menu_position]);
                 }elseif ( $is_employee || current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ){
                     $new_index=5;
-                    foreach( $this->custom_menu_order as  $key => $item ){
+                    foreach( $this->custom_menu_order as $item ){
                         foreach ( $module_menu as $p_key => $menu_item ){
                             if ( in_array( $item, $menu_item ) ) {
                                 $submenu['edit.php?post_type='.$this->post_type][$new_index] = $menu_item;

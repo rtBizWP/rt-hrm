@@ -82,13 +82,12 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 
 			$rt_form = new Rt_Form();
 
-			$rt_hrm_module = new Rt_HRM_Module();
+            $rt_hrm_attributes = new Rt_HRM_Attributes();
+            $rt_hrm_module = new Rt_HRM_Module();
             $rt_hrm_acl = new Rt_HRM_ACL();
 			$rt_hrm_dashboard = new Rt_HRM_Dashboard();
 			$rt_hrm_calendar = new Rt_HRM_Calendar();
 			$rt_calendar = new RT_Calendar();
-
-			$rt_hrm_attributes = new Rt_HRM_Attributes();
 
 		}
 

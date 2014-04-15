@@ -219,3 +219,8 @@ function rthrm_encrypt_decrypt( $string ) {
 	 */
 	return $encrypted_string;
 }
+
+function rthrm_render_attribute(  $attr, $post_id, $edit  ) {
+    global $rt_hrm_attributes;
+    $rt_hrm_attributes->render_attribute( $attr, $post_id, $edit );
+}
