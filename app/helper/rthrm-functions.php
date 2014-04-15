@@ -222,5 +222,10 @@ function rthrm_encrypt_decrypt( $string ) {
 
 function rthrm_render_attribute(  $attr, $post_id, $edit  ) {
     global $rt_hrm_attributes;
-    $rt_hrm_attributes->render_attribute( $attr, $post_id, $edit );
+   return $rt_hrm_attributes->render_attribute( $attr, $post_id, $edit );
+}
+
+function rthrm_leave_label( ) {
+    global $rt_hrm_module;
+    return $rt_hrm_module->labels['name'];
 }
