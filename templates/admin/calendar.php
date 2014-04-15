@@ -57,7 +57,7 @@
 						</label>
 					</td>
 					<td>
-						<?php echo rthrm_render_attribute( $attr, $post_id, $edit  ) ?>
+						<?php echo rthrm_render_attribute( $attr, '', true) ?>
 					</td>
 				</tr>
 			<?php

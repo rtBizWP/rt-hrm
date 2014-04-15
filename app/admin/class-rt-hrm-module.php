@@ -399,7 +399,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          */
         function save_leave_meta($post_id, $post){
 			global $rt_hrm_module,$rt_hrm_attributes;
-			if ( !wp_verify_nonce( $_POST['rthrm_leave_additional_details_meta_nonce'], 'rthrm_leave_additional_details_meta' ) ) {
+            if ( !isset( $_POST['rthrm_leave_additional_details_meta_nonce'] ) || !wp_verify_nonce( $_POST['rthrm_leave_additional_details_meta_nonce'], 'rthrm_leave_additional_details_meta' ) ) {
 				return $post_id;
 			}
 			if ( !current_user_can( 'edit_' . $rt_hrm_module->post_type, $post_id ))

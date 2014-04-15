@@ -147,10 +147,15 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
                     $color='yellow';
                 }
 
-
-                $leaveStartDate = DateTime::createFromFormat( 'd/m/Y', get_post_meta( get_the_id(), 'leave-start-date', false )[0] );
+                $leaveStartDate = get_post_meta( get_the_id(), 'leave-start-date', false );
+                if ( isset ( $leaveStartDate ) && !empty( $leaveStartDate ) ){
+                    $leaveStartDate = DateTime::createFromFormat( 'd/m/Y', $leaveStartDate[0] );
+                }
                 $leaveStartDate = $leaveStartDate->format('Y-m-d');
-                $leaveEndDate = get_post_meta( get_the_id(), 'leave-end-date', false)[0];
+                $leaveEndDate = get_post_meta( get_the_id(), 'leave-end-date', false);
+                if ( isset ( $leaveEndDate ) && !empty( $leaveEndDate ) ){
+                    $leaveEndDate = $leaveEndDate[0];
+                }
                 if ( isset( $leaveEndDate) && !empty ( $leaveEndDate )  ){
                     $leaveEndDate = DateTime::createFromFormat( 'd/m/Y', $leaveEndDate );
                     $leaveEndDate = $leaveEndDate->format('Y-m-d');
