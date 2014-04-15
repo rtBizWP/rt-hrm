@@ -95,7 +95,7 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 					var rt_calendar={
 						init : function(){
 							rt_calendar.init_calendar();
-							rt_calendar.esc_close();
+							rt_calendar.popup_close();
 							<?php if ( isset( $this->popup_element ) && !empty( $this->popup_element ) ){ ?>
 								$('<?php echo $this->popup_element ?>').hide();
 							<?php } ?>
@@ -115,12 +115,16 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 
 							$('<?php echo $this->dom_element ?>').fullCalendar(json_encode_default);
 						},
-						esc_close: function(){
+						popup_close: function(){
 							$(document).keydown(function(event) {
 								if (event.keyCode == '27') {
 									rt_calendar_close_overlays();
 								}
 							});
+
+                            $("#close_popup").click(function(){
+                                rt_calendar_close_overlays();
+                            });
 						},
 						open_popup: function( self, date, jsEvent, view){
 							// Close other overlays
