@@ -106,16 +106,16 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				'id' => 'documents', // Unique ID of the tab
 				'title' => __( 'Documents' ), // Title to display in the admin panel when tab is active
 			) );
-//			$doc_tab->createOption( array(
-//				'name' => __( 'Icon (Logo) URL' ), // Name of the option
-//				'desc' => 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in WordPress HRM', // Description of the option
-//				'id' => 'logo_url', // Unique ID of the option
-//				'type' => 'text', //
-//				'default' => RT_HRM_URL . 'app/assets/img/hrm-16X16.png', // Menu icon for top level menus only
-//				'example' => 'http://google.com/icon.png', // An example value for this field, will be displayed in a <code>
-//				'livepreview' => '', // jQuery script to update something in the site. For theme customizer only
-//			) );
-			$general_tab->createOption( array(
+			$doc_tab->createOption( array(
+				'name' => __( 'Storage Quota per User' ), // Name of the option
+				'desc' => '', // Description of the option
+				'id' => 'storage_quota_per_user', // Unique ID of the option
+				'type' => 'number', //
+				'default' => 10, // Menu icon for top level menus only
+				'example' => 'Every user will get this much storage quota to upload their documents. If 10 is given; 10MB will be calculated', // An example value for this field, will be displayed in a <code>
+				'livepreview' => '', // jQuery script to update something in the site. For theme customizer only
+			) );
+			$doc_tab->createOption( array(
 				'type' => 'save'
 			) );
 		}
