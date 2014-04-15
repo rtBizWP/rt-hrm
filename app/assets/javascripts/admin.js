@@ -150,6 +150,7 @@ jQuery(document).ready(function($) {
             $('#save-action #save-post').removeClass('button-disabled');
             $('#save-action #save-post').val('Save Draft');
             $('#save-action span').attr('style','display: none;');
+            $('#publishing-action #save-publish').removeClass('button-primary-disabled');
         }
 
 	}
