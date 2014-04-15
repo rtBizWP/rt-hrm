@@ -277,6 +277,9 @@ html .fc,
 	font-size: .85em;
 	cursor: default;
 	}
+.fc-event:hover {
+    cursor: pointer;
+    }
 
 a.fc-event {
 	text-decoration: none;
