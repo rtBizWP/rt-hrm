@@ -36,6 +36,7 @@ jQuery(document).ready(function($) {
 			rtHRMAdmin.eleLevaeStartDate = $("#leave-start-date");
 			rtHRMAdmin.eleLevaeDayType = $("#leave-duration");
 			rtHRMAdmin.eleLevaeEndDate = $("#leave-end-date");
+            rtHRMAdmin.eleLevaeDesc = $("#leave_description");
 
 			rtHRMAdmin.initDatePicker();
 			rtHRMAdmin.initRtCalenderMethod();
@@ -52,6 +53,8 @@ jQuery(document).ready(function($) {
 			})
 		},
 		initRtCalenderMethod : function(){
+            rtHRMAdmin.employeeId= rtHRMAdmin.eleLeaveUserID.val()
+            rtHRMAdmin.employeeName= rtHRMAdmin.eleLeaveUser.val()
 			$('#calendar-container').on('rtBeforePopup', rtHRMAdmin.rtHrmBeforePopup );
             $('#calendar-container').on('rtEventClick', rtHRMAdmin.rtHrmEventClick );
 		},
@@ -59,7 +62,10 @@ jQuery(document).ready(function($) {
 			rtHRMAdmin.lblLeaveStartDate.text( moment(date).format('MMMM DD YYYY, dddd') );
 			rtHRMAdmin.eleLevaeStartDate.val( moment(date).format('DD/MM/YYYY') );
 			rtHRMAdmin.eleLevaeEndDate.val( moment(date).format('DD/MM/YYYY') );
-
+            rtHRMAdmin.eleLeaveUserID.val( rtHRMAdmin.employeeId );
+            rtHRMAdmin.eleLeaveUser.val( rtHRMAdmin.employeeName );
+            $('input[name="post[leave-type][]"]:checked').attr('checked', false);
+            rtHRMAdmin.eleLevaeDesc.val('');
 			//remove if any error visible
 			removeError(rtHRMAdmin.eleLevaeStartDate);
 			removeError(rtHRMAdmin.eleLevaeEndDate);

@@ -431,7 +431,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * Manage Custom statuses for leave CPT
          */
         function add_leave_custom_status(){
-			global $post,$rt_hrm_module;
+			global $post, $rt_hrm_module, $pagenow;
 			$complete = '';
 			if( isset( $post) && !empty( $post ) && $post->post_type == $rt_hrm_module->post_type){
 				$option='';
@@ -443,33 +443,40 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					}
 					$option .= "<option value='" . $status['slug'] . "' " . $complete . ">"  .  $status['name'] .  "</option>";
 				}
-				echo '<script>
-		        jQuery(document).ready(function($) {
-		            $("select#post_status").html("'. $option .'");
-		            $(".inline-edit-status select").html("'. $option .'");
-		            $("#post-status-display").html("'. $post->post_status .'");
-					$("#publish").hide();
-					$("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
-					$("#save-publish").click(function(){
-						$("#publish").click();
-					});
-					if($("#leave-user").val().length > 0){
-					    $("#title-prompt-text").addClass("screen-reader-text");
-					    $("#title").val( $("#leave-user").val() + " Leave");
-					}
-					$("#title").attr("readonly","readonly");
-					$("#leave-user").blur(function(){
-					    if($("#leave-user").val().length > 0){
-					        $("#title-prompt-text").addClass("screen-reader-text");
-                            $("#title").val( $("#leave-user").val() + " Leave");
-                        }else{
-                            $("#title-prompt-text").removeClass("screen-reader-text");
-                            $("#title").val("");
-                        }
-					});
-		      });
-
-		      </script>';
+                if ( $pagenow == 'post-new.php' ){
+                    echo '<script>
+                        jQuery(document).ready(function($) {
+                            $("select#post_status").html("'. $option .'");
+                            $(".inline-edit-status select").html("'. $option .'");
+                            $("#post-status-display").html("'. $post->post_status .'");
+                            $("#publish").hide();
+                            $("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
+                            $("#save-publish").click(function(){
+                                $("#publish").click();
+                            });
+                            if($("#leave-user").val().length > 0){
+                                $("#title-prompt-text").addClass("screen-reader-text");
+                                $("#title").val( $("#leave-user").val() + " Leave");
+                            }
+                            $("#title").attr("readonly","readonly");
+                            $("#leave-user").blur(function(){
+                                if($("#leave-user").val().length > 0){
+                                    $("#title-prompt-text").addClass("screen-reader-text");
+                                    $("#title").val( $("#leave-user").val() + " Leave");
+                                }else{
+                                    $("#title-prompt-text").removeClass("screen-reader-text");
+                                    $("#title").val("");
+                                }
+                            });
+                        });
+                        </script>';
+                }elseif (  $pagenow == 'edit.php' ){
+                    echo '<script>
+                        jQuery(document).ready(function($) {
+                            $("select[name=_status]").html("'. $option .'");
+                        });
+                         </script>';
+                }
 			}
 		}
 
