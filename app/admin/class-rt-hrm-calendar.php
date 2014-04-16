@@ -140,11 +140,11 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
                 // Leave Status
                 $color='';
                 if ( get_post_status() == 'approved'){
-                    $color='green';
+                    $color=  Rt_HRM_Settings::$settings['approved_leaves_color'];
                 }elseif (get_post_status() == 'rejected' ){
-                    $color='red';
+                    $color=  Rt_HRM_Settings::$settings['rejected_leaves_color'];
                 } elseif (get_post_status() == 'pending' ){
-                    $color='';
+                    $color=  Rt_HRM_Settings::$settings['pending_leaves_color'];
                 }
 
                 $leaveStartDate = get_post_meta( get_the_id(), 'leave-start-date', false );
@@ -169,7 +169,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
                     'start'=> $leaveStartDate,
                     'end'=> $leaveEndDate,
                     'color'=> $color,
-                    'textColor'=> 'white',
+                    'textColor'=> Rt_HRM_Settings::$settings['leaves_text_color'],
                     'leave_id' => get_the_id(),
                 );
                 $event[]=$temp;

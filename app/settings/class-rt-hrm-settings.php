@@ -59,6 +59,11 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 		 */
 		function load_settings() {
 			self::$settings['logo_url'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( 'logo_url' ) : '';
+			global $rt_hrm_module;
+			foreach ( $rt_hrm_module->statuses as $key => $status ) {
+				self::$settings[$status['slug'].'_leaves_color'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( $status['slug'].'_leaves_color' ) : '';
+			}
+			self::$settings['leaves_text_color'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( 'leaves_text_color' ) : '';
 		}
 
 		/**
