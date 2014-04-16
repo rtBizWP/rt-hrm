@@ -106,6 +106,22 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				'id' => 'leaves', // Unique ID of the tab
 				'title' => __( 'Leaves' ), // Title to display in the admin panel when tab is active
 			) );
+			foreach ( $rt_hrm_module->statuses as $key => $status ) {
+				$leaves_tab->createOption( array(
+					'name' => __( $status['name'].' Leaves Color' ), // Name of the option
+					'desc' => 'This color will be used to mark '.$status['name'].' Leaves', // Description of the option
+					'id' => $status['slug'].'_leaves_color', // Unique ID of the option
+					'type' => 'color', //
+					'default' => $status['color'], // Menu icon for top level menus only
+				) );
+			}
+			$leaves_tab->createOption( array(
+				'name' => __( 'Leaves Text Color' ), // Name of the option
+				'desc' => 'This color will be used for Leaves Marker Text', // Description of the option
+				'id' => 'leaves_text_color', // Unique ID of the option
+				'type' => 'color', //
+				'default' => '#FFFFFF', // Menu icon for top level menus only
+			) );
 			$leaves_tab->createOption( array(
 				'name' => __( 'Leaves Quota per User' ), // Name of the option
 				'desc' => '', // Description of the option

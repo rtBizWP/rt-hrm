@@ -186,16 +186,19 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					'slug' => 'pending',
 					'name' => 'Pending Review',
 					'description' => 'Leave application is pending',
+					'color' => '#404040',
 				),
                 'approved' =>array(
 					'slug' => 'approved',
 					'name' => 'Approved',
 					'description' => 'Leave application is approved',
+					'color' => '#006600',
 				),
                 'rejected' =>array(
 					'slug' => 'rejected',
 					'name' => 'Rejected',
 					'description' => 'Leave application is rejected',
+					'color' => '#D00000',
 				),
 			);
 			return $this->statuses;
