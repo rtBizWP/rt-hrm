@@ -263,6 +263,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                                 $submenu['edit.php?post_type='.$this->post_type][$new_index] = $menu_item;
                                 unset ( $module_menu[$p_key] );
                                 $new_index += 5;
+								break;
                             }
                         }
                     }

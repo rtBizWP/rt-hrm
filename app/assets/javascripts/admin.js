@@ -1,5 +1,3 @@
-rthrm_user_edit = rthrm_user_edit[0];
-
 jQuery(document).ready(function($) {
 
 
@@ -43,6 +41,7 @@ jQuery(document).ready(function($) {
 			rtHRMAdmin.leaveDayChange();
 			rtHRMAdmin.add_leave_validate();
             rtHRMAdmin.autocompleteUser();
+			rtHRMAdmin.initDashboardWPMenuHack();
 		},
 		initDatePicker : function(){
 			//call datepicker
@@ -157,7 +156,23 @@ jQuery(document).ready(function($) {
             $('#save-action #save-post').val('Save Draft');
             $('#save-action span').attr('style','display: none;');
             $('#publishing-action #save-publish').removeClass('button-primary-disabled');
-        }
+        },
+
+		initDashboardWPMenuHack : function() {
+			/**
+			* WordPress Menu Hack for Dashboard
+			*/
+		   if ( typeof rt_hrm_top_menu != 'undefined' && typeof rt_hrm_dashboard_url != 'undefined' ) {
+			   $('#'+rt_hrm_top_menu+' ul li').removeClass('current');
+			   $('#'+rt_hrm_top_menu+' ul li a').removeClass('current');
+			   $('#'+rt_hrm_top_menu+' ul li a').each(function(e) {
+				   if ( this.href == rt_hrm_dashboard_url ) {
+					   $(this).parent().addClass("current");
+					   $(this).addClass('current');
+				   }
+			   });
+		   }
+		}
 
 	}
 	rtHRMAdmin.init();

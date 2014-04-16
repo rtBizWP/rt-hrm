@@ -36,7 +36,7 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
          */
         function load_styles_scripts() {
 			global $post, $rt_hrm_module;
-			$pagearray = array( 'rthrm-'.$rt_hrm_module->post_type.'-calendar' );
+			$pagearray = array( 'rthrm-'.$rt_hrm_module->post_type.'-calendar', 'rthrm-'.$rt_hrm_module->post_type.'-dashboard' );
 			if( ( isset( $post->post_type ) && $post->post_type == $rt_hrm_module->post_type )
 					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
 					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == $rt_hrm_module->post_type ) ) {
@@ -55,45 +55,20 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
 				wp_enqueue_script('rthrm-admin-js', RT_HRM_URL . 'app/assets/javascripts/admin.js','jquery', RT_HRM_VERSION, true);
 				wp_enqueue_script('rt-hrm-moment-js', RT_HRM_URL . 'app/assets/javascripts/moment.min.js','jquery', "", true);
 
-			}
-			$pagearray = array( 'rthrm-add-module', 'rthrm-gravity-mapper', 'rthrm-add-'.$rt_hrm_module->post_type );
-			if ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) {
+				wp_localize_script( 'rthrm-admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
+                wp_localize_script( 'rthrm-admin-js', 'adminurl', admin_url() );
 
 			}
 
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthrm-'.$rt_hrm_module->post_type.'-dashboard' ) {
-
+				wp_localize_script('rthrm-admin-js', 'rt_hrm_top_menu', 'menu-posts-'.$rt_hrm_module->post_type);
+				wp_localize_script('rthrm-admin-js', 'rt_hrm_dashboard_url', admin_url( 'edit.php?post_type='.$rt_hrm_module->post_type.'&page='.'rthrm-'.$rt_hrm_module->post_type.'-dashboard' ) );
 			}
 
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthrm-'.$rt_hrm_module->post_type.'-calendar' ) {
 
 				wp_enqueue_style('rt-hrm-calendar-css', RT_HRM_URL . 'app/lib/rt-calendar/calendar/fullcalendar.css', false, RT_HRM_VERSION, 'all');
 				wp_enqueue_script('rt-hrm-calendar-js', RT_HRM_URL . 'app/lib/rt-calendar/calendar/fullcalendar.js','jquery', "", true);
-			}
-
-
-			$this->localize_scripts();
-		}
-
-        /**
-         * Load localize script for rt-hrm plugin
-         */
-        function localize_scripts() {
-			global $rt_hrm_module;
-
-			$pagearray = array( 'rthrm-add-'.$rt_hrm_module->post_type, 'rthrm-'.$rt_hrm_module->post_type.'-calendar' );
-			if( wp_script_is( 'rthrm-admin-js' ) && isset( $_REQUEST['post_type'] ) && isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) {
-				$user_edit = false;
-				if ( current_user_can( "edit_{$rt_hrm_module->post_type}" ) ) {
-					$user_edit = true;
-				}
-				wp_localize_script( 'rthrm-admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-                wp_localize_script( 'rthrm-admin-js', 'adminurl', admin_url() );
-				wp_localize_script( 'rthrm-admin-js', 'rthrm_post_type', $_REQUEST['post_type'] );
-				wp_localize_script( 'rthrm-admin-js', 'rthrm_user_edit', array($user_edit) );
-
-			} else {
-				wp_localize_script( 'rthrm-admin-js', 'rthrm_user_edit', array('') );
 			}
 		}
 
