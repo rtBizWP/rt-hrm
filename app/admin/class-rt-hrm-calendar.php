@@ -75,7 +75,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 
 				$newLeave = array(
 					'comment_status' =>  'closed',
-					'post_author' => get_current_user_id(),
+					'post_author' => $leave_meta['leave-user-id'],
 					'post_date' => date('Y-m-d H:i:s'),
 					'post_content' => $leave_meta['leave_description'],
 					'post_status' => 'pending',
