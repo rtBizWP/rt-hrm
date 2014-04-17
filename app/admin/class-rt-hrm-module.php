@@ -98,6 +98,191 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action('wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
 
             add_action( 'wp_ajax_seach_employees_name', array( $this, 'employees_autocomplete_ajax' ) );
+
+			add_action( 'rt_biz_entity_meta_boxes', array( $this, 'contact_documents_meta_box' ) );
+			add_action( 'save_post', array( $this, 'save_contact_documents' ) );
+		}
+
+		function contact_documents_meta_box( $post_type ) {
+			global $rt_person;
+			if ( $post_type != $rt_person->post_type ) {
+				return;
+			}
+
+			global $post;
+			if ( ! isset( $post ) ) {
+				return;
+			}
+
+			$is_our_team_mate = get_post_meta( $post->ID, Rt_Person::$meta_key_prefix.Rt_Person::$our_team_mate_key, true );
+			if ( ! $is_our_team_mate ) {
+				return;
+			}
+
+			add_meta_box( 'rt-hrm-contact-documents', __( 'Documents' ), array( $this, 'render_documents_meta_box' ), $rt_person->post_type );
+		}
+
+		function render_documents_meta_box( $post ) {
+			?>
+			<a href="#" id="rt_hrm_add_doc_btn" class="button"><?php _e( 'Add Document' ); ?></a>
+			<br /><br />
+			<?php
+			$docs = get_posts( array(
+				'posts_per_page' => -1,
+				'post_parent' => $post->ID,
+				'post_type' => 'attachment',
+			));
+			?>
+			<div id="rt_hrm_doc_container">
+			<?php foreach ( $docs as $doc ) { ?>
+				<?php $extn_array = explode('.', $doc->guid); $extn = $extn_array[count($extn_array) - 1]; ?>
+				<div class="doc-item" data-doc-id="<?php echo $doc->ID; ?>">
+					<img height="20px" width="20px" src="<?php echo RT_HRM_URL . "app/assets/file-type/" . $extn . ".png"; ?>" />
+					<a target="_blank" href="<?php echo get_edit_post_link( $doc->ID ); ?>" title="<?php echo $doc->post_content; ?>" class="rt_hrm_doc_title"><?php echo $doc->post_title; ?></a>
+					<a href="#" class="rthrm_delete_doc">x</a>
+					<input type="hidden" name="rt_hrm_doc[]" value="<?php echo $doc->ID; ?>" />
+				</div>
+			<?php } ?>
+			</div>
+			<?php
+			do_action( 'rt_biz_render_meta_fields', $post, $this );
+			wp_nonce_field( 'rt_hrm_documents_metabox', 'rt_hrm_documents_metabox_nonce' );
+			$this->print_documents_metabox_js();
+			do_action( 'rt_biz_print_metabox_js', $post, $this );
+		}
+
+		function print_documents_metabox_js() { ?>
+			<style>
+				.rthrm_delete_doc {
+					margin-left: 10px;
+					color: red;
+				}
+				.rt_hrm_doc_title {
+					margin-left: 10px;
+				}
+			</style>
+			<script>
+				var hrm_doc_upload_frame;
+				jQuery(document).ready(function($){
+					$(document).on('click', '#rt_hrm_add_doc_btn', function(e) {
+						e.preventDefault();
+						if (hrm_doc_upload_frame) {
+							hrm_doc_upload_frame.open();
+							return;
+						}
+						hrm_doc_upload_frame = wp.media.frames.file_frame = wp.media({
+							title: jQuery(this).data('uploader_title'),
+							searchable: true,
+							button: {
+								text: 'Attach Selected Files',
+							},
+							multiple: true // Set to true to allow multiple files to be selected
+						});
+						hrm_doc_upload_frame.on('select', function() {
+							var selection = hrm_doc_upload_frame.state().get('selection');
+							var strAttachment = '';
+							selection.map(function(attachment) {
+								attachment = attachment.toJSON();
+								console.log(attachment);
+								strAttachment = '<div class="doc-item" data-doc-id="'+attachment.id+'">';
+								strAttachment += '<img height="20px" width="20px" src="' +attachment.icon + '" ><a target="_blank" href="'+attachment.editLink+'" title="'+attachment.description+'" class="rt_hrm_doc_title">'+attachment.title+'</a>';
+								strAttachment += '<a href="#" class="rthrm_delete_doc">x</a>';
+								strAttachment += '<input type="hidden" name="rt_hrm_doc[]" value="' + attachment.id +'" /></div>';
+
+								jQuery("#rt_hrm_doc_container").append(strAttachment);
+
+								// Do something with attachment.id and/or attachment.url here
+							});
+							// Do something with attachment.id and/or attachment.url here
+						});
+						hrm_doc_upload_frame.open();
+					});
+
+					$(document).on('click', '.rthrm_delete_doc', function(e) {
+						e.preventDefault();
+						jQuery(this).parent().remove();
+					});
+				});
+			</script>
+		<?php }
+
+		function save_contact_documents( $post_id ) {
+						/*
+			 * We need to verify this came from the our screen and with proper authorization,
+			 * because save_post can be triggered at other times.
+			 */
+
+			// Check if our nonce is set.
+			if ( ! isset( $_POST['rt_hrm_documents_metabox_nonce'] ) ) {
+				return;
+			}
+
+			$nonce = $_POST['rt_hrm_documents_metabox_nonce'];
+
+			// Verify that the nonce is valid.
+			if ( ! wp_verify_nonce( $nonce, 'rt_hrm_documents_metabox' ) ) {
+				return;
+			}
+
+			// If this is an autosave, our form has not been submitted, so we don't want to do anything.
+			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+				return;
+			}
+
+			$old_docs = get_posts( array(
+				'post_parent' => $post_id,
+				'post_type' => 'attachment',
+				'fields' => 'ids',
+				'posts_per_page' => -1,
+			));
+			$new_docs = array();
+			if ( isset( $_POST['rt_hrm_doc'] ) ) {
+				$new_docs = $_POST['rt_hrm_doc'];
+				foreach ( $new_docs as $doc ) {
+					if ( ! in_array( $doc, $old_docs ) ) {
+						$file = get_post($doc);
+						$filepath = get_attached_file( $doc );
+
+						$post_doc_hashes = get_post_meta( $post_id, '_rt_wp_hrm_doc_hash' );
+						if ( ! empty( $post_doc_hashes ) && in_array( md5_file( $filepath ), $post_doc_hashes ) ) {
+							continue;
+						}
+
+						if ( ! empty( $file->post_parent ) ) {
+							$args = array(
+								'post_mime_type' => $file->post_mime_type,
+								'guid' => $file->guid,
+								'post_title' => $file->post_title,
+								'post_content' => $file->post_content,
+								'post_parent' => $post_id,
+								'post_author' => get_current_user_id(),
+							);
+							wp_insert_attachment( $args, $file->guid, $post_id );
+
+							add_post_meta( $post_id, '_rt_wp_hrm_doc_hash', md5_file( $filepath ) );
+
+						} else {
+							wp_update_post( array( 'ID' => $doc, 'post_parent' => $post_id ) );
+							$file = get_attached_file( $doc );
+							add_post_meta( $post_id, '_rt_wp_hrm_doc_hash', md5_file( $filepath ) );
+						}
+					}
+				}
+
+				foreach ( $old_docs as $doc ) {
+					if ( ! in_array( $doc, $new_docs ) ) {
+						wp_update_post( array( 'ID' => $doc, 'post_parent' => '0' ) );
+						$filepath = get_attached_file( $doc );
+						delete_post_meta( $post_id, '_rt_wp_hrm_doc_hash', md5_file( $filepath ) );
+					}
+				}
+			} else {
+				foreach ( $old_docs as $doc ) {
+					wp_update_post( array( 'ID' => $doc, 'post_parent' => '0' ) );
+					$filepath = get_attached_file( $doc );
+					delete_post_meta( $post_id, '_rt_wp_hrm_doc_hash', md5_file( $filepath ) );
+				}
+			}
 		}
 
         /**
