@@ -94,13 +94,17 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
             add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
-			add_action('save_post', array( $this, 'save_leave_meta' ), 1, 2);
-			add_action('wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
+			add_action( 'save_post', array( $this, 'save_leave_meta' ), 1, 2);
+			add_action( 'wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
 
             add_action( 'wp_ajax_seach_employees_name', array( $this, 'employees_autocomplete_ajax' ) );
 
 			add_action( 'rt_biz_entity_meta_boxes', array( $this, 'contact_documents_meta_box' ) );
-			add_action( 'save_post', array( $this, 'save_contact_documents' ) );
+			add_action( 'save_post', array( $this, 'save_contact_documents_meta_box' ) );
+
+			add_action( 'edit_user_profile', array( $this, 'render_contact_documents_profile' ), 1 );
+			add_action( 'show_user_profile', array( $this, 'render_contact_documents_profile' ), 1 );
+			add_action( 'profile_update', array( $this, 'save_contact_documents_profile' ), 10, 2 );
 		}
 
 		function contact_documents_meta_box( $post_type ) {
@@ -119,10 +123,30 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				return;
 			}
 
-			add_meta_box( 'rt-hrm-contact-documents', __( 'Documents' ), array( $this, 'render_documents_meta_box' ), $rt_person->post_type );
+			add_meta_box( 'rt-hrm-contact-documents', __( 'Documents' ), array( $this, 'render_documents_view' ), $rt_person->post_type );
 		}
 
-		function render_documents_meta_box( $post ) {
+		function render_contact_documents_profile( $user ) {
+			$contact = ( function_exists( 'rt_biz_get_contact_for_wp_user' ) ) ? rt_biz_get_contact_for_wp_user( $user->ID ) : '';
+			if ( empty( $contact ) ) {
+				return;
+			}
+			$contact = $contact[0];
+			?>
+			<h3><?php _e( 'Documents' ); ?></h3>
+			<table class="form-table">
+				<tbody>
+					<tr>
+						<td>
+						<?php $this->render_documents_view( $contact ); ?>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<?php
+		}
+
+		function render_documents_view( $post ) {
 			?>
 			<a href="#" id="rt_hrm_add_doc_btn" class="button"><?php _e( 'Add Document' ); ?></a>
 			<br /><br />
@@ -146,13 +170,13 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			<?php } ?>
 			</div>
 			<?php
-			do_action( 'rt_biz_render_meta_fields', $post, $this );
+			do_action( 'rt_hrm_render_documents_view', $post, $this );
 			wp_nonce_field( 'rt_hrm_documents_metabox', 'rt_hrm_documents_metabox_nonce' );
-			$this->print_documents_metabox_js();
-			do_action( 'rt_biz_print_metabox_js', $post, $this );
+			$this->print_documents_view_js();
+			do_action( 'rt_hrm_print_documents_view_js', $post, $this );
 		}
 
-		function print_documents_metabox_js() { ?>
+		function print_documents_view_js() { ?>
 			<style>
 				.rthrm_delete_doc {
 					margin-left: 10px;
@@ -218,8 +242,17 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			</script>
 		<?php }
 
-		function save_contact_documents( $post_id ) {
-						/*
+		function save_contact_documents_profile( $user_id, $old_data ) {
+			$contact = ( function_exists( 'rt_biz_get_contact_for_wp_user' ) ) ? rt_biz_get_contact_for_wp_user( $user_id ) : '';
+			if ( empty( $contact ) ) {
+				return;
+			}
+			$contact = $contact[0];
+			$this->save_contact_documents( $contact->ID );
+		}
+
+		function save_contact_documents_meta_box( $post_id ) {
+			/*
 			 * We need to verify this came from the our screen and with proper authorization,
 			 * because save_post can be triggered at other times.
 			 */
@@ -241,6 +274,10 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				return;
 			}
 
+			$this->save_contact_documents( $post_id );
+		}
+
+		function save_contact_documents( $post_id ) {
 			$old_docs = get_posts( array(
 				'post_parent' => $post_id,
 				'post_type' => 'attachment',
