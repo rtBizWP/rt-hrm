@@ -64,6 +64,7 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				self::$settings[$status['slug'].'_leaves_color'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( $status['slug'].'_leaves_color' ) : '';
 			}
 			self::$settings['leaves_text_color'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( 'leaves_text_color' ) : '';
+			self::$settings['is_user_allowed_to_upload_edit_docs'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( 'is_user_allowed_to_upload_edit_docs' ) : '';
 		}
 
 		/**
@@ -85,7 +86,6 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				'parent' => 'edit.php?post_type='.$rt_hrm_module->post_type, // id of parent, if blank, then this is a top level menu
 				'id' => RT_WP_HRM::$settings_page_slug, // Unique ID of the menu item
 				'capability' => $admin_cap, // User role
-//				'icon' => $logo_url, // Menu icon for top level menus only http://melchoyce.github.io/dashicons/
 				'position' => 10, // Menu position. Can be used for both top and sub level menus
 				'use_form' => true, // If false, options will not be wrapped in a form
 			) );
@@ -143,6 +143,13 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				'name' => __( 'Documents' ), // Name of the tab
 				'id' => 'documents', // Unique ID of the tab
 				'title' => __( 'Documents' ), // Title to display in the admin panel when tab is active
+			) );
+			$doc_tab->createOption( array(
+				'name' => __( 'Allow users to upload/remove documents from their profile page ?' ), // Name of the option
+				'desc' => 'This is a checkbox which decides whether users/employees are allowed to upload/edit their documents from their profile page or not.', // Description of the option
+				'id' => 'is_user_allowed_to_upload_edit_docs', // Unique ID of the option
+				'type' => 'checkbox', //
+				'default' => 0, // Menu icon for top level menus only
 			) );
 			$doc_tab->createOption( array(
 				'name' => __( 'Storage Quota per User' ), // Name of the option

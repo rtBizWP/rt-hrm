@@ -123,7 +123,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				return;
 			}
 
-			add_meta_box( 'rt-hrm-contact-documents', __( 'Documents' ), array( $this, 'render_documents_view' ), $rt_person->post_type );
+			add_meta_box( 'rt-hrm-contact-documents', __( 'Documents' ), array( $this, 'render_documents_meta_box' ), $rt_person->post_type );
 		}
 
 		function render_contact_documents_profile( $user ) {
@@ -132,13 +132,17 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				return;
 			}
 			$contact = $contact[0];
+			$is_user_change_allowed = Rt_HRM_Settings::$settings['is_user_allowed_to_upload_edit_docs'];
+			if ( current_user_can( 'administrator' ) ) {
+				$is_user_change_allowed = true;
+			}
 			?>
 			<h3><?php _e( 'Documents' ); ?></h3>
 			<table class="form-table">
 				<tbody>
 					<tr>
 						<td>
-						<?php $this->render_documents_view( $contact ); ?>
+						<?php $this->render_documents_view( $contact, $is_user_change_allowed ); ?>
 						</td>
 					</tr>
 				</tbody>
@@ -146,11 +150,17 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			<?php
 		}
 
-		function render_documents_view( $post ) {
+		function render_documents_meta_box( $post ) {
+			$this->render_documents_view( $post, $is_user_change_allowed = 1 );
+		}
+
+		function render_documents_view( $post, $is_user_change_allowed ) {
+			if ( $is_user_change_allowed ) {
 			?>
 			<a href="#" id="rt_hrm_add_doc_btn" class="button"><?php _e( 'Add Document' ); ?></a>
 			<br /><br />
 			<?php
+			}
 			$docs = get_posts( array(
 				'posts_per_page' => -1,
 				'post_parent' => $post->ID,
@@ -164,8 +174,10 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					<img class="rthrm_doc_img" height="20px" width="20px" src="<?php echo RT_HRM_URL . "app/assets/file-type/" . $extn . ".png"; ?>" />
 					<a target="_blank" href="<?php echo get_edit_post_link( $doc->ID ); ?>" title="<?php echo $doc->post_content; ?>" class="rt_hrm_doc_title"><?php echo $doc->post_title; ?></a>
 					<a target="_blank" href="<?php echo wp_get_attachment_url($doc->ID); ?>" class="rthrm_download_doc"><?php _e( 'Download' );?></a>
+					<?php if ( $is_user_change_allowed ) { ?>
 					<a href="#" class="rthrm_delete_doc">x</a>
 					<input type="hidden" name="rt_hrm_doc[]" value="<?php echo $doc->ID; ?>" />
+					<?php } ?>
 				</div>
 			<?php } ?>
 			</div>
