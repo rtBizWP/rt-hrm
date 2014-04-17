@@ -137,8 +137,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			<?php foreach ( $docs as $doc ) { ?>
 				<?php $extn_array = explode('.', $doc->guid); $extn = $extn_array[count($extn_array) - 1]; ?>
 				<div class="doc-item" data-doc-id="<?php echo $doc->ID; ?>">
-					<img height="20px" width="20px" src="<?php echo RT_HRM_URL . "app/assets/file-type/" . $extn . ".png"; ?>" />
+					<img class="rthrm_doc_img" height="20px" width="20px" src="<?php echo RT_HRM_URL . "app/assets/file-type/" . $extn . ".png"; ?>" />
 					<a target="_blank" href="<?php echo get_edit_post_link( $doc->ID ); ?>" title="<?php echo $doc->post_content; ?>" class="rt_hrm_doc_title"><?php echo $doc->post_title; ?></a>
+					<a target="_blank" href="<?php echo wp_get_attachment_url($doc->ID); ?>" class="rthrm_download_doc"><?php _e( 'Download' );?></a>
 					<a href="#" class="rthrm_delete_doc">x</a>
 					<input type="hidden" name="rt_hrm_doc[]" value="<?php echo $doc->ID; ?>" />
 				</div>
@@ -157,8 +158,17 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					margin-left: 10px;
 					color: red;
 				}
-				.rt_hrm_doc_title {
+				.rthrm_doc_img {
+					/*margin-top: -5px;*/
+				}
+				.rt_hrm_doc_title, .rthrm_download_doc {
 					margin-left: 10px;
+				}
+				.doc-item {
+					border: 1px solid grey;
+					margin: 2px 2px;
+					display: inline-block;
+					padding: 2px 5px;
 				}
 			</style>
 			<script>
@@ -185,7 +195,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 								attachment = attachment.toJSON();
 								console.log(attachment);
 								strAttachment = '<div class="doc-item" data-doc-id="'+attachment.id+'">';
-								strAttachment += '<img height="20px" width="20px" src="' +attachment.icon + '" ><a target="_blank" href="'+attachment.editLink+'" title="'+attachment.description+'" class="rt_hrm_doc_title">'+attachment.title+'</a>';
+								strAttachment += '<img class="rthrm_doc_img" height="20px" width="20px" src="' +attachment.icon + '" >';
+								strAttachment += '<a target="_blank" href="'+attachment.editLink+'" title="'+attachment.description+'" class="rt_hrm_doc_title">'+attachment.title+'</a>';
+								strAttachment += '<a target="_blank" href="'+attachment.url+'" class="rthrm_download_doc"><?php _e( 'Download' );?></a>';
 								strAttachment += '<a href="#" class="rthrm_delete_doc">x</a>';
 								strAttachment += '<input type="hidden" name="rt_hrm_doc[]" value="' + attachment.id +'" /></div>';
 
