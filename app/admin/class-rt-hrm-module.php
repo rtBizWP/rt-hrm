@@ -105,6 +105,26 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'edit_user_profile', array( $this, 'render_contact_documents_profile' ), 1 );
 			add_action( 'show_user_profile', array( $this, 'render_contact_documents_profile' ), 1 );
 			add_action( 'profile_update', array( $this, 'save_contact_documents_profile' ), 10, 2 );
+
+			add_action( 'wp_ajax_rt_hrm_get_attachment_size', array( $this, 'get_attachment_size' ) );
+		}
+
+		function get_attachment_size() {
+			if ( ! isset( $_POST['attachment_id'] ) ) {
+				echo json_encode( array( 'status' => 'error', 'message' => __( 'Attachemnt ID not given. Please try again.' ) ) );
+				die();
+			}
+
+			$attachment_id = intval( $_POST['attachment_id'] );
+			$attachment_file = get_attached_file( $attachment_id );
+			if ( empty( $attachment_file ) ) {
+				echo json_encode( array( 'status' => 'error', 'message' => __( 'Attachment file not found to know the file size. Please try again.' ) ) );
+				die();
+			}
+
+			$file_size = filesize( $attachment_file ) / 1024 / 1024;
+			echo json_encode( array( 'status' => 'success', 'file_size' => $file_size ) );
+			die();
 		}
 
 		function contact_documents_meta_box( $post_type ) {
@@ -158,7 +178,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			if ( $is_user_change_allowed ) {
 			?>
 			<a href="#" id="rt_hrm_add_doc_btn" class="button"><?php _e( 'Add Document' ); ?></a>
-			<br /><br />
 			<?php
 			}
 			$docs = get_posts( array(
@@ -166,6 +185,14 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'post_parent' => $post->ID,
 				'post_type' => 'attachment',
 			));
+			$existing_data_size = 0;
+			$upload_limit = Rt_HRM_Settings::$settings['storage_quota_per_user'];
+			foreach ( $docs as $doc ) {
+				$existing_data_size += ( filesize( get_attached_file( $doc->ID ) ) / 1024 / 1024 );
+			}
+			if ( $existing_data_size > $upload_limit ) { ?>
+			<div class="rthrm_upload_limit_exceeds"><?php _e( sprintf( 'Upload Limit for this user exceeds. Documents of size %s are already uploaded.', '<strong>'.$existing_data_size.' MB</strong>' ) ); ?></div>
+			<?php }
 			?>
 			<div id="rt_hrm_doc_container">
 			<?php foreach ( $docs as $doc ) { ?>
@@ -184,11 +211,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			<?php
 			do_action( 'rt_hrm_render_documents_view', $post, $this );
 			wp_nonce_field( 'rt_hrm_documents_metabox', 'rt_hrm_documents_metabox_nonce' );
-			$this->print_documents_view_js();
+			$this->print_documents_view_js( $existing_data_size );
 			do_action( 'rt_hrm_print_documents_view_js', $post, $this );
 		}
 
-		function print_documents_view_js() { ?>
+		function print_documents_view_js( $existing_data_size ) { ?>
 			<style>
 				.rthrm_delete_doc {
 					margin-left: 10px;
@@ -206,9 +233,20 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					display: inline-block;
 					padding: 2px 5px;
 				}
+				.rthrm_upload_limit_exceeds {
+					background-color: #FF9999;
+					border: 1px solid red;
+					padding: 5px;
+					margin: 5px 2px;
+				}
+				#rt_hrm_doc_container {
+					margin: 5px 2px;
+				}
 			</style>
 			<script>
 				var hrm_doc_upload_frame;
+				var hrm_upload_limit = <?php echo Rt_HRM_Settings::$settings['storage_quota_per_user']; ?>;
+				var hrm_existing_data_size = <?php echo $existing_data_size; ?>;
 				jQuery(document).ready(function($){
 					$(document).on('click', '#rt_hrm_add_doc_btn', function(e) {
 						e.preventDefault();
@@ -238,6 +276,21 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 								strAttachment += '<input type="hidden" name="rt_hrm_doc[]" value="' + attachment.id +'" /></div>';
 
 								jQuery("#rt_hrm_doc_container").append(strAttachment);
+
+								jQuery.post('<?php echo admin_url('admin-ajax.php'); ?>', {
+									action: 'rt_hrm_get_attachment_size',
+									attachment_id: attachment.id
+								}, function(data) {
+									data = jQuery.parseJSON(data);
+									jQuery('.rthrm_upload_limit_exceeds').remove();
+									if ( data.status != 'success' ) {
+										jQuery("#rt_hrm_doc_container div.doc-item[data-doc-id="+attachment.id+"]").remove();
+										jQuery('<div class="rthrm_upload_limit_exceeds">'+data.message+'</div>').insertBefore('#rt_hrm_doc_container');
+									} else if ( ( hrm_existing_data_size + data.file_size ) > hrm_upload_limit ) {
+										jQuery("#rt_hrm_doc_container div.doc-item[data-doc-id="+attachment.id+"]").remove();
+										jQuery('<div class="rthrm_upload_limit_exceeds"><?php _e( sprintf( 'Upload Limit for this user exceeds. Documents of size %s are already uploaded. Size of uploaded file is ', '<strong>'.$existing_data_size.' MB</strong>' ) ); ?><strong>'+data.file_size+' MB</strong>.</div>').insertBefore('#rt_hrm_doc_container');
+									}
+								});
 
 								// Do something with attachment.id and/or attachment.url here
 							});
@@ -299,9 +352,18 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$new_docs = array();
 			if ( isset( $_POST['rt_hrm_doc'] ) ) {
 				$new_docs = $_POST['rt_hrm_doc'];
+				$existing_data_size = 0;
+				$upload_limit = Rt_HRM_Settings::$settings['storage_quota_per_user'];
+				foreach ( $new_docs as $doc ) {
+					$existing_data_size += ( filesize( get_attached_file( $doc ) ) / 1024 / 1024 );
+				}
+				if ( $existing_data_size > $upload_limit ) {
+					return;
+				}
+
 				foreach ( $new_docs as $doc ) {
 					if ( ! in_array( $doc, $old_docs ) ) {
-						$file = get_post($doc);
+						$file = get_post( $doc );
 						$filepath = get_attached_file( $doc );
 
 						$post_doc_hashes = get_post_meta( $post_id, '_rt_wp_hrm_doc_hash' );

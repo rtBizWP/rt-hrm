@@ -65,6 +65,7 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 			}
 			self::$settings['leaves_text_color'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( 'leaves_text_color' ) : '';
 			self::$settings['is_user_allowed_to_upload_edit_docs'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( 'is_user_allowed_to_upload_edit_docs' ) : '';
+			self::$settings['storage_quota_per_user'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? intval( self::$titan_obj->getOption( 'storage_quota_per_user' ) ) : 0;
 		}
 
 		/**
