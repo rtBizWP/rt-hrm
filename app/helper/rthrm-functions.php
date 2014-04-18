@@ -91,55 +91,6 @@ function rthrm_post_type_name( $name ) {
 	return 'rt_' . rthrm_sanitize_taxonomy_name( $name );
 }
 
-/**
- * Call for get all attributes of HRM
- * @param string $attribute_store_as
- * @return array
- */
-function rthrm_get_all_attributes( $attribute_store_as = '' ) {
-	global $rt_attributes_model;
-	$attrs = $rt_attributes_model->get_all_attributes();
-
-	if( empty( $attribute_store_as ) ) {
-		return $attrs;
-	}
-
-	$newAttr = array();
-	foreach ($attrs as $attr) {
-		if( $attr->attribute_store_as == $attribute_store_as )
-			$newAttr[] = $attr;
-	}
-
-	return $newAttr;
-}
-
-/**
- * Call for get attribute of HRM
- * @param $post_type
- * @param string $attribute_store_as
- * @return array
- */
-function rthrm_get_attributes( $post_type, $attribute_store_as = '' ) {
-	global $rt_attributes_relationship_model, $rt_attributes_model;
-	$relations = $rt_attributes_relationship_model->get_relations_by_post_type( $post_type );
-	$attrs = array();
-
-	foreach ($relations as $relation) {
-		$attrs[] = $rt_attributes_model->get_attribute( $relation->attr_id );
-	}
-
-	if( empty( $attribute_store_as ) ) {
-		return $attrs;
-	}
-
-	$newAttr = array();
-	foreach ($attrs as $attr) {
-		if ( $attr->attribute_store_as == $attribute_store_as )
-			$newAttr[] = $attr;
-	}
-	return $newAttr;
-}
-
 
 /*     * ********* Post Term To String **** */
 /**
@@ -218,11 +169,6 @@ function rthrm_encrypt_decrypt( $string ) {
 	 * Return the encrypted/decrypted string
 	 */
 	return $encrypted_string;
-}
-
-function rthrm_render_attribute(  $attr, $post_id, $edit  ) {
-    global $rt_hrm_attributes;
-   return $rt_hrm_attributes->render_attribute( $attr, $post_id, $edit );
 }
 
 function rthrm_leave_label( ) {

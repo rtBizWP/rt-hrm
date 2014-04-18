@@ -28,6 +28,10 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
          */
         var $attributes_page_slug = 'rthrm-attributes';
 
+		static $leave_type_tax = 'rt-leave-type';
+
+		var $leave_type_tax_label;
+
         /**
          * Object initialization
          */
@@ -39,19 +43,57 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
          * Create object of rt-attributes classes & Add attributes page for leave [Custom post type]
          */
         function init_attributes() {
-			global $rt_attributes, $rt_hrm_module, $rt_attributes_model, $rt_attributes_relationship_model;
-            $rt_attributes = new RT_Attributes( RT_HRM_TEXT_DOMAIN );
-            $admin_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) : '';
+			$this->init_leave_type();
+			add_action( 'admin_menu' , array( $this, 'remove_leave_type_meta_box' ) );
+		}
+
+		function remove_leave_type_meta_box() {
+			global $rt_hrm_module;
+			remove_meta_box( 'tagsdiv-'.self::$leave_type_tax, $rt_hrm_module->post_type, 'side' );
+		}
+
+		function init_leave_type() {
             $editor_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) : '';
-            $terms_caps = array(
-                'manage_terms' => $editor_cap,
-                'edit_terms'   => $editor_cap,
-                'delete_terms' => $editor_cap,
-                'assign_terms' => $editor_cap,
+            $caps = array(
+				'manage_terms' => $editor_cap,
+				'edit_terms'   => $editor_cap,
+				'delete_terms' => $editor_cap,
+				'assign_terms' => $editor_cap,
             );
-			$rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type='.$rt_hrm_module->post_type, '', $admin_cap, $terms_caps, $render_type = true, $storage_type = true, $orderby = true );
-			$rt_attributes_model = new RT_Attributes_Model();
-			$rt_attributes_relationship_model = new RT_Attributes_Relationship_Model();
+
+			global $rt_hrm_module;
+			$name = self::$leave_type_tax;
+			$label = $this->leave_type_tax_label = __( 'Leave Type' );
+			$post_type = $rt_hrm_module->post_type;
+
+			register_taxonomy(
+				$name,
+				$post_type,
+				array(
+					'public'					=> false,
+					'hierarchical' 				=> true,
+					'update_count_callback' 	=> array( $this, 'update_post_term_count' ),
+					'labels' => array(
+							'name' 						=> $label,
+							'singular_name' 			=> $label,
+							'search_items' 				=> __( 'Search' ) . ' ' . $label,
+							'all_items' 				=> __( 'All' ) . ' ' . $label,
+							'parent_item' 				=> __( 'Parent' ) . ' ' . $label,
+							'parent_item_colon' 		=> __( 'Parent' ) . ' ' . $label . ':',
+							'edit_item' 				=> __( 'Edit' ) . ' ' . $label,
+							'update_item' 				=> __( 'Update' ) . ' ' . $label,
+							'add_new_item' 				=> __( 'Add New' ) . ' ' . $label,
+							'new_item_name' 			=> __( 'New' ) . ' ' . $label,
+						),
+					'show_ui' 					=> true,
+					'show_admin_column'			=> false,
+					'query_var' 				=> true,
+					'capabilities'				=> $caps,
+					'show_in_nav_menus' 		=> true,
+					//'rewrite' 					=> array( 'slug' => $product_attribute_base . sanitize_title( $tax->attribute_name ), 'with_front' => false, 'hierarchical' => $hierarchical ),
+					'rewrite'					=> true,
+				)
+			);
 		}
 
         /**

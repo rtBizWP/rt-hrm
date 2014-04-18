@@ -548,7 +548,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * @param $post
          */
         function ui_metabox( $post ){
-            global $current_user;
+            global $current_user, $rt_hrm_attributes;
 			wp_nonce_field( 'rthrm_leave_additional_details_meta', 'rthrm_leave_additional_details_meta_nonce' );
 
             $leave_user = get_post_meta( $post->ID, 'leave-user', false);
@@ -574,68 +574,82 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                             <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { echo $current_employee->ID; }  ?>">
                         </td>
                     </tr>
+					<tr>
+						<td>
+							<label for="<?php echo $rt_hrm_attributes->leave_type_tax_label; ?>">
+								<?php echo $rt_hrm_attributes->leave_type_tax_label; ?>
+							</label>
+						</td>
+						<td>
+							<?php
+								$options = array();
+								$terms = get_terms( Rt_HRM_Attributes::$leave_type_tax, array( 'hide_empty' => false, 'order' => 'asc' ) );
+								$post_term = wp_get_post_terms( ( isset( $post->ID ) ) ? $post->ID : '', Rt_HRM_Attributes::$leave_type_tax, array( 'fields' => 'ids' ) );
+								// Default Selected Term for the attribute. can beset via settings -- later on
+								$selected_term = '-11111';
+								if( !empty( $post_term ) ) {
+									$selected_term = $post_term[0];
+								}
+								foreach ($terms as $term) {
+									$options[] = array(
+										$term->name => $term->term_id,
+										'title' => $term->name,
+										'checked' => ($term->term_id == $selected_term) ? true : false,
+									);
+								}
+								global $rt_form;
+								$args = array(
+									'id' => Rt_HRM_Attributes::$leave_type_tax,
+									'name' => 'post['.Rt_HRM_Attributes::$leave_type_tax.'][]',
+									'rtForm_options' => $options,
+								);
+								echo $rt_form->get_radio( $args );
+							?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="leave-duration">Duration</label>
+						</td>
+						<td>
+							<select id="leave-duration" name="post[leave-duration]" class="rt-form-select">
+								<option value="full-day" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'full-day' ) { echo 'selected'; } ?> >Full Day</option>
+								<option value="half-day" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'half-day' ) { echo 'selected'; } ?>>Half Day</option>
+								<option value="other" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'other' ) { echo 'selected'; } ?>>Other</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="leave-start-date">Start Date</label>
+						</td>
+						<td>
 
-				<?php
-					global $rt_hrm_module,$rt_hrm_attributes;
-					$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
-					foreach ( $attributes as $attr ){
-						?>
-						<tr>
-							<td>
-								<label for="<?php echo $attr->attribute_name ?>">
-									<?php echo $attr->attribute_label; ?>
-								</label>
-							</td>
-							<td>
-								<?php $rt_hrm_attributes->render_attribute( $attr, isset($post->ID) ? $post->ID : '', true ); ?>
-							</td>
-						</tr>
-						<?php
-					}
-				?>
-				<tr>
-					<td>
-						<label for="leave-duration">Duration</label>
-					</td>
-					<td>
-						<select id="leave-duration" name="post[leave-duration]" class="rt-form-select">
-							<option value="full-day" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'full-day' ) { echo 'selected'; } ?> >Full Day</option>
-							<option value="half-day" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'half-day' ) { echo 'selected'; } ?>>Half Day</option>
-							<option value="other" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'other' ) { echo 'selected'; } ?>>Other</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label for="leave-start-date">Start Date</label>
-					</td>
-					<td>
+							<div >
+								<input id="leave-start-date" name="post[leave-start-date]"  class="rt-form-text datepicker" placeholder="Select Start Date" readonly="readonly" value="<?php if ( isset( $leave_start_date ) && !empty( $leave_start_date ) ) { echo $leave_start_date[0]; }  ?>" type="text">
+							</div>
+						</td>
+					</tr>
 
-						<div >
-							<input id="leave-start-date" name="post[leave-start-date]"  class="rt-form-text datepicker" placeholder="Select Start Date" readonly="readonly" value="<?php if ( isset( $leave_start_date ) && !empty( $leave_start_date ) ) { echo $leave_start_date[0]; }  ?>" type="text">
-						</div>
-					</td>
-				</tr>
+					<tr <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] != 'other' ) { echo "style='display:none'"; } ?> >
+						<td>
+							<label for="leave-end-date">End Date</label>
+						</td>
+						<td>
 
-				<tr <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] != 'other' ) { echo "style='display:none'"; } ?> >
-					<td>
-						<label for="leave-end-date">End Date</label>
-					</td>
-					<td>
-
-						<div>
-							<input id="leave-end-date" name="post[leave-end-date]" class="rt-form-text datepicker" placeholder="Select End Date" readonly="readonly" value="<?php if ( isset( $leave_end_date ) && !empty( $leave_end_date ) ) { echo $leave_end_date[0]; }  ?>" type="text">
-						</div>
-					</td>
-				</tr>
-                <tr>
-                    <td>
-                        <label class="label">Description </label>
-                    </td>
-                    <td>
-                        <textarea id="content" class="rt-form-text" name="content" style="resize: none;width: 100%; height: 75px;" aria-hidden="true"><?php echo $post->post_content ?></textarea>
-                    </td>
-                </tr>
+							<div>
+								<input id="leave-end-date" name="post[leave-end-date]" class="rt-form-text datepicker" placeholder="Select End Date" readonly="readonly" value="<?php if ( isset( $leave_end_date ) && !empty( $leave_end_date ) ) { echo $leave_end_date[0]; }  ?>" type="text">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label class="label">Description </label>
+						</td>
+						<td>
+							<textarea id="content" class="rt-form-text" name="content" style="resize: none;width: 100%; height: 75px;" aria-hidden="true"><?php echo $post->post_content ?></textarea>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 
@@ -653,15 +667,14 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             if ( !isset( $_POST['rthrm_leave_additional_details_meta_nonce'] ) || !wp_verify_nonce( $_POST['rthrm_leave_additional_details_meta_nonce'], 'rthrm_leave_additional_details_meta' ) ) {
 				return $post_id;
 			}
-			if ( !current_user_can( 'edit_' . $rt_hrm_module->post_type, $post_id ))
+			if ( !current_user_can( 'edit_' . $rt_hrm_module->post_type, $post_id ) )
 				return $post_id;
 			if( $post->post_type == 'revision' ) return;
 
 			$leave_meta = $_POST['post'];
 
-			$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
-			foreach ( $attributes as $attr ){
-				$rt_hrm_attributes->save_attributes( $attr, isset($post_id) ? $post_id : '', $leave_meta );
+			if ( isset( $leave_meta[  Rt_HRM_Attributes::$leave_type_tax] ) ) {
+				wp_set_post_terms( $post_id, implode( ',', array_map( 'intval', $leave_meta[Rt_HRM_Attributes::$leave_type_tax] ) ), Rt_HRM_Attributes::$leave_type_tax );
 			}
             update_post_meta( $post_id, 'leave-user', $leave_meta['leave-user'] );
             update_post_meta( $post_id, 'leave-user-id', $leave_meta['leave-user-id'] );

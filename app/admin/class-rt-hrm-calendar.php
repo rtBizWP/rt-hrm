@@ -85,9 +85,8 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 
 				$newLeaveID = wp_insert_post($newLeave);
 
-				$attributes = rthrm_get_attributes( $rt_hrm_module->post_type );
-				foreach ( $attributes as $attr ){
-					$rt_hrm_attributes->save_attributes( $attr, isset($newLeaveID) ? $newLeaveID : '', $leave_meta );
+				if ( isset( $leave_meta[  Rt_HRM_Attributes::$leave_type_tax] ) ) {
+					wp_set_post_terms( $newLeaveID, implode( ',', array_map( 'intval', $leave_meta[Rt_HRM_Attributes::$leave_type_tax] ) ), Rt_HRM_Attributes::$leave_type_tax );
 				}
 
                 update_post_meta( $newLeaveID, 'leave-user', $leave_meta['leave-user'] );
