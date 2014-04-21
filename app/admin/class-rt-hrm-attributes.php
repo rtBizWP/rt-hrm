@@ -49,7 +49,7 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 
 		function remove_leave_type_meta_box() {
 			global $rt_hrm_module;
-			remove_meta_box( 'tagsdiv-'.self::$leave_type_tax, $rt_hrm_module->post_type, 'side' );
+			remove_meta_box( self::$leave_type_tax . 'div', $rt_hrm_module->post_type, 'side' );
 		}
 
 		function init_leave_type() {
