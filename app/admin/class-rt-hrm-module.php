@@ -58,6 +58,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          */
         var $custom_menu_order = array();
 
+		static $user_leave_quota_key = 'rt_hrm_leaves_quota';
+
         /**
          * Object initialization
          */
@@ -106,6 +108,10 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'show_user_profile', array( $this, 'render_contact_documents_profile' ), 1 );
 			add_action( 'profile_update', array( $this, 'save_contact_documents_profile' ), 10, 2 );
 
+			add_action( 'edit_user_profile', array( $this, 'render_paid_leave_quota' ), 1 );
+			add_action( 'show_user_profile', array( $this, 'render_paid_leave_quota' ), 1 );
+			add_action( 'profile_update', array( $this, 'save_paid_leave_quota' ), 10, 2 );
+
 			add_action( 'wp_ajax_rt_hrm_get_attachment_size', array( $this, 'get_attachment_size' ) );
 		}
 
@@ -146,6 +152,51 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_meta_box( 'rt-hrm-contact-documents', __( 'Documents' ), array( $this, 'render_documents_meta_box' ), $rt_person->post_type );
 		}
 
+		function get_user_leave_quota( $user_id ) {
+			$leave_quota = get_user_meta( $user_id, self::$user_leave_quota_key, true );
+			if ( $leave_quota === '' ) {
+				$leave_quota = Rt_HRM_Settings::$settings['leaves_quota_per_user'];
+			}
+			return $leave_quota;
+		}
+
+		function save_user_leave_quota( $user_id, $leave_quota ) {
+			update_user_meta( $user_id, self::$user_leave_quota_key, $leave_quota );
+		}
+
+		function render_paid_leave_quota( $user ) {
+			$editor_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) : '';
+			$leave_quota = $this->get_user_leave_quota( $user->ID );
+			?>
+			<h3><?php _e( 'Paid Leaves' ); ?></h3>
+			<table class="form-table">
+				<tbody>
+					<tr>
+						<th>
+							<?php _e( 'Paid Leaves left : ' ); ?>
+						</th>
+						<td>
+							<?php if ( current_user_can( $editor_cap ) ) { ?>
+							<input name="rt_hrm_leave_quota" type="number" step="1" min="0" value="<?php echo $leave_quota; ?>" />
+							<?php } else { ?>
+							<?php echo $leave_quota; ?>
+							<?php } ?>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<?php
+		}
+
+		function save_paid_leave_quota( $user_id, $old_data ) {
+			if ( ! isset( $_POST['rt_hrm_leave_quota'] ) ) {
+				return;
+			}
+
+			$leave_quota = $_POST['rt_hrm_leave_quota'];
+			$this->save_user_leave_quota( $user_id, $leave_quota );
+		}
+
 		function render_contact_documents_profile( $user ) {
 			$contact = ( function_exists( 'rt_biz_get_contact_for_wp_user' ) ) ? rt_biz_get_contact_for_wp_user( $user->ID ) : '';
 			if ( empty( $contact ) ) {
@@ -153,7 +204,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			}
 			$contact = $contact[0];
 			$is_user_change_allowed = Rt_HRM_Settings::$settings['is_user_allowed_to_upload_edit_docs'];
-			if ( current_user_can( 'administrator' ) ) {
+			$editor_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) : '';
+			if ( current_user_can( $editor_cap ) ) {
 				$is_user_change_allowed = true;
 			}
 			?>

@@ -64,6 +64,7 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				self::$settings[$status['slug'].'_leaves_color'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( $status['slug'].'_leaves_color' ) : '';
 			}
 			self::$settings['leaves_text_color'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( 'leaves_text_color' ) : '';
+			self::$settings['leaves_quota_per_user'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? intval( self::$titan_obj->getOption( 'leaves_quota_per_user' ) ) : 0;
 			self::$settings['is_user_allowed_to_upload_edit_docs'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? self::$titan_obj->getOption( 'is_user_allowed_to_upload_edit_docs' ) : '';
 			self::$settings['storage_quota_per_user'] = ( isset( self::$titan_obj ) && ! empty( self::$titan_obj ) ) ? intval( self::$titan_obj->getOption( 'storage_quota_per_user' ) ) : 0;
 		}
@@ -129,12 +130,12 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				'default' => '#FFFFFF', // Menu icon for top level menus only
 			) );
 			$leaves_tab->createOption( array(
-				'name' => __( 'Leaves Quota per User' ), // Name of the option
+				'name' => __( 'Paid Leaves Quota per User' ), // Name of the option
 				'desc' => '', // Description of the option
 				'id' => 'leaves_quota_per_user', // Unique ID of the option
 				'type' => 'number', //
 				'default' => 10, // Menu icon for top level menus only
-				'example' => 'Every user will get this much leaves. It can be overriden for any user from his/her profile.', // An example value for this field, will be displayed in a <code>
+				'example' => 'Every user will get this much paid leaves. It can be overriden for any user from his/her profile.', // An example value for this field, will be displayed in a <code>
 				'livepreview' => '', // jQuery script to update something in the site. For theme customizer only
 			) );
 			$leaves_tab->createOption( array(
