@@ -89,6 +89,10 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 					wp_set_post_terms( $newLeaveID, implode( ',', array_map( 'intval', $leave_meta[Rt_HRM_Attributes::$leave_type_tax] ) ), Rt_HRM_Attributes::$leave_type_tax );
 				}
 
+				if ( isset( $_POST['leave_quota_use'] ) ) {
+					update_post_meta( $newLeaveID, '_rt_hrm_leave_quota_use', $_POST['leave_quota_use'] );
+				}
+
                 update_post_meta( $newLeaveID, 'leave-user', $leave_meta['leave-user'] );
                 update_post_meta( $newLeaveID, 'leave-user-id', $leave_meta['leave-user-id'] );
                 update_post_meta( $newLeaveID, 'leave-duration', $leave_meta['leave-duration'] );
@@ -110,13 +114,13 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
          */
         function ui( $post_type ) {
 			global $current_user;
-            $current_employee = rt_biz_get_contact_for_wp_user( get_current_user_id( ) );
+            $current_employee = rt_biz_get_person_for_wp_user( get_current_user_id( ) );
             if ( isset( $current_employee ) && !empty( $current_employee ) ){
                 $current_employee=$current_employee[0];
             }
 			$arg = array(
 				'post_type' => $post_type,
-				'is_hrm_manager' => current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ),
+				'is_hrm_manager' => current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ),
                 'current_employee' => $current_employee
 			);
 			rthrm_get_template( 'admin/calendar.php', $arg );
@@ -129,7 +133,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
         function render_calendar() {
 			global $rt_calendar, $rt_hrm_module;
             $args = array('post_type' => $rt_hrm_module->post_type,'post_status' => 'pending,approved,rejected');
-            if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) )  ) {
+            if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) )  ) {
                 $args['author'] = get_current_user_id();
             }
             $the_query = new WP_Query( $args );

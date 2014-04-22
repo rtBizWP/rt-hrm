@@ -35,17 +35,19 @@ jQuery(document).ready(function($) {
 			rtHRMAdmin.eleLevaeDayType = $("#leave-duration");
 			rtHRMAdmin.eleLevaeEndDate = $("#leave-end-date");
             rtHRMAdmin.eleLevaeDesc = $("#leave_description");
+			rtHRMAdmin.eleLeaveQuotaUse = $('#leave_quota_use');
 
 			rtHRMAdmin.initDatePicker();
 			rtHRMAdmin.initRtCalenderMethod();
 			rtHRMAdmin.leaveDayChange();
 			rtHRMAdmin.add_leave_validate();
             rtHRMAdmin.autocompleteUser();
+			rtHRMAdmin.paidLeaveChange();
 			rtHRMAdmin.initDashboardWPMenuHack();
 		},
 		initDatePicker : function(){
 			//call datepicker
-			$(".datepicker").live('focus', function(){
+			$(document).on('focus', ".datepicker",function(){
 				$(this).datepicker({
 					'dateFormat': 'dd/mm/yy'
 				});
@@ -80,7 +82,7 @@ jQuery(document).ready(function($) {
 				rtHRMAdmin.eleLevaeEndDate.val('');
 				rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().hide();
 			}
-			rtHRMAdmin.eleLevaeDayType.live('change',function(){
+			$(document).on('change','#'+rtHRMAdmin.eleLevaeDayType.attr('id'),function(){
 				if ( $(this).val()=='Other' || $(this).val()=='other' ) {
 					rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().show();
 				}else{
@@ -89,15 +91,39 @@ jQuery(document).ready(function($) {
 				}
 			})
 		},
+		paidLeaveChange: function() {
+			rtHRMAdmin.eleLeaveUserID.bind('change');
+			rtHRMAdmin.eleLeaveUserID.on('change', function(e) {
+				e.preventDefault();
+				rtHRMAdmin.eleLeaveQuotaUse.closest('tr').addClass('hide');
+				rtHRMAdmin.eleLeaveQuotaUse.prop('checked', false).change();
+				if ( $(this).val().trim() == '' ) {
+					return;
+				}
+				employee_id = $(this).val();
+				$.post(ajaxurl, {
+					action: 'rt_hrm_check_user_leave_quota',
+					employee_id: employee_id
+				}, function(data) {
+					data = $.parseJSON(data);
+					if ( data.status == 'success' ) {
+						rtHRMAdmin.eleLeaveQuotaUse.closest('tr').removeClass('hide');
+					}
+				});
+			});
+		},
 		add_leave_validate : function(){
 			$("#post, #form-add-leave").submit(function(e) {
 				try {
-                    if ( typeof(rtHRMAdmin.eleLeaveUserID.val()) == "undefined" || rtHRMAdmin.eleLeaveUserID.val().trim() == "" || rtHRMAdmin.eleLeaveUser.length > 1) {
+                    if ( typeof(rtHRMAdmin.eleLeaveUserID.val()) == "undefined"
+						|| rtHRMAdmin.eleLeaveUserID.val().trim() == ""
+						|| rtHRMAdmin.eleLeaveUser.val().trim() == '' ) {
                         addError(rtHRMAdmin.eleLeaveUserID, "Please Enter valid Employee Name");
                         rtHRMAdmin.removeLodingOnNewPost();
                         return false;
                     }
-                    if (typeof(rtHRMAdmin.eleLevaeStartDate.val()) == "undefined" || rtHRMAdmin.eleLevaeStartDate.val().trim() == "") {
+                    if ( typeof(rtHRMAdmin.eleLevaeStartDate.val()) == "undefined"
+						|| rtHRMAdmin.eleLevaeStartDate.val().trim() == "") {
 						addError(rtHRMAdmin.eleLevaeStartDate, "Please Enter the Leave Start Date");
                         rtHRMAdmin.removeLodingOnNewPost();
                         return false;
@@ -121,7 +147,7 @@ jQuery(document).ready(function($) {
             if(rtHRMAdmin.eleLeaveUser.length > 0){
                 rtHRMAdmin.eleLeaveUser.autocomplete({
                     source: function( request, response ) {
-                        rtHRMAdmin.eleLeaveUserID.val("");
+                        rtHRMAdmin.eleLeaveUserID.val("").trigger('change');
                         $.ajax({
                             url: ajaxurl,
                             dataType: "json",
@@ -143,7 +169,7 @@ jQuery(document).ready(function($) {
                     },minLength: 2,
                     select: function(event, ui) {
                         rtHRMAdmin.eleLeaveUser.val(ui.item.label);
-                        rtHRMAdmin.eleLeaveUserID.val(ui.item.id);
+                        rtHRMAdmin.eleLeaveUserID.val(ui.item.id).trigger('change');
                         return false;
                     }
                 }).data("ui-autocomplete")._renderItem = function(ul, item) {

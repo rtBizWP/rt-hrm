@@ -113,6 +113,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'profile_update', array( $this, 'save_paid_leave_quota' ), 10, 2 );
 
 			add_action( 'wp_ajax_rt_hrm_get_attachment_size', array( $this, 'get_attachment_size' ) );
+			add_action( 'wp_ajax_rt_hrm_check_user_leave_quota', array( $this, 'check_employee_leave_quota' ) );
 		}
 
 		function get_attachment_size() {
@@ -130,6 +131,23 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 			$file_size = filesize( $attachment_file ) / 1024 / 1024;
 			echo json_encode( array( 'status' => 'success', 'file_size' => $file_size ) );
+			die();
+		}
+
+		function check_employee_leave_quota() {
+			if ( ! isset( $_POST['employee_id'] ) ) {
+				echo json_encode( array( 'status' => 'error', 'message' => __( 'Employee ID not given. Please try again.' ) ) );
+				die();
+			}
+
+			$employee_id = intval( $_POST['employee_id'] );
+			$user_id = rt_biz_get_wp_user_for_person( $employee_id );
+			$leave_quota = $this->get_user_remaining_leaves( $user_id );
+			if ( $leave_quota > 0 ) {
+				echo json_encode( array( 'status' => 'success', 'leave_quota' => $leave_quota ) );
+			} else {
+				echo json_encode( array( 'status' => 'error', 'message' => __( 'No leaves remained.' ) ) );
+			}
 			die();
 		}
 
@@ -157,7 +175,23 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			if ( $leave_quota === '' ) {
 				$leave_quota = Rt_HRM_Settings::$settings['leaves_quota_per_user'];
 			}
-			return $leave_quota;
+			return intval( $leave_quota );
+		}
+
+		function get_user_remaining_leaves( $user_id ) {
+			$leaves = get_posts( array(
+				'posts_per_page' => -1,
+				'post_type' => $this->post_type,
+				'post_status' => 'approved',
+				'post_author' => $user_id,
+				'meta_query' => array(
+					array(
+						'key' => '_rt_hrm_leave_quota_use',
+						'value' => '1',
+					),
+				),
+			) );
+			return $this->get_user_leave_quota( $user_id ) - count( $leaves );
 		}
 
 		function save_user_leave_quota( $user_id, $leave_quota ) {
@@ -168,13 +202,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$editor_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) : '';
 			$leave_quota = $this->get_user_leave_quota( $user->ID );
 			?>
-			<h3><?php _e( 'Paid Leaves' ); ?></h3>
+			<h3><?php _e( 'Leaves Section' ); ?></h3>
 			<table class="form-table">
 				<tbody>
 					<tr>
-						<th>
-							<?php _e( 'Paid Leaves left : ' ); ?>
-						</th>
+						<th><?php _e( 'Paid Leaves Quota : ' ); ?></th>
 						<td>
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
 							<input name="rt_hrm_leave_quota" type="number" step="1" min="0" value="<?php echo $leave_quota; ?>" />
@@ -182,6 +214,10 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 							<?php echo $leave_quota; ?>
 							<?php } ?>
 						</td>
+					</tr>
+					<tr>
+						<th><?php _e( 'Remaining Leaves : ' ); ?></th>
+						<td><?php echo $this->get_user_remaining_leaves( $user->ID ); ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -198,7 +234,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
 
 		function render_contact_documents_profile( $user ) {
-			$contact = ( function_exists( 'rt_biz_get_contact_for_wp_user' ) ) ? rt_biz_get_contact_for_wp_user( $user->ID ) : '';
+			$contact = ( function_exists( 'rt_biz_get_person_for_wp_user' ) ) ? rt_biz_get_person_for_wp_user( $user->ID ) : '';
 			if ( empty( $contact ) ) {
 				return;
 			}
@@ -360,7 +396,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		<?php }
 
 		function save_contact_documents_profile( $user_id, $old_data ) {
-			$contact = ( function_exists( 'rt_biz_get_contact_for_wp_user' ) ) ? rt_biz_get_contact_for_wp_user( $user_id ) : '';
+			$contact = ( function_exists( 'rt_biz_get_person_for_wp_user' ) ) ? rt_biz_get_person_for_wp_user( $user_id ) : '';
 			if ( empty( $contact ) ) {
 				return;
 			}
@@ -612,14 +648,14 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             if ( isset( $submenu['edit.php?post_type='.$this->post_type] ) && !empty( $submenu['edit.php?post_type='.$this->post_type] ) ) {
                 $module_menu = $submenu['edit.php?post_type='.$this->post_type];
                 $is_employee = false;
-                $current_employee = rt_biz_get_contact_for_wp_user( get_current_user_id( ) );
+                $current_employee = rt_biz_get_person_for_wp_user( get_current_user_id( ) );
                 if ( isset( $current_employee ) && !empty( $current_employee ) ){
                     $is_employee = true;
                 }
                 unset($submenu['edit.php?post_type='.$this->post_type]);
-                if ( ! $is_employee && ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ){
+                if ( ! $is_employee && ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ){
                     unset($menu[$this->menu_position]);
-                }elseif ( $is_employee || current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ){
+                }elseif ( $is_employee || current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ){
                     $new_index=5;
                     foreach( $this->custom_menu_order as $item ){
                         foreach ( $module_menu as $p_key => $menu_item ){
@@ -674,8 +710,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             $leave_duration = get_post_meta( $post->ID, 'leave-duration', false);
 			$leave_start_date = get_post_meta( $post->ID, 'leave-start-date', false);
 			$leave_end_date = get_post_meta( $post->ID, 'leave-end-date', false);
+			$leave_quota_use = get_post_meta( $post->ID, '_rt_hrm_leave_quota_use', true );
 
-            $current_employee = rt_biz_get_contact_for_wp_user( get_current_user_id( ) );
+            $current_employee = rt_biz_get_person_for_wp_user( get_current_user_id() );
             if ( isset( $current_employee ) && !empty( $current_employee ) ){
                 $current_employee=$current_employee[0];
             }
@@ -683,13 +720,13 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			<table class="form-table rthrm-container">
 				<tbody>
 
-                    <tr  <?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { ?>  class="hide" <?php } ?>>
+                    <tr  <?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { ?>  class="hide" <?php } ?>>
                         <td class="tblkey">
                             <label class="label">Employee Name</label>
                         </td>
                         <td class="tblval">
-                            <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { echo $current_employee->post_title; }  ?>">
-                            <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { echo $current_employee->ID; }  ?>">
+                            <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; }  ?>">
+                            <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->ID; }  ?>">
                         </td>
                     </tr>
 					<tr>
@@ -768,6 +805,22 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 							<textarea id="content" class="rt-form-text" name="content" style="resize: none;width: 100%; height: 75px;" aria-hidden="true"><?php echo $post->post_content ?></textarea>
 						</td>
 					</tr>
+				<?php
+				$display_checkbox = false;
+				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) {
+					$leave_quota = $this->get_user_remaining_leaves( get_current_user_id() );
+					if ( intval( $leave_quota ) > 0 ) {
+						$display_checkbox = true;
+					}
+				} else if ( isset( $current_employee->ID ) && isset( $current_employee->post_title ) ) {
+					$display_checkbox = true;
+				} ?>
+				<tr <?php echo ( ! $display_checkbox ) ? 'class="hide"' : ''; ?>>
+					<td></td>
+					<td>
+						<label><input type="checkbox" id="leave_quota_use" name="leave_quota_use" value="1" <?php checked( '1', $leave_quota_use ); ?> /> <?php _e( 'Use Paid Leaves that are left ?' ); ?></label>
+					</td>
+				</tr>
 				</tbody>
 			</table>
 
@@ -794,7 +847,12 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			if ( isset( $leave_meta[  Rt_HRM_Attributes::$leave_type_tax] ) ) {
 				wp_set_post_terms( $post_id, implode( ',', array_map( 'intval', $leave_meta[Rt_HRM_Attributes::$leave_type_tax] ) ), Rt_HRM_Attributes::$leave_type_tax );
 			}
-            update_post_meta( $post_id, 'leave-user', $leave_meta['leave-user'] );
+
+			if ( isset( $_POST['leave_quota_use'] ) ) {
+				update_post_meta( $newLeaveID, '_rt_hrm_leave_quota_use', $_POST['leave_quota_use'] );
+			}
+
+			update_post_meta( $post_id, 'leave-user', $leave_meta['leave-user'] );
             update_post_meta( $post_id, 'leave-user-id', $leave_meta['leave-user-id'] );
             update_post_meta( $post_id, 'leave-duration', $leave_meta['leave-duration'] );
 			update_post_meta( $post_id, 'leave-start-date', $leave_meta['leave-start-date'] );
@@ -816,7 +874,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			if( isset( $post) && !empty( $post ) && $post->post_type == $this->post_type){
 				$option='';
                 $custom_statuses = $this->get_custom_statuses();
-                if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) {
+                if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) {
                     unset($custom_statuses['approved']);
                     unset($custom_statuses['rejected']);
                 }

@@ -37,13 +37,13 @@
 	<div class="body">
 		<table class="form-table rthrm-container">
 			<tbody>
-				<tr <tr  <?php if ( ! $is_hrm_manager ) { ?>  class="hide" <?php } ?> >
+				<tr  <?php if ( ! $is_hrm_manager ) { ?>  class="hide" <?php } ?> >
 					<td class="tblkey">
 						<label class="label">Employee Name</label>
 					</td>
 					<td class="tblval">
-                        <input type="text" id="leave-user" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php  if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { echo $current_employee->post_title; } ?>">
-                        <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) ) ) { echo $current_employee->ID; } ?>">
+                        <input type="text" id="leave-user" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php  if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; } ?>">
+                        <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->ID; } ?>">
 					</td>
 				</tr>
 				<tr>
@@ -103,13 +103,11 @@
 						</div>
 					</td>
 				</tr>
-
 				<tr style="display: none;">
 					<td>
 						<label for="leave-end-date">End Date</label>
 					</td>
 					<td>
-
 						<div>
 							<input id="leave-end-date" name="post[leave-end-date]" class="rt-form-text datepicker" placeholder="Select End Date" readonly="readonly" value="" type="text">
 						</div>
@@ -123,6 +121,21 @@
 						<textarea id="leave_description"  class="rt-form-text" name="post[leave_description]"></textarea>
 					</td>
 				</tr>
+				<?php
+				global $rt_hrm_module;
+				$display_checkbox = false;
+				if ( ! $is_hrm_manager ) {
+					$leave_quota = $rt_hrm_module->get_user_leave_quota( get_current_user_id() );
+					if ( intval( $leave_quota ) > 0 ) {
+						$display_checkbox = true;
+					}
+				} ?>
+				<tr <?php echo ( ! $display_checkbox ) ? 'class="hide"' : ''; ?>>
+					<td></td>
+					<td>
+						<label><input type="checkbox" id="leave_quota_use" name="leave_quota_use" value="1" /> <?php _e( 'Use Paid Leaves that are left ?' ); ?></label>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -131,4 +144,3 @@
 	</div>
 	<div class="spinner">&nbsp;</div>
 </form>
-
