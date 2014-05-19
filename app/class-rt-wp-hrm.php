@@ -34,7 +34,9 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
          */
         public function     __construct() {
 
-			$this->check_rt_biz_dependecy();
+                        if( ! $this->check_rt_biz_dependecy() ) {
+				return false;
+			}
 
 			$this->init_globals();
 
