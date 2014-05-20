@@ -53,7 +53,7 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 		}
 
 		function init_leave_type() {
-            $editor_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) : '';
+            $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
             $caps = array(
 				'manage_terms' => $editor_cap,
 				'edit_terms'   => $editor_cap,

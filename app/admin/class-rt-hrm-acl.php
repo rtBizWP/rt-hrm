@@ -20,7 +20,7 @@ if ( ! class_exists( 'Rt_HRM_ACL' ) ) {
 
 		function register_rt_hrm_module( $modules ) {
 			global $rt_hrm_module;
-			$module_key = ( function_exists( 'rt_biz_sanitize_module_key' ) ) ? rt_biz_sanitize_module_key( RT_HRM_TEXT_DOMAIN ) : '';
+			$module_key = rt_biz_sanitize_module_key( RT_HRM_TEXT_DOMAIN );
             $modules[ $module_key ] = array(
 				'label' => __( 'rtHRM' ),
 				'post_types' => array( $rt_hrm_module->post_type ),

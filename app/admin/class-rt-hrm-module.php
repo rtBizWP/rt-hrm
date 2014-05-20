@@ -80,10 +80,10 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$this->register_custom_statuses();
 
 			$settings = get_site_option( 'rt_hrm_settings', false );
-			if ( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' && function_exists( 'rt_contacts_register_person_connection' ) ) {
+			if ( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' ) {
 				rt_contacts_register_person_connection( $this->post_type, $this->labels['name'] );
 			}
-			if ( isset( $settings['attach_accounts'] ) && $settings['attach_accounts'] == 'yes' && function_exists( 'rt_contacts_register_organization_connection' ) ) {
+			if ( isset( $settings['attach_accounts'] ) && $settings['attach_accounts'] == 'yes' ) {
 				rt_contacts_register_organization_connection( $this->post_type, $this->labels['name'] );
 			}
 
@@ -199,7 +199,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
 
 		function render_paid_leave_quota( $user ) {
-			$editor_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) : '';
+			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
 			$leave_quota = $this->get_user_leave_quota( $user->ID );
 			?>
 			<h3><?php _e( 'Leaves Section' ); ?></h3>
@@ -234,13 +234,13 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
 
 		function render_contact_documents_profile( $user ) {
-			$contact = ( function_exists( 'rt_biz_get_person_for_wp_user' ) ) ? rt_biz_get_person_for_wp_user( $user->ID ) : '';
+			$contact = rt_biz_get_person_for_wp_user( $user->ID );
 			if ( empty( $contact ) ) {
 				return;
 			}
 			$contact = $contact[0];
 			$is_user_change_allowed = Rt_HRM_Settings::$settings['is_user_allowed_to_upload_edit_docs'];
-			$editor_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) : '';
+			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
 			if ( current_user_can( $editor_cap ) ) {
 				$is_user_change_allowed = true;
 			}
@@ -396,7 +396,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		<?php }
 
 		function save_contact_documents_profile( $user_id, $old_data ) {
-			$contact = ( function_exists( 'rt_biz_get_person_for_wp_user' ) ) ? rt_biz_get_person_for_wp_user( $user_id ) : '';
+			$contact = rt_biz_get_person_for_wp_user( $user_id );
 			if ( empty( $contact ) ) {
 				return;
 			}
@@ -502,7 +502,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
         function register_custom_pages() {
 			global $rt_hrm_dashboard, $rt_hrm_calendar;
 
-            $author_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' ) : '';
+            $author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
 
 			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Dashboard' ), __( 'Dashboard' ), $author_cap, 'rthrm-'.$this->post_type.'-dashboard', array( $this, 'dashboard' ) );
 			$rt_hrm_dashboard->add_screen_id( $screen_id );

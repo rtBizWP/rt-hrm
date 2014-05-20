@@ -80,7 +80,7 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				return;
 			}
 
-			$admin_cap = ( function_exists( 'rt_biz_get_access_role_cap' ) ) ? rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) : '';
+			$admin_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' );
 
 			$settings_page = self::$titan_obj->createAdminPanel( array(
 				'name' => __( 'Settings' ), // Name of the menu item
