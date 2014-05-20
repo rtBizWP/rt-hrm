@@ -32,9 +32,9 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
         /**
          * Call for dependency check and other hooks
          */
-        public function     __construct() {
+        public function __construct() {
 
-                        if( ! $this->check_rt_biz_dependecy() ) {
+            if( ! $this->check_rt_biz_dependecy() ) {
 				return false;
 			}
 
@@ -63,9 +63,31 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
          * Check rt-biz plugin dependency
          */
         function check_rt_biz_dependecy() {
-			if ( ! class_exists( 'Rt_Biz' ) ) {
-				add_action( 'admin_notices', array( $this, 'rt_biz_admin_notice' ) );
-			}
+            $flag = true;
+            $used_function = array(
+                'rt_biz_sanitize_module_key',
+                'rt_biz_get_access_role_cap',
+                'rt_biz_get_person_for_wp_user',
+                'rt_biz_get_access_role_cap',
+                'rt_biz_get_wp_user_for_person',
+                'rt_biz_search_employees'
+            );
+
+            foreach ( $used_function as $fn ) {
+                if ( ! function_exists( $fn ) ) {
+                    $flag = false;
+                }
+            }
+
+            if ( ! class_exists( 'Rt_Biz' ) ) {
+                $flag = false;
+            }
+
+            if ( ! $flag ) {
+                add_action( 'admin_notices', array( $this, 'rt_biz_admin_notice' ) );
+            }
+
+            return $flag;
 		}
 
         /**
