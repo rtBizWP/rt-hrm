@@ -79,14 +79,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$this->register_custom_post( $this->menu_position );
 			$this->register_custom_statuses();
 
-			$settings = get_site_option( 'rt_hrm_settings', false );
-			if ( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' ) {
-				rt_contacts_register_person_connection( $this->post_type, $this->labels['name'] );
-			}
-			if ( isset( $settings['attach_accounts'] ) && $settings['attach_accounts'] == 'yes' ) {
-				rt_contacts_register_organization_connection( $this->post_type, $this->labels['name'] );
-			}
-
 		}
 
         /**
