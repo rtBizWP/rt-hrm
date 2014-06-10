@@ -96,13 +96,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'rt_biz_entity_meta_boxes', array( $this, 'contact_documents_meta_box' ) );
 			add_action( 'save_post', array( $this, 'save_contact_documents_meta_box' ) );
 
-			add_action( 'edit_user_profile', array( $this, 'render_contact_documents_profile' ), 1 );
-			add_action( 'show_user_profile', array( $this, 'render_contact_documents_profile' ), 1 );
-			add_action( 'profile_update', array( $this, 'save_contact_documents_profile' ), 10, 2 );
-
-			add_action( 'edit_user_profile', array( $this, 'render_paid_leave_quota' ), 1 );
-			add_action( 'show_user_profile', array( $this, 'render_paid_leave_quota' ), 1 );
-			add_action( 'profile_update', array( $this, 'save_paid_leave_quota' ), 10, 2 );
+			add_action( 'rt_biz_entity_meta_boxes', array( $this, 'contact_leaves_section_meta_box' ) );
+			add_action( 'save_post', array( $this, 'save_contact_leaves_section_meta_box' ) );
 
 			add_action( 'wp_ajax_rt_hrm_get_attachment_size', array( $this, 'get_attachment_size' ) );
 			add_action( 'wp_ajax_rt_hrm_check_user_leave_quota', array( $this, 'check_employee_leave_quota' ) );
@@ -143,6 +138,25 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			die();
 		}
 
+		function contact_leaves_section_meta_box( $post_type ) {
+			global $rt_person;
+			if ( $post_type != $rt_person->post_type ) {
+				return;
+			}
+
+			global $post;
+			if ( ! isset( $post ) ) {
+				return;
+			}
+
+			$is_our_team_mate = get_post_meta( $post->ID, Rt_Person::$meta_key_prefix.Rt_Person::$our_team_mate_key, true );
+			if ( ! $is_our_team_mate ) {
+				return;
+			}
+
+			add_meta_box( 'rt-hrm-contact-leaves-section', __( 'Leaves Section' ), array( $this, 'render_leaves_section_meta_box' ), $rt_person->post_type );
+		}
+
 		function contact_documents_meta_box( $post_type ) {
 			global $rt_person;
 			if ( $post_type != $rt_person->post_type ) {
@@ -162,15 +176,17 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_meta_box( 'rt-hrm-contact-documents', __( 'Documents' ), array( $this, 'render_documents_meta_box' ), $rt_person->post_type );
 		}
 
-		function get_user_leave_quota( $user_id ) {
-			$leave_quota = get_user_meta( $user_id, self::$user_leave_quota_key, true );
+		function get_user_leave_quota( $post_id ) {
+			$leave_quota = get_post_meta( $post_id, self::$user_leave_quota_key, true );
 			if ( $leave_quota === '' ) {
 				$leave_quota = Rt_HRM_Settings::$settings['leaves_quota_per_user'];
 			}
 			return intval( $leave_quota );
 		}
 
-		function get_user_remaining_leaves( $user_id ) {
+		function get_user_remaining_leaves( $post_id ) {
+			global $rt_person;
+			$user_id = Rt_Person::get_meta( $post_id, $rt_person->user_id_key, true );
 			$leaves = get_posts( array(
 				'posts_per_page' => -1,
 				'post_type' => $this->post_type,
@@ -183,71 +199,40 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					),
 				),
 			) );
-			return $this->get_user_leave_quota( $user_id ) - count( $leaves );
+			return $this->get_user_leave_quota( $post_id ) - count( $leaves );
 		}
 
-		function save_user_leave_quota( $user_id, $leave_quota ) {
-			update_user_meta( $user_id, self::$user_leave_quota_key, $leave_quota );
+		function save_user_leave_quota( $post_id, $leave_quota ) {
+			update_post_meta( $post_id, self::$user_leave_quota_key, $leave_quota );
 		}
 
-		function render_paid_leave_quota( $user ) {
+		function render_paid_leave_quota( $post ) {
 			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
-			$leave_quota = $this->get_user_leave_quota( $user->ID );
+			$leave_quota = $this->get_user_leave_quota( $post->ID );
 			?>
-			<h3><?php _e( 'Leaves Section' ); ?></h3>
-			<table class="form-table">
-				<tbody>
-					<tr>
-						<th><?php _e( 'Paid Leaves Quota : ' ); ?></th>
-						<td>
-							<?php if ( current_user_can( $editor_cap ) ) { ?>
-							<input name="rt_hrm_leave_quota" type="number" step="1" min="0" value="<?php echo $leave_quota; ?>" />
-							<?php } else { ?>
-							<?php echo $leave_quota; ?>
-							<?php } ?>
-						</td>
-					</tr>
-					<tr>
-						<th><?php _e( 'Remaining Leaves : ' ); ?></th>
-						<td><?php echo $this->get_user_remaining_leaves( $user->ID ); ?></td>
-					</tr>
-				</tbody>
-			</table>
+			<script>
+				jQuery(document).ready(function($) {
+					$('#postdivrich').hide();
+				});
+			</script>
+			<div class="form-field">
+				<label><strong><?php _e( 'Paid Leaves Quota : ' ); ?></strong></label>
+				<?php if ( current_user_can( $editor_cap ) ) { ?>
+				<input name="rt_hrm_leave_quota" type="number" step="1" min="0" value="<?php echo $leave_quota; ?>" />
+				<?php } else { ?>
+				<span><?php echo $leave_quota; ?></span>
+				<?php } ?>
+			</div>
+			<div class="form-field">
+				<label><strong><?php _e( 'Remaining Leaves : ' ); ?></strong></label>
+				<span><?php echo $this->get_user_remaining_leaves( $post->ID ); ?></span>
+			</div>
 			<?php
+			wp_nonce_field( 'rt_hrm_leaves_section_metabox', 'rt_hrm_leaves_section_metabox_nonce' );
 		}
 
-		function save_paid_leave_quota( $user_id, $old_data ) {
-			if ( ! isset( $_POST['rt_hrm_leave_quota'] ) ) {
-				return;
-			}
-
-			$leave_quota = $_POST['rt_hrm_leave_quota'];
-			$this->save_user_leave_quota( $user_id, $leave_quota );
-		}
-
-		function render_contact_documents_profile( $user ) {
-			$contact = rt_biz_get_person_for_wp_user( $user->ID );
-			if ( empty( $contact ) ) {
-				return;
-			}
-			$contact = $contact[0];
-			$is_user_change_allowed = Rt_HRM_Settings::$settings['is_user_allowed_to_upload_edit_docs'];
-			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
-			if ( current_user_can( $editor_cap ) ) {
-				$is_user_change_allowed = true;
-			}
-			?>
-			<h3><?php _e( 'Documents' ); ?></h3>
-			<table class="form-table">
-				<tbody>
-					<tr>
-						<td>
-						<?php $this->render_documents_view( $contact, $is_user_change_allowed ); ?>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<?php
+		function render_leaves_section_meta_box( $post ) {
+			$this->render_paid_leave_quota( $post );
 		}
 
 		function render_documents_meta_box( $post ) {
@@ -299,13 +284,15 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			<style>
 				.rthrm_delete_doc {
 					margin-left: 10px;
+					display: inline-block;
 					color: red;
 				}
 				.rthrm_doc_img {
-					/*margin-top: -5px;*/
+					display: inline-block;
 				}
 				.rt_hrm_doc_title, .rthrm_download_doc {
 					margin-left: 10px;
+					display: inline-block;
 				}
 				.doc-item {
 					border: 1px solid grey;
@@ -387,13 +374,35 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			</script>
 		<?php }
 
-		function save_contact_documents_profile( $user_id, $old_data ) {
-			$contact = rt_biz_get_person_for_wp_user( $user_id );
-			if ( empty( $contact ) ) {
+		function save_contact_leaves_section_meta_box( $post_id ) {
+			/*
+			 * We need to verify this came from the our screen and with proper authorization,
+			 * because save_post can be triggered at other times.
+			 */
+
+			// Check if our nonce is set.
+			if ( ! isset( $_POST['rt_hrm_leaves_section_metabox_nonce'] ) ) {
 				return;
 			}
-			$contact = $contact[0];
-			$this->save_contact_documents( $contact->ID );
+
+			$nonce = $_POST['rt_hrm_leaves_section_metabox_nonce'];
+
+			// Verify that the nonce is valid.
+			if ( ! wp_verify_nonce( $nonce, 'rt_hrm_leaves_section_metabox' ) ) {
+				return;
+			}
+
+			// If this is an autosave, our form has not been submitted, so we don't want to do anything.
+			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+				return;
+			}
+
+			if ( ! isset( $_POST['rt_hrm_leave_quota'] ) ) {
+				return;
+			}
+
+			$leave_quota = $_POST['rt_hrm_leave_quota'];
+			$this->save_user_leave_quota( $post_id, $leave_quota );
 		}
 
 		function save_contact_documents_meta_box( $post_id ) {
