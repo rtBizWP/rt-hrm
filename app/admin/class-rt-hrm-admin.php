@@ -41,7 +41,9 @@ if( !class_exists( 'Rt_HRM_Admin' ) ) {
 					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
 					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == $rt_hrm_module->post_type ) ) {
 
-                wp_enqueue_style('rthrm-jquery-ui-css', RT_HRM_URL . 'app/assets/css/jquery-ui-1.9.2.custom.css', false, RT_HRM_VERSION, 'all');
+				if ( !  wp_style_is( 'rt-jquery-ui-css' ) ) {
+	                wp_enqueue_style('rt-jquery-ui-css', RT_HRM_URL . 'app/assets/css/jquery-ui-1.9.2.custom.css', false, RT_HRM_VERSION, 'all');
+				}
 				wp_enqueue_style('rthrm-admin-css', RT_HRM_URL . 'app/assets/css/admin.css', false, RT_HRM_VERSION, 'all');
 
                 if( !wp_script_is('jquery-ui-datepicker') ) {
