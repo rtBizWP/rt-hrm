@@ -64,9 +64,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * Object initialization
          */
         public function __construct() {
-			$this->get_custom_labels();
-			$this->get_custom_statuses();
-            $this->get_custom_menu_order();
 			add_action( 'init', array( $this, 'init_hrm' ) );
 			$this->hooks();
 		}
@@ -75,7 +72,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * call for register leave CPT & its status
          */
         function init_hrm() {
-
+			$this->get_custom_labels();
+			$this->get_custom_statuses();
+            $this->get_custom_menu_order();
 			$this->register_custom_post( $this->menu_position );
 			$this->register_custom_statuses();
 
@@ -558,10 +557,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * @return array
          */
         function get_custom_labels() {
+			$menu_label = Rt_HRM_Settings::$settings['menu_label'];
 			$this->labels = array(
 				'name' => __( 'Leave' ),
 				'singular_name' => __( 'Leave' ),
-				'menu_name' => __( 'HRM' ),
+				'menu_name' => $menu_label,
 				'all_items' => __( 'Leaves' ),
 				'add_new' => __( 'Add Leave' ),
 				'add_new_item' => __( 'Add Leave' ),

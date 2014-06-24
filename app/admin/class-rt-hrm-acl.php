@@ -21,8 +21,10 @@ if ( ! class_exists( 'Rt_HRM_ACL' ) ) {
 		function register_rt_hrm_module( $modules ) {
 			global $rt_hrm_module;
 			$module_key = rt_biz_sanitize_module_key( RT_HRM_TEXT_DOMAIN );
-            $modules[ $module_key ] = array(
-				'label' => __( 'rtHRM' ),
+			$rt_hrm_options = maybe_unserialize( get_option( RT_HRM_TEXT_DOMAIN.'_options' ) );
+			$menu_label = $rt_hrm_options['menu_label'];
+			$modules[ $module_key ] = array(
+				'label' => $menu_label,
 				'post_types' => array( $rt_hrm_module->post_type ),
 			);
 			return $modules;
