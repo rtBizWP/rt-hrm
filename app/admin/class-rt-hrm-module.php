@@ -208,11 +208,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
 			$leave_quota = $this->get_user_leave_quota( $post->ID );
 			?>
-			<script>
-				jQuery(document).ready(function($) {
-					$('#postdivrich').hide();
-				});
-			</script>
 			<div class="form-field">
 				<label><strong><?php _e( 'Paid Leaves Quota : ' ); ?></strong></label>
 				<?php if ( current_user_can( $editor_cap ) ) { ?>
