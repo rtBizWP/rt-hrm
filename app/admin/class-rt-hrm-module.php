@@ -99,7 +99,27 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 			add_action( 'wp_ajax_rt_hrm_get_attachment_size', array( $this, 'get_attachment_size' ) );
 			add_action( 'wp_ajax_rt_hrm_check_user_leave_quota', array( $this, 'check_employee_leave_quota' ) );
+                      
+                        add_filter( "manage_edit-{$this->post_type}_columns", array( $this,'leave_columns' ) );
+                        add_action( "manage_{$this->post_type}_posts_custom_column" ,  array( $this,'manage_leave_columns' ), 10, 2 );
 		}
+                
+                function leave_columns( $columns ) {
+                    $columns['status'] = __( 'Status' );
+                    return $columns;
+                }
+                
+                function manage_leave_columns($column, $post_id ){
+                    switch ( $column ) {
+
+                        case 'status' :
+                            echo get_post_status( $post_id );
+                           
+                            break;
+
+                       
+                    }
+                }
 
 		function get_attachment_size() {
 			if ( ! isset( $_POST['attachment_id'] ) ) {

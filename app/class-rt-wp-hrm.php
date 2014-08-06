@@ -52,7 +52,7 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
         function admin_init() {
 			$this->templateURL = apply_filters('rthrm_template_url', 'rthrm/');
 
-			$this->update_database();
+			//$this->update_database();
 
 			global $rt_hrm_admin;
 			$rt_hrm_admin = new Rt_HRM_Admin();
