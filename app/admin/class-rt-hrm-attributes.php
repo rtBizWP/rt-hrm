@@ -72,7 +72,7 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 				array(
 					'public'					=> false,
 					'hierarchical' 				=> true,
-					'update_count_callback' 	=> array( $this, 'update_post_term_count' ),
+					'update_count_callback' 	=> 'rthrm_update_post_term_count',
 					'labels' => array(
 							'name' 						=> $label,
 							'singular_name' 			=> $label,
