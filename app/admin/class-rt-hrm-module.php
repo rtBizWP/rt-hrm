@@ -803,15 +803,14 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					</tr>
 				<?php
 				$display_checkbox = false;
-				if ( isset( $current_employee->ID ) && isset( $current_employee->post_title ) ) {
-					$display_checkbox = true;
-				} else if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) {
+				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) {
 					$leave_quota = $this->get_user_remaining_leaves( get_current_user_id() );
 					if ( intval( $leave_quota ) > 0 ) {
 						$display_checkbox = true;
 					}
-				}
-				?>
+				} else if ( isset( $current_employee->ID ) && isset( $current_employee->post_title ) ) {
+					$display_checkbox = true;
+				} ?>
 				<tr <?php echo ( ! $display_checkbox ) ? 'class="hide"' : ''; ?>>
 					<td></td>
 					<td>
