@@ -102,7 +102,7 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				'desc' => 'This label will be used for the Menu Item label for rtBiz', // Description of the option
 				'id' => 'menu_label', // Unique ID of the option
 				'type' => 'text', //
-				'default' => __( 'HRM' ), // Menu icon for top level menus only
+				'default' => __( 'Voxxi HRM' ), // Menu icon for top level menus only
 				'example' => '', // An example value for this field, will be displayed in a <code>
 				'livepreview' => '', // jQuery script to update something in the site. For theme customizer only
 			) );
