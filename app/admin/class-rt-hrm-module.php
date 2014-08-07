@@ -99,7 +99,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 			add_action( 'wp_ajax_rt_hrm_get_attachment_size', array( $this, 'get_attachment_size' ) );
 			add_action( 'wp_ajax_rt_hrm_check_user_leave_quota', array( $this, 'check_employee_leave_quota' ) );
-                      
+			add_action( 'wp_ajax_rt_hrm_check_leave_day', array( $this, 'check_leave_day' ) );
+                        
                         add_filter( "manage_edit-{$this->post_type}_columns", array( $this,'leave_columns' ) );
                         add_action( "manage_{$this->post_type}_posts_custom_column" ,  array( $this,'manage_leave_columns' ), 10, 2 );
 		}
@@ -155,6 +156,36 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			}
 			die();
 		}
+                
+		function check_leave_day() {
+			
+                        $args = array(
+                            'meta_query' => array(
+                                array(
+                                    'key' => 'leave-user-id',
+                                    'value' => $_REQUEST['leave_user_id']
+                                ),
+                                array(
+                                    'key' => 'leave-start-date',
+                                    'value' => $_REQUEST['leave_start_date']
+                                )
+                            ),
+                            'post_type' => $this->post_type,
+                            'post_status' => 'any',
+                            'nopaging' => true
+                        );
+                        
+                        $posts = get_posts($args);
+                        
+			if ( count($posts) <= 0 ) {
+				echo json_encode( array( 'status' => 'success' ) );
+			} else {
+				echo json_encode( array( 'status' => 'error', 'message' => __( 'Leave for day '.$_REQUEST['leave_start_date'].' applied already') ) );
+			}
+			die();
+		}
+                
+                
 
 		function contact_leaves_section_meta_box( $post_type ) {
 			global $rt_person;
@@ -550,7 +581,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'show_ui' => true, // Show the UI in admin panel
 				'menu_icon' => $logo_url,
 				'menu_position' => $menu_position,
-				'supports' => array('title',),
+				'supports' => array('title','comments'),
 				'capability_type' => $this->post_type,
 			);
 			register_post_type( $this->post_type, $args );
@@ -715,6 +746,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'advanced'
 				,'high'
 			);
+                        
+                        add_meta_box( 'commentsdiv',  __('Comments'), 'post_comment_meta_box',  $this->post_type,  'advanced', 'high');   
+                                  
 		}
 
         /**
@@ -854,7 +888,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * @return mixed
          */
         function save_leave_meta($post_id, $post){
-			global $rt_hrm_module,$rt_hrm_attributes;
+            global $rt_hrm_module,$rt_hrm_attributes;
             if ( !isset( $_POST['rthrm_leave_additional_details_meta_nonce'] ) || !wp_verify_nonce( $_POST['rthrm_leave_additional_details_meta_nonce'], 'rthrm_leave_additional_details_meta' ) ) {
 				return $post_id;
 			}
@@ -882,7 +916,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			}else {
 				delete_post_meta( $post_id, 'leave-end-date' );
 			}
-
+                       
 		}
 
         /**
