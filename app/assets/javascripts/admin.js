@@ -108,6 +108,7 @@ jQuery(document).ready(function($) {
 				}, function(data) {
 					data = $.parseJSON(data);
 					if ( data.status == 'success' ) {
+                                                $('#remaining-leave-quota').text(data.leave_quota);
 						rtHRMAdmin.eleLeaveQuotaUse.closest('tr').removeClass('hide');
 					}
 				});

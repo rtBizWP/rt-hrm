@@ -116,7 +116,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
                         case 'status' :
                            
-                            echo  $this->statuses[ get_post_status( $post_id ) ]['name'];;
+                            echo isset( $this->statuses[ get_post_status( $post_id ) ] ) ? $this->statuses[ get_post_status( $post_id ) ]['name'] : '';
                            
                             break;
 
@@ -239,7 +239,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			global $rt_person;
 			$user_id = Rt_Person::get_meta( $post_id, $rt_person->user_id_key, true );
 			$leaves = get_posts( array(
-				'posts_per_page' => -1,
+				'nopagging' => true,
 				'post_type' => $this->post_type,
 				'post_status' => 'approved',
 				'post_author' => $user_id,
@@ -873,6 +873,14 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 						<label><input type="checkbox" id="leave_quota_use" name="leave_quota_use" value="1" <?php checked( '1', $leave_quota_use ); ?> /> <?php _e( 'Use Paid Leaves that are left ?' ); ?></label>
 					</td>
 				</tr>
+				<tr>
+					<td>
+							<label>Remaining leave</label>
+						</td>
+                                    <td>
+                                        <label id="remaining-leave-quota"><?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
+					</td>
+				</tr>
 				</tbody>
 			</table>
 
@@ -921,7 +929,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			}
 
 			if ( isset( $_POST['leave_quota_use'] ) ) {
-				update_post_meta( $newLeaveID, '_rt_hrm_leave_quota_use', $_POST['leave_quota_use'] );
+				update_post_meta( $post_id, '_rt_hrm_leave_quota_use', $_POST['leave_quota_use'] );
 			}
 
 			update_post_meta( $post_id, 'leave-user', $leave_meta['leave-user'] );
