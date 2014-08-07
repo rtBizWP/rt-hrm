@@ -115,7 +115,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                     switch ( $column ) {
 
                         case 'status' :
-                            echo get_post_status( $post_id );
+                           
+                            echo  $this->statuses[ get_post_status( $post_id ) ]['name'];;
                            
                             break;
 
