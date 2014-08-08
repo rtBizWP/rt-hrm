@@ -10,7 +10,7 @@
 
 	<?php screen_icon(); ?>
 
-	<h2><?php $menu_label = Rt_HRM_Settings::$settings['menu_label']; echo $menu_label . __( ' Calendar' ); ?></h2>
+	<h2><?php _e( 'HRM Calendar' ); ?></h2>
 
 	<div id="poststuff">
 
