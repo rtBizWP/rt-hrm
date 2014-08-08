@@ -182,7 +182,8 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 			$rt_calendar->setDomElement("#calendar-container");
 			$rt_calendar->setPopupElement(".leave-insert-dialog");
 			$rt_calendar->setEvent($event);
-			$rt_calendar->render_calendar();
+			$is_editor = current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) );
+			$rt_calendar->render_calendar( $is_editor );
 		}
 
 	}
