@@ -87,7 +87,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
 			add_action( 'save_post', array( $this, 'save_leave_meta' ), 1, 2);
-			add_action( "save_post_{$this->post_type}", array( $this, 'add_first_comment' ), 1, 2);
 			add_action( 'wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
 
             add_action( 'wp_ajax_seach_employees_name', array( $this, 'employees_autocomplete_ajax' ) );
@@ -891,26 +890,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 		<?php
 		}
-                
-                function add_first_comment($post_id, $post){
-                    global $current_user;
-                    $comments_count = wp_count_comments($post_id);
-                    if ( $comments_count->total_comments == 0 && !empty( $post->post_content ) ) {
-                        $time = current_time('mysql');
-                         $data = array(
-
-                             'comment_post_ID' => $post_id,
-                             'comment_author' => $current_user->user_login,
-                             'comment_content' => $post->post_content,
-                             'comment_author_email' =>$current_user->user_email,
-                             'user_id' => $current_user->ID,
-                             'comment_date' => $time,
-
-                          );
-
-                         wp_insert_comment($data);
-                    }
-                }
 
         /**
          * Save meta-box values for leave CPT
