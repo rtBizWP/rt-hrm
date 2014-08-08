@@ -53,6 +53,18 @@ if ( ! class_exists( 'Rt_Hrm_Help' ) ) {
 				'edit.php' => array(
 					
 					array(
+						'id' => 'leave_list_overview',
+						'title' => __( 'Overview' ),
+						'content' => '',
+						'page' => '',
+					),
+					array(
+						'id' => 'leave_list_screen_content',
+						'title' => __( 'Screen Content' ),
+						'content' => '',
+						'page' => '',
+					),
+					array(
 						'id' => 'calander_overview',
 						'title' => __( 'Overview' ),
 						'content' => '',
@@ -121,7 +133,7 @@ if ( ! class_exists( 'Rt_Hrm_Help' ) ) {
 						}
 						break;
 					case 'edit.php':
-                                               if ( isset( $_GET[ 'post_type' ] ) ) {
+                                               if ( isset( $_GET[ 'post_type' ] ) &&  $_GET[ 'post_type' ] == 'rt_leave'  ) {
 						if ( isset( $_GET[ 'page' ] ) ) {
 							foreach ( $this->tabs[ $GLOBALS[ 'pagenow' ] ] as $args ) {
                                                          
@@ -130,7 +142,15 @@ if ( ! class_exists( 'Rt_Hrm_Help' ) ) {
                                                                         $this->add_tab( $args );
                                                                 }
 							}
-						}
+						}else{
+                                                    foreach ( $this->tabs[ $GLOBALS[ 'pagenow' ] ] as $args ) {
+                                                         
+								if ( empty($args[ 'page' ]) ) {
+                                                                   
+                                                                        $this->add_tab( $args );
+                                                                }
+							}
+                                                }
                                                }
 						break;
 					case 'post.php':
@@ -191,6 +211,35 @@ if ( ! class_exists( 'Rt_Hrm_Help' ) ) {
                                       
 					<?php
 					break;
+                                case 'leave_list_overview':
+                                    ?>
+
+                                       <p><?php _e( 'This screen provides access to all Leave detail. You can customize the display of this screen to suit your workflow.' ); ?></p>
+                                    
+                                    <?php
+                                    break;
+                                case 'leave_list_screen_content':
+                                    ?>
+                                    <p><?php _e( 'You can customize the display of this screen’s contents in a number of ways :' ); ?></p>
+					<ul>
+						<li><?php _e( 'You can hide/display columns based on your needs and decide how many leaves to list per screen using the Screen Options tab.' ); ?></li>
+						<li>
+							<?php _e( 'You can filter the list of leave by status using the text links in the upper left to show All, Approved, Rejected, or Pending Review leave.' ); ?>
+							<?php _e( 'The default view is to show all leave.' ); ?>
+						</li>
+						<li>
+							<?php _e( 'You can view leave in a simple title list or with an excerpt.' ); ?>
+							<?php _e( 'Choose the view you prefer by clicking on the icons at the top of the list on the right.' ); ?>
+						</li>
+						<li>
+							<?php _e( 'You can refine the list to show only leave in a specific category or from a specific month by using the dropdown menus above the leave list.' ); ?>
+							<?php _e( 'Click the Filter button after making your selection.' ); ?>
+							<?php _e( 'You also can refine the list by clicking on the author in the leave list.' ); ?>
+						</li>
+                                    </ul>
+                                    <?php
+                                    break;
+                                
 				case 'add_leave_overview':
                                 case 'edit_leave_overview':
 					?>
