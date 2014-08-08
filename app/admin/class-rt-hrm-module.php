@@ -160,24 +160,29 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
                 
 		function check_leave_day() {
-			
-                        $args = array(
-                            'meta_query' => array(
-                                array(
-                                    'key' => 'leave-user-id',
-                                    'value' => $_REQUEST['leave_user_id']
-                                ),
-                                array(
-                                    'key' => 'leave-start-date',
-                                    'value' => $_REQUEST['leave_start_date']
-                                )
-                            ),
-                            'post_type' => $this->post_type,
-                            'post_status' => 'any',
-                            'nopaging' => true
-                        );
-                        
-                        $posts = get_posts($args);
+
+			if ( ! isset( $_REQUEST['leave_user_id'] ) || ! isset( $_REQUEST['leave_start_date'] ) ) {
+				echo json_encode( array( 'status' => 'error', 'message' => __( 'Invalid Request. USer ID or Start Date not given.') ) );
+				die();
+			}
+
+			$args = array(
+				'meta_query' => array(
+					array(
+						'key' => 'leave-user-id',
+						'value' => $_REQUEST['leave_user_id']
+					),
+					array(
+						'key' => 'leave-start-date',
+						'value' => $_REQUEST['leave_start_date']
+					)
+				),
+				'post_type' => $this->post_type,
+				'post_status' => 'any',
+				'nopaging' => true
+			);
+
+			$posts = get_posts($args);
                         
 			if ( count($posts) <= 0 ) {
 				echo json_encode( array( 'status' => 'success' ) );
