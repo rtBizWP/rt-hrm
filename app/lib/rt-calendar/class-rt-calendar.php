@@ -82,7 +82,8 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 		 * Render Calendar
 		 */
 		function render_calendar(  ) {
-			?>
+                    $non_admin_user = !current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) );
+                    ?>
 			<script type="text/javascript">
 				jQuery(document).ready( function( $ ) {
 
@@ -129,11 +130,27 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 						open_popup: function( self, date, jsEvent, view){
 							// Close other overlays
 							rt_calendar_close_overlays();
-
+                                                        
+                                                 <?php  if ( $non_admin_user ) { ?>
+                                                         
+                                                   var currdate = (new Date()).setHours(0, 0, 0, 0);
+                                                    if ( date >= currdate ) {
+                                                 
 							$('<?php echo $this->dom_element ?>').trigger('rtBeforePopup', [ self, date, jsEvent, view ] );
 							$('<?php echo $this->popup_element ?>').show();
 							$('<?php echo $this->dom_element ?>').trigger('rtAfterPopup', [ self, date, jsEvent, view ] );
-						}
+                                                     
+                                                    }
+                                                    $('.fc-past').addClass('fc-other-month');
+                                                    
+                                                    <?php }else{ ?> 
+                                                    
+                                                        $('<?php echo $this->dom_element ?>').trigger('rtBeforePopup', [ self, date, jsEvent, view ] );
+                                                        $('<?php echo $this->popup_element ?>').show();
+                                                        $('<?php echo $this->dom_element ?>').trigger('rtAfterPopup', [ self, date, jsEvent, view ] );
+
+                                                    <?php } ?>
+                                                }
 					}
 					rt_calendar.init();
 				});
