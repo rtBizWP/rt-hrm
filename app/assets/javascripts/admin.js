@@ -40,6 +40,7 @@ jQuery(document).ready(function($) {
 			rtHRMAdmin.initDatePicker();
 			rtHRMAdmin.initRtCalenderMethod();
 			rtHRMAdmin.leaveDayChange();
+			rtHRMAdmin.leaveDayCheck();
 			rtHRMAdmin.add_leave_validate();
             rtHRMAdmin.autocompleteUser();
 			rtHRMAdmin.paidLeaveChange();
@@ -107,6 +108,7 @@ jQuery(document).ready(function($) {
 				}, function(data) {
 					data = $.parseJSON(data);
 					if ( data.status == 'success' ) {
+                                                $('#remaining-leave-quota').text(data.leave_quota);
 						rtHRMAdmin.eleLeaveQuotaUse.closest('tr').removeClass('hide');
 					}
 				});
@@ -128,6 +130,9 @@ jQuery(document).ready(function($) {
                         rtHRMAdmin.removeLodingOnNewPost();
                         return false;
 					}
+                                        
+                                      
+                                        
 					removeError(rtHRMAdmin.eleLevaeStartDate);
 					if( rtHRMAdmin.eleLevaeDayType.val().trim() == "other" ){
 						if (rtHRMAdmin.eleLevaeEndDate.val().trim() == "") {
@@ -198,7 +203,30 @@ jQuery(document).ready(function($) {
 				   }
 			   });
 		   }
-		}
+		},
+                
+                leaveDayCheck:function(){
+                    $("#leave-start-date").change(function(){
+                      if ( !typeof(rtHRMAdmin.eleLeaveUserID.val()) == "undefined"
+						|| !rtHRMAdmin.eleLeaveUserID.val().trim() == ""
+						|| !rtHRMAdmin.eleLeaveUser.val().trim() == '' ) {
+                         $.post(ajaxurl, {
+                                        action: 'rt_hrm_check_leave_day',
+					leave_user_id: rtHRMAdmin.eleLeaveUserID.val().trim(),
+					leave_start_date: rtHRMAdmin.eleLevaeStartDate.val().trim()
+				}, function(data) {
+					data = $.parseJSON(data);
+					if ( data.status == 'error' ) {
+                                            rtHRMAdmin.eleLevaeStartDate.val('');
+						addError(rtHRMAdmin.eleLevaeStartDate, data.message);   
+					}else{
+                                            removeError(rtHRMAdmin.eleLevaeStartDate);
+                                        }   
+				});  
+                        }
+                    });
+                 
+                }
 
 	}
 	rtHRMAdmin.init();

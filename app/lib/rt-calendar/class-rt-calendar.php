@@ -81,15 +81,15 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 		/**
 		 * Render Calendar
 		 */
-		function render_calendar(  ) {
-			?>
+		function render_calendar( $is_admin ) {
+		?>
 			<script type="text/javascript">
 				jQuery(document).ready( function( $ ) {
 
 					function rt_calendar_close_overlays() {
 						$('<?php echo $this->dom_element ?>').trigger('rtBeforePopupClose', [ $(this) ] );
 						$('<?php echo $this->popup_element ?>').hide();
-						$('<?php echo $this->dom_element ?>').trigger('rtBeforePopupClose', [ $(this) ] );
+						$('<?php echo $this->dom_element ?>').trigger('rtAfterPopupClose', [ $(this) ] );
 					}
 
 					var rt_calendar={
@@ -129,11 +129,27 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 						open_popup: function( self, date, jsEvent, view){
 							// Close other overlays
 							rt_calendar_close_overlays();
-
+                                                        
+                                                 <?php  if ( ! $is_admin ) { ?>
+                                                         
+                                                   var currdate = (new Date()).setHours(0, 0, 0, 0);
+                                                    if ( date >= currdate ) {
+                                                 
 							$('<?php echo $this->dom_element ?>').trigger('rtBeforePopup', [ self, date, jsEvent, view ] );
 							$('<?php echo $this->popup_element ?>').show();
 							$('<?php echo $this->dom_element ?>').trigger('rtAfterPopup', [ self, date, jsEvent, view ] );
-						}
+                                                     
+                                                    }
+                                                    $('.fc-past').addClass('fc-other-month');
+                                                    
+                                                    <?php }else{ ?> 
+                                                    
+                                                        $('<?php echo $this->dom_element ?>').trigger('rtBeforePopup', [ self, date, jsEvent, view ] );
+                                                        $('<?php echo $this->popup_element ?>').show();
+                                                        $('<?php echo $this->dom_element ?>').trigger('rtAfterPopup', [ self, date, jsEvent, view ] );
+
+                                                    <?php } ?>
+                                                }
 					}
 					rt_calendar.init();
 				});
