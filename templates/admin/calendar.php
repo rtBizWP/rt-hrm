@@ -14,6 +14,16 @@
 
 	<div id="poststuff">
 
+		<?php
+			if ( isset( $_REQUEST[ 'message_id' ] ) ) {
+				switch ( $_REQUEST['message_id'] ) {
+					case 1:
+						echo '<div class="error"><p>'.__( 'You can not apply for leave twice on the same day.' ).'</p></div>';
+						break;
+				}
+			}
+		?>
+
 		<div id="calendar-widgets" class="metabox-holder">
 
 

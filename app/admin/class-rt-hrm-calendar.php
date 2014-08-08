@@ -72,10 +72,34 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthrm-'.$rt_hrm_module->post_type.'-calendar' && isset( $_REQUEST['form-add-leave'] ) && !empty( $_REQUEST['form-add-leave'] ) ) {
 
 				$leave_meta = $_REQUEST['post'];
+				$author = rt_biz_get_wp_user_for_person( $leave_meta['leave-user-id'] );
+
+				$args = array(
+					'meta_query' => array(
+						array(
+							'key' => 'leave-user-id',
+							'value' => $leave_meta['leave-user-id']
+						),
+						array(
+							'key' => 'leave-start-date',
+							'value' => $leave_meta['leave-start-date']
+						)
+					),
+					'post_type' => $rt_hrm_module->post_type,
+					'post_status' => 'any',
+					'nopaging' => true
+				);
+
+				$posts = get_posts($args);
+
+				if ( count($posts) > 0 ) {
+					wp_redirect( admin_url( 'edit.php?post_type=rt_leave&page=rthrm-rt_leave-calendar&message_id=1' ) );
+					die();
+				}
 
 				$newLeave = array(
 					'comment_status' =>  'closed',
-					'post_author' => $leave_meta['leave-user-id'],
+					'post_author' => $author,
 					'post_date' => date('Y-m-d H:i:s'),
 					'post_content' => $leave_meta['leave_description'],
 					'post_status' => 'pending',
@@ -104,6 +128,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 					delete_post_meta( $newLeaveID, 'leave-end-date' );
 				}
                 wp_redirect( admin_url( 'edit.php?post_type=rt_leave&page=rthrm-rt_leave-calendar' ) );
+				die();
 			}
 		}
 
