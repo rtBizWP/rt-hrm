@@ -81,16 +81,15 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 		/**
 		 * Render Calendar
 		 */
-		function render_calendar(  ) {
-                    $non_admin_user = !current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' ) );
-                    ?>
+		function render_calendar( $is_admin ) {
+		?>
 			<script type="text/javascript">
 				jQuery(document).ready( function( $ ) {
 
 					function rt_calendar_close_overlays() {
 						$('<?php echo $this->dom_element ?>').trigger('rtBeforePopupClose', [ $(this) ] );
 						$('<?php echo $this->popup_element ?>').hide();
-						$('<?php echo $this->dom_element ?>').trigger('rtBeforePopupClose', [ $(this) ] );
+						$('<?php echo $this->dom_element ?>').trigger('rtAfterPopupClose', [ $(this) ] );
 					}
 
 					var rt_calendar={
@@ -131,7 +130,7 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 							// Close other overlays
 							rt_calendar_close_overlays();
                                                         
-                                                 <?php  if ( $non_admin_user ) { ?>
+                                                 <?php  if ( ! $is_admin ) { ?>
                                                          
                                                    var currdate = (new Date()).setHours(0, 0, 0, 0);
                                                     if ( date >= currdate ) {

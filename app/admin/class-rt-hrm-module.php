@@ -94,7 +94,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
 			add_action( 'save_post', array( $this, 'save_leave_meta' ), 1, 2);
-			add_action( "save_post_{$this->post_type}", array( $this, 'add_first_comment' ), 1, 2);
 			add_action( 'wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
 
             add_action( 'wp_ajax_seach_employees_name', array( $this, 'employees_autocomplete_ajax' ) );
@@ -167,24 +166,29 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
                 
 		function check_leave_day() {
-			
-                        $args = array(
-                            'meta_query' => array(
-                                array(
-                                    'key' => 'leave-user-id',
-                                    'value' => $_REQUEST['leave_user_id']
-                                ),
-                                array(
-                                    'key' => 'leave-start-date',
-                                    'value' => $_REQUEST['leave_start_date']
-                                )
-                            ),
-                            'post_type' => $this->post_type,
-                            'post_status' => 'any',
-                            'nopaging' => true
-                        );
-                        
-                        $posts = get_posts($args);
+
+			if ( ! isset( $_REQUEST['leave_user_id'] ) || ! isset( $_REQUEST['leave_start_date'] ) ) {
+				echo json_encode( array( 'status' => 'error', 'message' => __( 'Invalid Request. USer ID or Start Date not given.') ) );
+				die();
+			}
+
+			$args = array(
+				'meta_query' => array(
+					array(
+						'key' => 'leave-user-id',
+						'value' => $_REQUEST['leave_user_id']
+					),
+					array(
+						'key' => 'leave-start-date',
+						'value' => $_REQUEST['leave_start_date']
+					)
+				),
+				'post_type' => $this->post_type,
+				'post_status' => 'any',
+				'nopaging' => true
+			);
+
+			$posts = get_posts($args);
                         
 			if ( count($posts) <= 0 ) {
 				echo json_encode( array( 'status' => 'success' ) );
@@ -585,7 +589,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'show_ui' => true, // Show the UI in admin panel
 				'menu_icon' => $logo_url,
 				'menu_position' => $menu_position,
-				'supports' => array('title','comments'),
+				'supports' => array('title','comments','author'),
 				'capability_type' => $this->post_type,
 			);
 			register_post_type( $this->post_type, $args );
@@ -893,26 +897,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 		<?php
 		}
-                
-                function add_first_comment($post_id, $post){
-                    global $current_user;
-                    $comments_count = wp_count_comments($post_id);
-                    if ( $comments_count->total_comments == 0 && !empty( $post->post_content ) ) {
-                        $time = current_time('mysql');
-                         $data = array(
-
-                             'comment_post_ID' => $post_id,
-                             'comment_author' => $current_user->user_login,
-                             'comment_content' => $post->post_content,
-                             'comment_author_email' =>$current_user->user_email,
-                             'user_id' => $current_user->ID,
-                             'comment_date' => $time,
-
-                          );
-
-                         wp_insert_comment($data);
-                    }
-                }
 
         /**
          * Save meta-box values for leave CPT

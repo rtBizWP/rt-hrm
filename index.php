@@ -1,12 +1,12 @@
 <?php
 
 /*
-  Plugin Name: Voxxi HRM
-  Plugin URI: mailto:support@voxxi.me
-  Description: Part of the Voxxi Business Suite
-  Version: 0.0.1
-  Author: Voxxi
-  Author URI: http://voxxi.me
+  Plugin Name: WordPress HRM
+  Plugin URI: http://rtcamp.com/
+  Description: Manage leave & user profile.
+  Version: 0.0.0
+  Author: rtCamp
+  Author URI: http://rtcamp.com
   License: GPL
   Text Domain: rt_hrm
  */
@@ -15,7 +15,7 @@ if ( !defined( 'RT_HRM_VERSION' ) ) {
     /**
      * define HRM version
      */
-    define( 'RT_HRM_VERSION', '0.0.1' );
+    define( 'RT_HRM_VERSION', '0.0.0' );
 }
 if ( !defined( 'RT_HRM_TEXT_DOMAIN' ) ) {
     /**
