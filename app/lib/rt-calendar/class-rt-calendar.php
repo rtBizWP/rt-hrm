@@ -89,7 +89,7 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 					function rt_calendar_close_overlays() {
 						$('<?php echo $this->dom_element ?>').trigger('rtBeforePopupClose', [ $(this) ] );
 						$('<?php echo $this->popup_element ?>').hide();
-						$('<?php echo $this->dom_element ?>').trigger('rtBeforePopupClose', [ $(this) ] );
+						$('<?php echo $this->dom_element ?>').trigger('rtAfterPopupClose', [ $(this) ] );
 					}
 
 					var rt_calendar={
