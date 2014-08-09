@@ -147,7 +147,7 @@ if ( ! class_exists( 'Rt_Hrm_Help' ) ) {
 							foreach ( $this->tabs[ $GLOBALS[ 'pagenow' ] ] as $args ) {
 								if ( isset( $_GET[ 'page' ] ) && isset( $args[ 'page' ] ) && $args[ 'page' ] == $_GET[ 'page' ] ) {
 									$this->add_tab( $args );
-								} else if ( empty( $args[ 'page' ] ) && empty( $_GET[ 'page' ] ) ) {
+								} else if ( empty( $args[ 'page' ] ) && empty( $_GET[ 'page' ] ) && $args[ 'post_type' ] == $_GET[ 'post_type' ] ) {
 									$this->add_tab( $args );
 								}
 							}
