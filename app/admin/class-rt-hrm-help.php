@@ -199,6 +199,9 @@ if ( ! class_exists( 'Rt_Hrm_Help' ) ) {
 
 			// Some Extra content with logic
 			switch ( $tab[ 'id' ] ) {
+				case 'dashboard_overview':
+					echo 'HRM Dashboard';
+					break;
 				case 'calander_overview':
 					?>
 					<ul>

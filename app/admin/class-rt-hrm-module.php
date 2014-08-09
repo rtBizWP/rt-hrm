@@ -561,9 +561,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
             $author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
 
-//			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Dashboard' ), __( 'Dashboard' ), $author_cap, 'rthrm-'.$this->post_type.'-dashboard', array( $this, 'dashboard' ) );
-//			$rt_hrm_dashboard->add_screen_id( $screen_id );
-//			$rt_hrm_dashboard->setup_dashboard();
+			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Dashboard' ), __( 'Dashboard' ), $author_cap, 'rthrm-'.$this->post_type.'-dashboard', array( $this, 'dashboard' ) );
+			$rt_hrm_dashboard->add_screen_id( $screen_id );
+			$rt_hrm_dashboard->setup_dashboard();
 
 			/* Metaboxes for dashboard widgets */
 			add_action( 'add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
