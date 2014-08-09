@@ -77,6 +77,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$this->get_custom_labels();
 			$this->register_custom_post( $this->menu_position );
 			$this->register_custom_statuses();
+                         
 		}
 
         /**
