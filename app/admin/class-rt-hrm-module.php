@@ -66,7 +66,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
         public function __construct() {
 			$this->get_custom_statuses();
             $this->get_custom_menu_order();
-              $this->init_help();
 			add_action( 'init', array( $this, 'init_hrm' ) );
 			$this->hooks();
 		}
@@ -79,11 +78,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$this->register_custom_post( $this->menu_position );
 			$this->register_custom_statuses();
                          
-		}
-                
-                function init_help() {
-			global $rt_hrm_help;
-			$rt_hrm_help = new Rt_Hrm_Help();
 		}
 
         /**
