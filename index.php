@@ -1,8 +1,8 @@
 <?php
 
 /*
-Plugin Name: Voxxi HRM
-  Plugin URI: mailto:support@voxxi.me
+  Plugin Name: Voxxi HRM
+  Plugin URI: http://voxxi.me
   Description: Part of the Voxxi Business Suite
   Version: 0.0.1
   Author: Voxxi
