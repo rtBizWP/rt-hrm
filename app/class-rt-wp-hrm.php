@@ -59,7 +59,7 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
         function init_globals() {
 			global $rt_hrm_module, $rt_hrm_dashboard, $rt_hrm_calendar,
 				$rt_calendar, $rt_hrm_attributes, $rt_form, $rt_hrm_acl,
-				$rt_hrm_settings;
+				$rt_hrm_settings, $rt_hrm_help;
 
 			$rt_form = new Rt_Form();
 
@@ -70,7 +70,7 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 			$rt_hrm_dashboard = new Rt_HRM_Dashboard();
 			$rt_hrm_calendar = new Rt_HRM_Calendar();
 			$rt_calendar = new RT_Calendar();
-
+			$rt_hrm_help = new Rt_Hrm_Help();
 		}
 
         /**
