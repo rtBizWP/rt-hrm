@@ -34,6 +34,10 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
          */
         public function __construct() {
 
+            if ( !$this->check_rt_biz_dependecy() ) {
+                return false;
+			}
+
 			$this->init_globals();
 
 			add_action( 'init', array( $this, 'admin_init' ), 5 );
@@ -52,6 +56,46 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 			$rt_hrm_admin = new Rt_HRM_Admin();
 
 		}
+
+        /**
+         * Check rt-biz plugin dependency
+         */
+        function check_rt_biz_dependecy() {
+            $flag = true;
+            $used_function = array(
+                'rt_biz_sanitize_module_key',
+                'rt_biz_get_access_role_cap',
+                'rt_biz_get_person_for_wp_user',
+                'rt_biz_get_access_role_cap',
+                'rt_biz_get_wp_user_for_person',
+                'rt_biz_search_employees'
+            );
+
+            foreach ( $used_function as $fn ) {
+                if ( ! function_exists( $fn ) ) {
+                    $flag = false;
+                }
+            }
+
+            if ( ! class_exists( 'Rt_Biz' ) ) {
+                $flag = false;
+            }
+
+            if ( ! $flag ) {
+                add_action( 'admin_notices', array( $this, 'rt_biz_admin_notice' ) );
+            }
+
+            return $flag;
+		}
+
+        /**
+         * Display notice for rt-biz plugin if not found
+         */
+        function rt_biz_admin_notice() { ?>
+			<div class="updated">
+				<p><?php _e( sprintf( 'WordPress HRM : It seems that WordPress rt-biz plugin is not installed or activated. Please %s / %s it.', '<a href="'.admin_url( 'plugin-install.php?tab=search&s=rt-biz' ).'">'.__( 'install' ).'</a>', '<a href="'.admin_url( 'plugins.php' ).'">'.__( 'activate' ).'</a>' ) ); ?></p>
+			</div>
+		<?php }
 
         /**
          * initialization of all classes
