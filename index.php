@@ -109,12 +109,3 @@ function rt_hrm_init() {
 
 }
 add_action( 'rt_biz_init', 'rt_hrm_init', 1 );
-
-function rt_hrm_check_dependency() {
-	global $rt_wp_hrm;
-	if ( empty( $rt_wp_hrm ) ) {
-		rt_hrm_include();
-		$rt_wp_hrm = new RT_WP_HRM();
-	}
-}
-add_action( 'init', 'rt_hrm_check_dependency' );
