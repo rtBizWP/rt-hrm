@@ -89,7 +89,7 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
          */
         function rt_biz_admin_notice() { ?>
 			<div class="updated">
-				<p><?php _e( sprintf( 'rtHRM : It seems that rtBiz plugin is not installed or activated. Please %s / %s it.', '<a href="'.admin_url( 'plugin-install.php?tab=search&s=rt-biz' ).'">'.__( 'install' ).'</a>', '<a href="'.admin_url( 'plugins.php' ).'">'.__( 'activate' ).'</a>' ) ); ?></p>
+				<p><?php _e( sprintf( 'Voxxi HRM : It seems that rtBiz plugin is not installed or activated. Please %s / %s it.', '<a href="'.admin_url( 'plugin-install.php?tab=search&s=rt-biz' ).'">'.__( 'install' ).'</a>', '<a href="'.admin_url( 'plugins.php' ).'">'.__( 'activate' ).'</a>' ) ); ?></p>
 			</div>
 		<?php }
 
