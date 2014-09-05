@@ -87,7 +87,7 @@ function rt_hrm_include() {
 
 	include_once RT_HRM_PATH_HELPER . 'rthrm-functions.php';
 
-	global $rthrm_app_autoload, $rthrm_admin_autoload, $rthrm_models_autoload, $rthrm_helper_autoload, $rthrm_calendar_autoload, $rthrm_form_autoload, $rthrm_settings_autoload;
+	global $rthrm_app_autoload, $rthrm_admin_autoload, $rthrm_models_autoload, $rthrm_helper_autoload, $rthrm_calendar_autoload, $rthrm_form_autoload, $rthrm_settings_autoload, $rthrm_buddypress_autoload, $rt_hrm_buddypress_hrm;
 	$rthrm_app_autoload = new RT_WP_Autoload( RT_HRM_PATH_APP );
 	$rthrm_admin_autoload = new RT_WP_Autoload( RT_HRM_PATH_ADMIN );
 	$rthrm_models_autoload = new RT_WP_Autoload( RT_HRM_PATH_MODELS );
@@ -95,6 +95,8 @@ function rt_hrm_include() {
 	$rthrm_form_autoload = new RT_WP_Autoload( RT_HRM_PATH_LIB . 'rtformhelpers/' );
 	$rthrm_calendar_autoload = new RT_WP_Autoload( RT_HRM_PATH_LIB . 'rt-calendar/' );
 	$rthrm_settings_autoload = new RT_WP_Autoload( RT_HRM_PATH . 'app/settings/' );
+	$rthrm_buddypress_autoload = new RT_WP_Autoload( RT_HRM_PATH . 'app/buddypress-components/rt-hrm-componet/' );
+	$rt_hrm_buddypress_hrm = new RT_WP_Autoload( RT_HRM_PATH . 'app/buddypress-components/rt-hrm-componet/bp-hrm/' ); // Need to move inside bp  comp
 }
 
 /**
