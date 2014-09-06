@@ -6,9 +6,9 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * Description of class-rt-biz-settings
+ * Description of Rt_Hrm_Bp_Hrm
  *
- * @author paresh
+ * @author kishore
  */
 if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
     
