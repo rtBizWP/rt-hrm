@@ -25,7 +25,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
                         parent::start(
                                 'hrm',
                                 __( 'HRM', 'buddypress' ),
-                               RT_BP_PEOPLE_PATH,
+                               RT_HRM_BP_HRM_PATH,
                                 array(
                                         'adminbar_myaccount_order' => 9999
                                 )

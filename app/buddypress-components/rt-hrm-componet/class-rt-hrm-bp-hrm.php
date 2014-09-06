@@ -18,7 +18,6 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
            
             // Define constants
             $this->define_constants();
-			// print_r(RT_HRM_BP_HRM_PATH);
 
             // Include required files
             $this->includes();
@@ -32,16 +31,14 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
             
              global $rt_hrm_buddypress_hrm;
              
-             $rt_hrm_buddypress_hrm = new RT_WP_Autoload( RT_BP_PEOPLE_PATH . '/bp-hrm/' );
-			 
-			 // print_r($rt_hrm_buddypress_hrm);
+             $rt_hrm_buddypress_hrm = new RT_WP_Autoload( RT_HRM_BP_HRM_PATH . 'bp-hrm/' );
             
         }
         
         function define_constants(){
             
-                if ( ! defined( 'RT_BP_PEOPLE_PATH' ) ) {
-                        define( 'RT_BP_PEOPLE_PATH', plugin_dir_path( __FILE__ ) );
+                if ( ! defined( 'RT_HRM_BP_HRM_PATH' ) ) {
+                        define( 'RT_HRM_BP_HRM_PATH', plugin_dir_path( __FILE__ ) );
                 }
                 
                
