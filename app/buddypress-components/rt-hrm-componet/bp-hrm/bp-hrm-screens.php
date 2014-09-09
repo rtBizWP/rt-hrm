@@ -23,12 +23,10 @@ function bp_hrm_screen() {
 }
 add_action( 'bp_screens', 'bp_hrm_screen' );
 
+        
 function bp_hrm_calender() { 
-	add_filter('bp_located_template','load_calender_template');
-}
-
-function load_calender_template(){
-    return  RT_HRM_BP_HRM_PATH.'/templates/hrm-list.php';
+    
+    echo 'calender Screen';
 }
 
 function bp_hrm_leave() {

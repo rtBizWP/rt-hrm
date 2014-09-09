@@ -96,6 +96,7 @@ function rt_hrm_include() {
 	$rthrm_calendar_autoload = new RT_WP_Autoload( RT_HRM_PATH_LIB . 'rt-calendar/' );
 	$rthrm_settings_autoload = new RT_WP_Autoload( RT_HRM_PATH . 'app/settings/' );
 	$rthrm_buddypress_autoload = new RT_WP_Autoload( RT_HRM_PATH . 'app/buddypress-components/rt-hrm-componet/' );
+	$rt_hrm_buddypress_hrm = new RT_WP_Autoload( RT_HRM_PATH . 'app/buddypress-components/rt-hrm-componet/bp-hrm/' ); // Need to move inside bp  comp
 }
 
 /**
