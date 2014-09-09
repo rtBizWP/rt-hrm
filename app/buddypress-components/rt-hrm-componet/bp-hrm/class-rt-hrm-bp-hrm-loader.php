@@ -7,10 +7,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Implementation of Rt_Hrm_Bp_Hrm_Loader
+ * Implementation of BP_people_Componet
  *
- * @package BuddyPress_HRM_Component
- * @author kishore
+ * @package BuddyPress_people_Component
+ * @author paresh
  */
 if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 	class Rt_Hrm_Bp_Hrm_Loader extends BP_Component {
@@ -42,8 +42,8 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
                 public function includes( $includes = array() ) {
                     
                        $includes = array(
-							'screens',
-						);
+				'screens',
+			);
 
                        
                         parent::includes( $includes );
@@ -93,14 +93,14 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 		 */
 		function setup_nav( $nav = array(), $sub_nav = array() ) {
 
-            // Only grab count if we're on a user page and current user has access
-            if ( bp_is_user() && bp_user_has_access() ) {
-                    $count    = bp_get_total_unread_messages_count();
-                    $class    = ( 0 === $count ) ? 'no-count' : 'count';
-                    $nav_name = sprintf( __( 'Messages <span class="%s">%s</span>', 'buddypress' ), esc_attr( $class ), number_format_i18n( $count ) );
-            } else {
-                    $nav_name = __( 'HRM', 'buddypress' );
-            }
+                        // Only grab count if we're on a user page and current user has access
+                        if ( bp_is_user() && bp_user_has_access() ) {
+                                $count    = bp_get_total_unread_messages_count();
+                                $class    = ( 0 === $count ) ? 'no-count' : 'count';
+                                $nav_name = sprintf( __( 'Messages <span class="%s">%s</span>', 'buddypress' ), esc_attr( $class ), number_format_i18n( $count ) );
+                        } else {
+                                $nav_name = __( 'HRM', 'buddypress' );
+                        }
 
 			// Add 'hrm' to the main navigation
 			$main_nav = array(
@@ -111,17 +111,17 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 				'default_subnav_slug' => 'hrm',
 			);
 
-            // Determine user to use
-            if ( bp_displayed_user_domain() ) {
-                    $user_domain = bp_displayed_user_domain();
-            } elseif ( bp_loggedin_user_domain() ) {
-                    $user_domain = bp_loggedin_user_domain();
-            } else {
-                    return;
-            }
+                        // Determine user to use
+                        if ( bp_displayed_user_domain() ) {
+                                $user_domain = bp_displayed_user_domain();
+                        } elseif ( bp_loggedin_user_domain() ) {
+                                $user_domain = bp_loggedin_user_domain();
+                        } else {
+                                return;
+                        }
 
-            // Link to user people
-            $people_link = trailingslashit( $user_domain . $this->slug );
+                        // Link to user people
+                        $people_link = trailingslashit( $user_domain . $this->slug );
 
 
 			// Add the subnav items
