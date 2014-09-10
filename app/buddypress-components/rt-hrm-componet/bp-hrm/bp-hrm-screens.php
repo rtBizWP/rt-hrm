@@ -28,12 +28,15 @@ function bp_hrm_calender() {
 }
 
 function load_calender_template(){
-    return  RT_HRM_BP_HRM_PATH.'/templates/hrm-list.php';
+    return  RT_HRM_BP_HRM_PATH.'/templates/hrm-calender.php';
 }
 
 function bp_hrm_leave() {
-    
-    echo 'leave Screen';
+    add_filter('bp_located_template','load_leave_template');
+}
+
+function load_leave_template(){
+    return  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave.php';
 }
 
 function bp_hrm_requests() {
