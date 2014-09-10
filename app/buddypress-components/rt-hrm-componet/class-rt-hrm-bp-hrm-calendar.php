@@ -22,13 +22,6 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm_Calendar' ) ) {
         }
 		
 		/**
-		 * Setter method for screen id
-		 */
-		function add_screen_id( $screen_id ) {
-			$this->screen_id = $screen_id;
-		}
-		
-		/**
          * Actions to be taken prior to page loading. This is after headers have been set.
          * Handle calendar page event
          * call on load-$hook
@@ -60,8 +53,11 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm_Calendar' ) ) {
 				$posts = get_posts($args);
 
 				if ( count($posts) > 0 ) {
-					wp_redirect( admin_url( 'edit.php?post_type=rt_leave&page=rthrm-rt_leave-calendar&message_id=1' ) );
-					die();
+					// echo '<div class="error"><p>'.__( 'You can not apply for leave twice on the same day.' ).'</p></div>';
+					// todo: write in php instead of js
+				?>
+					<script> alert('You can not apply for leave twice on the same day.') </script>
+				<?php return false;
 				}
 
 				$newLeave = array(
@@ -94,8 +90,6 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm_Calendar' ) ) {
 				}else {
 					delete_post_meta( $newLeaveID, 'leave-end-date' );
 				}
-                // wp_redirect( admin_url( 'edit.php?post_type=rt_leave&page=rthrm-rt_leave-calendar' ) );
-				//die();
 			}
 		}
 		
