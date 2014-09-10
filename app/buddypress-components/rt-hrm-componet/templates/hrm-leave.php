@@ -21,7 +21,7 @@
 						<?php bp_get_options_nav() ?>
 					</ul>
 				</div>
-				<!-- code for leaves -->
+				<!-- code for leave -->
 				<?php 
 					echo '<div class=""><p>'.__( 'code for leave.' ).'</p></div>';
 					global $rt_hrm_module, $rt_hrm_attributes, $bp;
