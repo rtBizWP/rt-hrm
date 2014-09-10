@@ -26,6 +26,9 @@
     top: 20%;
     z-index: 999;
 }
+.ui-autocomplete  {
+	z-index: 9999;
+}
 
 .leave-insert-dialog .form-table td {
     padding: 5px;
