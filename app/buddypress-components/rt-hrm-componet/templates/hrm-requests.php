@@ -67,13 +67,15 @@
 									$rt_leave_type_list = wp_get_post_terms($post->ID, 'rt-leave-type', array("fields" => "names")); // tod0:need to call in correct way
 									
 								?>
-								<th align="center" scope="row">//image//</th>
-								<th align="center" scope="row"><?php echo $leave_user_value;?></th>
-								<th align="center" scope="row"><?php echo $rt_leave_type_list[0];?></th>
-								<th align="center" scope="row"><?php echo $leave_start_date_value;?></th>
-								<th align="center" scope="row"><?php esc_html_e('End Date', 'rt_hrm');?></th>
-								<th align="center" scope="row"><?php echo $post->post_status;?></th>
-								<th align="center" scope="row"><?php esc_html_e('Approver', 'rt_hrm');?></th>
+								<tr>
+									<th align="center" scope="row">//image//</th>
+									<th align="center" scope="row"><?php echo $leave_user_value;?></th>
+									<th align="center" scope="row"><?php echo $rt_leave_type_list[0];?></th>
+									<th align="center" scope="row"><?php echo $leave_start_date_value;?></th>
+									<th align="center" scope="row"><?php esc_html_e('End Date', 'rt_hrm');?></th>
+									<th align="center" scope="row"><?php echo $post->post_status;?></th>
+									<th align="center" scope="row"><?php esc_html_e('Approver', 'rt_hrm');?></th>
+								</tr>
 								<?php endforeach; 
 								wp_reset_postdata();
 							}
