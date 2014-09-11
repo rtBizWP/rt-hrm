@@ -27,7 +27,7 @@ function bp_hrm_calender() {
 	add_filter('bp_located_template','load_calender_template');
 }
 
-function load_calender_template(){
+function load_calender_template() {
     return  RT_HRM_BP_HRM_PATH.'/templates/hrm-calender.php';
 }
 
@@ -35,13 +35,16 @@ function bp_hrm_leave() {
     add_filter('bp_located_template','load_leave_template');
 }
 
-function load_leave_template(){
+function load_leave_template() {
     return  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave.php';
 }
 
 function bp_hrm_requests() {
-    
-    echo 'requests Screen';
+	add_filter('bp_located_template','load_requests_template');
+}
+
+function load_requests_template() {
+    return  RT_HRM_BP_HRM_PATH.'/templates/hrm-requests.php';
 }
 
 ?>
