@@ -583,8 +583,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 			$args = array(
 				'labels' => $this->labels,
-				'public' => false,
-				'publicly_queryable' => false,
+				'public' => true, // Made true to check on front-end
+				'publicly_queryable' => true, // Made true to check on front-end
 				'show_ui' => true, // Show the UI in admin panel
 				'menu_icon' => $logo_url,
 				'menu_position' => $menu_position,

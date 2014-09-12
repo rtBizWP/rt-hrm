@@ -92,7 +92,12 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 		 * @global obj $bp
 		 */
 		function setup_nav( $nav = array(), $sub_nav = array() ) {
-
+            	
+			// Determine user to use -- only
+			if ( bp_loggedin_user_id() !== bp_displayed_user_id() ) {
+				return;
+			}
+			
             // Only grab count if we're on a user page and current user has access
             if ( bp_is_user() && bp_user_has_access() ) {
                     $count    = bp_get_total_unread_messages_count();
@@ -145,14 +150,16 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			);
                         
 			// Add a few subnav items
-			$sub_nav[] = array(
-				'name'            =>  __( 'Requests' ),
-				'slug'            => 'requests',
-				'parent_url'      => $people_link,
-				'parent_slug'     =>  $this->id,
-				'screen_function' => 'bp_hrm_requests',
-				'position'        => 30,
-			);
+			if ( current_user_can('edit_posts') ) {
+				$sub_nav[] = array(
+					'name'            =>  __( 'Requests' ),
+					'slug'            => 'requests',
+					'parent_url'      => $people_link,
+					'parent_slug'     =>  $this->id,
+					'screen_function' => 'bp_hrm_requests',
+					'position'        => 30,
+				);
+			}
 
 			parent::setup_nav( $main_nav, $sub_nav );
 

@@ -40,7 +40,9 @@ function load_leave_template() {
 }
 
 function bp_hrm_requests() {
-	add_filter('bp_located_template','load_requests_template');
+	if ( current_user_can('edit_posts') ) {
+		add_filter('bp_located_template','load_requests_template');
+	}
 }
 
 function load_requests_template() {
