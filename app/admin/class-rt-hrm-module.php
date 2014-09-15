@@ -1005,7 +1005,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                 $arrReturn[] = array("id" => $author->ID, "label" => $author->post_title);
             }
             header('Content-Type: application/json');
+			echo '<!--JSON_STARTS-->';
             echo json_encode($arrReturn);
+			echo '<!--JSON_ENDS-->';
             die(0);
         }
 
