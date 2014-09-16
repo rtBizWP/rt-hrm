@@ -47,7 +47,7 @@ if( !class_exists( 'Rt_Hrm_Bp_Hrm_Frontend' ) ) {
 				if ( !  wp_style_is( 'rt-jquery-ui-css' ) ) {
 	                wp_enqueue_style('rt-jquery-ui-css', RT_HRM_URL . 'app/assets/css/jquery-ui-1.9.2.custom.css', false, RT_HRM_VERSION, 'all');
 				}
-				wp_enqueue_style('rthrm-admin-css', RT_HRM_URL . 'app/assets/css/admin.css', false, RT_HRM_VERSION, 'all');
+				wp_enqueue_style('rthrm-admin-css', RT_HRM_URL . 'app/assets/css/hrm-frontend.css', false, RT_HRM_VERSION, 'all');
 
                 if( !wp_script_is('jquery-ui-datepicker') ) {
                     wp_enqueue_script( 'jquery-ui-datepicker' );
