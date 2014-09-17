@@ -91,6 +91,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
 
             add_action( 'wp_ajax_seach_employees_name', array( $this, 'employees_autocomplete_ajax' ) );
+			
+			add_action( 'wp_ajax_leave_listing_info', array( $this, 'leave_listing' ) );
+			add_action( 'wp_ajax_nopriv_leave_listing_info', array( $this, 'leave_listing' ) );
 
 			add_action( 'rt_biz_entity_meta_boxes', array( $this, 'contact_documents_meta_box' ) );
 			add_action( 'save_post', array( $this, 'save_contact_documents_meta_box' ) );
@@ -925,7 +928,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			update_post_meta( $post_id, 'leave-user', $leave_meta['leave-user'] );
             update_post_meta( $post_id, 'leave-user-id', $leave_meta['leave-user-id'] );
             update_post_meta( $post_id, 'leave-duration', $leave_meta['leave-duration'] );
-			update_post_meta( $post_id, 'leave-start-date', $leave_meta['leave-start-date'] );
+			update_post_meta( $post_id, 'leave-start-date', strtotime( $leave_meta['leave-start-date'] ) );
 
 			if ( $leave_meta['leave-duration'] == 'other' ){
 				update_post_meta( $post_id, 'leave-end-date', $leave_meta['leave-end-date'] );
@@ -1008,6 +1011,110 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             echo json_encode($arrReturn);
             die(0);
         }
+		
+		function leave_listing() {
+			global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb, $wp_query, $paged;
+			
+			// Get post data
+			$post_data = array();
+			
+			$order = stripslashes( trim( $_POST['order'] ) );
+			$attr = stripslashes( trim( $_POST['attr'] ) );
+			
+			$meta_key = 'leave-start-date';
+			if ( $attr == "startdate" ){
+				$meta_key = 'leave-start-date';
+			} else if( $attr == "enddate" ) {
+				$meta_key = 'leave-end-date';
+			}
+			
+			
+			$paged = $_GET['paged'] ? $_GET['paged'] : 1;
+			
+			$posts_per_page = 2;
+			
+			$offset = ( $paged - 1 ) * $posts_per_page;
+			if ($offset <=0) {
+				$offset = 0;
+			}
+			
+			$post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = 'rt_biz_contact_user_id' and meta_value = {$bp->displayed_user->id} ");
+			
+			$args = array(
+				'meta_query' => array(
+					array(
+						'key' => 'leave-user-id',
+						'value' => $post_meta->post_id
+					)
+				),
+				'post_type' => $rt_hrm_module->post_type,
+				'meta_key'   => $meta_key,
+				'orderby' => 'meta_value_num',
+				'order'      => $order,
+				'post_status' => array( 'approved', 'rejected' ),
+				//'posts_per_page' => $posts_per_page,
+				'offset' => $offset
+			);
+			
+			//echo "<pre>";
+			//print_r($args);
+			//echo "</pre>";
+			
+			// The Query
+			$the_query = new WP_Query( $args );
+			
+			//echo $the_query->max_num_pages;
+			
+			$arrReturn = array();
+			
+			// The Loop
+			if ( $the_query->have_posts() ) {
+				
+				while ( $the_query->have_posts() ) {
+					$the_query->the_post();
+					$get_the_id =  get_the_ID();
+					$get_user_meta = get_post_meta($get_the_id);
+					$leave_user_value = get_post_meta( $get_the_id, 'leave-user', true );
+					$leave_duration_value = get_post_meta( $get_the_id, 'leave-duration', true );
+					$leave_duration_type = get_term_by('slug', $leave_duration_value, 'rt-leave-type');
+					
+					$leave_start_date_value = get_post_meta( $get_the_id, 'leave-start-date', true );
+					$leave_start_date_value = date( get_option( 'date_format' ),$leave_start_date_value);
+					$leave_end_date_value = get_post_meta( $get_the_id, 'leave-end-date', true );
+					$leave_user_id = get_post_meta( $get_the_id, 'leave-user-id', true );
+					$rt_biz_contact_user_id = get_post_meta( $leave_user_id, 'rt_biz_contact_user_id', true );
+					
+					
+					//Returns Array of Term Names for "rt-leave-type"
+					$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // tod0:need to call in correct way
+					
+					$get_post_status = get_post_status();
+					$get_edit_post_link = get_edit_post_link( $get_the_id );
+					$get_permalink = get_permalink( $get_the_id );
+					
+					
+					$arrReturn[] = array(
+						"leavetype" =>  $rt_leave_type_list[0],
+						"leavestartdate" => $leave_start_date_value, 
+						"leaveenddate" => $leave_end_date_value, 
+						"poststatus" => $get_post_status,
+						"editpostlink" => $get_edit_post_link,
+						"permalink" => $get_permalink
+					);
+					
+				}
+				
+			} else {
+				// no posts found
+			}
+			
+			/* Restore original Post Data */
+			wp_reset_postdata();
+			header('Content-Type: application/json');
+            echo json_encode($arrReturn);
+            die(0);
+
+		}
 
 	}
 }

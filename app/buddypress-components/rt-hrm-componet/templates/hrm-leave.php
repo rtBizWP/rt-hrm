@@ -34,18 +34,42 @@
 							)
 						),
 						'post_type' => $rt_hrm_module->post_type,
-						'post_status' => 'any',
+						'post_status' => array( 'approved', 'rejected' ),
 						'nopaging' => true
 					);
 					$leave_posts = get_posts($args);
 					?>
-					<table cellspacing="0" class="requests-lists">
+					<table cellspacing="0" class="lists">
 						<tbody>
-							<tr>
-								<th align="center" scope="row"><?php esc_html_e('Leave Type', 'rt_hrm');?></th>
-								<th align="center" scope="row"><?php esc_html_e('Start Date', 'rt_hrm');?></th>
-								<th align="center" scope="row"><?php esc_html_e('End Date', 'rt_hrm');?></th>
-								<th align="center" scope="row"><?php esc_html_e('Status', 'rt_hrm');?></th>
+							<tr class="lists-header">
+								<th align="center" scope="row">
+									<?php esc_html_e('Leave Type', 'rt_hrm');?>
+									<!--<select name="leavetype" class="order leavetype">
+									  <option value="ASC">ASC</option>
+									  <option value="DESC">DESC</option>
+									</select>-->
+								</th>
+								<th align="center" scope="row">
+									<?php esc_html_e('Start Date', 'rt_hrm');?>
+									<select name="startdate" class="order startdate">
+									  <option value="ASC">ASC</option>
+									  <option value="DESC">DESC</option>
+									</select>
+								</th>
+								<th align="center" scope="row">
+									<?php esc_html_e('End Date', 'rt_hrm');?>
+									<select name="enddate" class="order enddate">
+									  <option value="ASC">ASC</option>
+									  <option value="DESC">DESC</option>
+									</select>
+								</th>
+								<th align="center" scope="row">
+									<?php esc_html_e('Status', 'rt_hrm');?>
+									<!--<select name="status" class="order status">
+									  <option value="ASC">ASC</option>
+									  <option value="DESC">DESC</option>
+									</select>-->
+								</th>
 							</tr>
 							<?php
 							if ( count($leave_posts) > 0 ) {
@@ -65,7 +89,7 @@
 									$rt_leave_type_list = wp_get_post_terms($post->ID, 'rt-leave-type', array("fields" => "names")); // tod0:need to call in correct way
 								if ( bp_loggedin_user_id() == bp_displayed_user_id() ) {
 								?>
-								<tr>
+								<tr class="lists-data">
 									<td align="center" scope="row">
 										<?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0];
 										edit_post_link('Edit', '<br /><span>', '</span>&nbsp;&#124;');?>
