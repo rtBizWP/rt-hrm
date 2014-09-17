@@ -928,7 +928,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			update_post_meta( $post_id, 'leave-user', $leave_meta['leave-user'] );
             update_post_meta( $post_id, 'leave-user-id', $leave_meta['leave-user-id'] );
             update_post_meta( $post_id, 'leave-duration', $leave_meta['leave-duration'] );
-			update_post_meta( $post_id, 'leave-start-date', strtotime( $leave_meta['leave-start-date'] ) );
+			update_post_meta( $post_id, 'leave-start-date', $leave_meta['leave-start-date'] );
 
 			if ( $leave_meta['leave-duration'] == 'other' ){
 				update_post_meta( $post_id, 'leave-end-date', $leave_meta['leave-end-date'] );
@@ -1079,7 +1079,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					$leave_duration_type = get_term_by('slug', $leave_duration_value, 'rt-leave-type');
 					
 					$leave_start_date_value = get_post_meta( $get_the_id, 'leave-start-date', true );
-					$leave_start_date_value = date( get_option( 'date_format' ),$leave_start_date_value);
+					// $leave_start_date_value = date( get_option( 'date_format' ),$leave_start_date_value);
 					$leave_end_date_value = get_post_meta( $get_the_id, 'leave-end-date', true );
 					$leave_user_id = get_post_meta( $get_the_id, 'leave-user-id', true );
 					$rt_biz_contact_user_id = get_post_meta( $leave_user_id, 'rt_biz_contact_user_id', true );
