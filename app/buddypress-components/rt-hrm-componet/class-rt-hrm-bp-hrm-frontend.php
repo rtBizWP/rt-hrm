@@ -62,6 +62,7 @@ if( !class_exists( 'Rt_Hrm_Bp_Hrm_Frontend' ) ) {
 
 				wp_localize_script( 'rthrm-admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
 				wp_localize_script( 'rthrm-frontend-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
+				wp_localize_script( 'rthrm-frontend-js', 'rthrmurl', RT_HRM_URL );
                 wp_localize_script( 'rthrm-admin-js', 'adminurl', admin_url() );
 				
 				wp_enqueue_style('rt-hrm-calendar-css', RT_HRM_URL . 'app/lib/rt-calendar/calendar/fullcalendar.css', false, RT_HRM_VERSION, 'all');

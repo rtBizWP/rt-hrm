@@ -1020,6 +1020,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			
 			$order = stripslashes( trim( $_POST['order'] ) );
 			$attr = stripslashes( trim( $_POST['attr'] ) );
+			$paged = stripslashes( trim( $_POST['paged'] ) ) ? stripslashes( trim( $_POST['paged'] ) ) : 1;
 			
 			$meta_key = 'leave-start-date';
 			if ( $attr == "startdate" ){
@@ -1029,9 +1030,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			}
 			
 			
-			$paged = $_GET['paged'] ? $_GET['paged'] : 1;
 			
-			$posts_per_page = 2;
+			
+			$posts_per_page = 1;
 			
 			$offset = ( $paged - 1 ) * $posts_per_page;
 			if ($offset <=0) {
@@ -1052,7 +1053,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'orderby' => 'meta_value_num',
 				'order'      => $order,
 				'post_status' => array( 'approved', 'rejected' ),
-				//'posts_per_page' => $posts_per_page,
+				'posts_per_page' => $posts_per_page,
 				'offset' => $offset
 			);
 			
@@ -1063,7 +1064,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			// The Query
 			$the_query = new WP_Query( $args );
 			
-			//echo $the_query->max_num_pages;
+			$max_num_pages =  $the_query->max_num_pages;
 			
 			$arrReturn = array();
 			
@@ -1099,7 +1100,10 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 						"leaveenddate" => $leave_end_date_value, 
 						"poststatus" => $get_post_status,
 						"editpostlink" => $get_edit_post_link,
-						"permalink" => $get_permalink
+						"permalink" => $get_permalink,
+						"max_num_pages" => $max_num_pages,
+						"order" => $order,
+						"attr" => $attr
 					);
 					
 				}

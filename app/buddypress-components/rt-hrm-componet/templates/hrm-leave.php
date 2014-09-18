@@ -23,7 +23,15 @@
 				</div>
 				<!-- code for leaves -->
 				<?php
-					global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb;
+					global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb,  $wp_query;
+					$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+					
+					$posts_per_page = 1;
+			
+					$offset = ( $paged - 1 ) * $posts_per_page;
+					if ($offset <=0) {
+						$offset = 0;
+					}
 					
 					$post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = 'rt_biz_contact_user_id' and meta_value = {$bp->displayed_user->id} ");
 					$args = array(
@@ -35,7 +43,8 @@
 						),
 						'post_type' => $rt_hrm_module->post_type,
 						'post_status' => array( 'approved', 'rejected' ),
-						'nopaging' => true
+						'posts_per_page' => $posts_per_page,
+						'offset' => $offset
 					);
 					$leave_posts = get_posts($args);
 					?>
@@ -106,6 +115,7 @@
 							?>
 						</tbody>
 					</table>
+					<ul><li id="prev"><a class="page-link" data-page="2">Previous</a></li><li id="next"><a class="page-link next" data-page="2">Next</a></li></ul>
 			</div><!-- #item-body -->
 
 		</div><!-- .padder -->
