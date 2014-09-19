@@ -179,7 +179,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
                 if ( isset ( $leaveStartDate ) && !empty( $leaveStartDate ) ){
                     $leaveStartDate = DateTime::createFromFormat( 'd/m/Y', $leaveStartDate[0] );
                 }
-                $leaveStartDate = $leaveStartDate->format('Y-m-d');
+                $leaveStartDate = !empty( $leaveStartDate ) ? $leaveStartDate->format('Y-m-d') : '' ;
                 $leaveEndDate = get_post_meta( get_the_id(), 'leave-end-date', false);
                 if ( isset ( $leaveEndDate ) && !empty( $leaveEndDate ) ){
                     $leaveEndDate = $leaveEndDate[0];
