@@ -175,14 +175,14 @@ jQuery(document).ready(function($) {
 			var attr = "";
 			var max_num_pages = 999999;
 			if ( 1 == paged ){
-				$( "li#prev" ).hide();
+				$( "#requests-pagination li#prev" ).hide();
 			} else {
-				$( "li#prev" ).show();
+				$( "#requests-pagination li#prev" ).show();
 			}
 			if ( max_num_pages == paged ){
-				$( "li#next" ).hide();
+				$( "#requests-pagination li#next" ).hide();
 			} else {
-				$( "li#next" ).show();
+				$( "#requests-pagination li#next" ).show();
 			}
 			$( ".requests-lists .order" ).change(function() {
 				order = $(this).val();
@@ -210,7 +210,7 @@ jQuery(document).ready(function($) {
 						});
 						if ( data.length === 0 ){
 							$( ".requests-lists tr.lists-data" ).remove();
-							$( "ul#pagination" ).remove();
+							$( "ul#requests-pagination" ).remove();
 							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>' );
 							$( ".requests-lists #loading" ).remove();
 							
