@@ -46,6 +46,10 @@
 						'posts_per_page' => $posts_per_page,
 						'offset' => $offset
 					);
+					// The Query
+					$the_query = new WP_Query( $args );
+					
+					$max_num_pages =  $the_query->max_num_pages;
 					$leave_posts = get_posts($args);
 					?>
 					<table cellspacing="0" class="lists">
@@ -115,8 +119,8 @@
 							?>
 						</tbody>
 					</table>
-					<?php if ( count($leave_posts) > 1 ) { ?>
-					<ul id="pagination"><li id="prev"><a class="page-link">Previous</a></li><li id="next"><a class="page-link next">Next</a></li></ul>
+					<?php if ( $max_num_pages > 1 ) { ?>
+					<ul id="requests-pagination"><li id="prev"><a class="page-link">Previous</a></li><li id="next"><a class="page-link next">Next</a></li></ul>
 					<?php } ?>
 			</div><!-- #item-body -->
 
