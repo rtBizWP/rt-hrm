@@ -1112,9 +1112,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				}
 				
 			} else {
-				?>
-				<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>
-				<?php
+				// no posts found
 			}
 			
 			/* Restore original Post Data */
@@ -1229,10 +1227,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					
 				}
 				
-			}else {
-				?>
-				<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>
-				<?php
+			} else {
+				// no posts found
 			}
 			
 			/* Restore original Post Data */
