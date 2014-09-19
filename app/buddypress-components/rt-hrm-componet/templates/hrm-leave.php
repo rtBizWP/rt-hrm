@@ -115,7 +115,7 @@
 							?>
 						</tbody>
 					</table>
-					<?php if ( count($leave_posts) > 0 ) { ?>
+					<?php if ( count($leave_posts) >= 1 ) { ?>
 					<ul id="pagination"><li id="prev"><a class="page-link">Previous</a></li><li id="next"><a class="page-link next">Next</a></li></ul>
 					<?php } ?>
 			</div><!-- #item-body -->
