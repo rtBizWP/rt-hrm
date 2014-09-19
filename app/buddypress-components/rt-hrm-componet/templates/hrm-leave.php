@@ -115,7 +115,9 @@
 							?>
 						</tbody>
 					</table>
-					<ul><li id="prev"><a class="page-link" data-page="2">Previous</a></li><li id="next"><a class="page-link next" data-page="2">Next</a></li></ul>
+					<?php if ( count($leave_posts) > 0 ) { ?>
+					<ul id="pagination"><li id="prev"><a class="page-link">Previous</a></li><li id="next"><a class="page-link next">Next</a></li></ul>
+					<?php } ?>
 			</div><!-- #item-body -->
 
 		</div><!-- .padder -->

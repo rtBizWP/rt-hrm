@@ -94,6 +94,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			
 			add_action( 'wp_ajax_leave_listing_info', array( $this, 'leave_listing' ) );
 			add_action( 'wp_ajax_nopriv_leave_listing_info', array( $this, 'leave_listing' ) );
+			
+			add_action( 'wp_ajax_requests_listing_info', array( $this, 'requests_listing' ) );
+			add_action( 'wp_ajax_nopriv_requests_listing_info', array( $this, 'requests_listing' ) );
 
 			add_action( 'rt_biz_entity_meta_boxes', array( $this, 'contact_documents_meta_box' ) );
 			add_action( 'save_post', array( $this, 'save_contact_documents_meta_box' ) );
@@ -105,8 +108,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'wp_ajax_rt_hrm_check_user_leave_quota', array( $this, 'check_employee_leave_quota' ) );
 			add_action( 'wp_ajax_rt_hrm_check_leave_day', array( $this, 'check_leave_day' ) );
                         
-                        add_filter( "manage_edit-{$this->post_type}_columns", array( $this,'leave_columns' ) );
-                        add_action( "manage_{$this->post_type}_posts_custom_column" ,  array( $this,'manage_leave_columns' ), 10, 2 );
+            add_filter( "manage_edit-{$this->post_type}_columns", array( $this,'leave_columns' ) );
+            add_action( "manage_{$this->post_type}_posts_custom_column" ,  array( $this,'manage_leave_columns' ), 10, 2 );
 		}
                 
                 function leave_columns( $columns ) {
@@ -1012,6 +1015,13 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             die(0);
         }
 		
+		/**
+		 * leave_listing
+		 *
+		 * @access public
+		 * @param  void
+		 * @return json json_encode($arrReturn)
+		 */
 		function leave_listing() {
 			global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb, $wp_query, $paged;
 			
@@ -1028,10 +1038,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			} else if( $attr == "enddate" ) {
 				$meta_key = 'leave-end-date';
 			}
-			
-			
-			
-			
+
 			$posts_per_page = 1;
 			
 			$offset = ( $paged - 1 ) * $posts_per_page;
@@ -1056,10 +1063,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'posts_per_page' => $posts_per_page,
 				'offset' => $offset
 			);
-			
-			//echo "<pre>";
-			//print_r($args);
-			//echo "</pre>";
 			
 			// The Query
 			$the_query = new WP_Query( $args );
@@ -1101,6 +1104,122 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 						"poststatus" => $get_post_status,
 						"editpostlink" => $get_edit_post_link,
 						"permalink" => $get_permalink,
+						"max_num_pages" => $max_num_pages,
+						"order" => $order,
+						"attr" => $attr
+					);
+					
+				}
+				
+			} else {
+				// no posts found
+			}
+			
+			/* Restore original Post Data */
+			wp_reset_postdata();
+			header('Content-Type: application/json');
+            echo json_encode($arrReturn);
+            die(0);
+
+		}
+
+		/**
+		 * requests_listing
+		 *
+		 * @access public
+		 * @param  void
+		 * @return json json_encode($arrReturn)
+		 */
+		function requests_listing() {
+			global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb, $wp_query, $paged;
+			
+			// Get post data
+			$post_data = array();
+			
+			$order = stripslashes( trim( $_POST['order'] ) );
+			$attr = stripslashes( trim( $_POST['attr'] ) );
+			$paged = stripslashes( trim( $_POST['paged'] ) ) ? stripslashes( trim( $_POST['paged'] ) ) : 1;
+			
+			$meta_key = 'leave-start-date';
+			if ( $attr == "startdate" ){
+				$meta_key = 'leave-start-date';
+			} else if( $attr == "enddate" ) {
+				$meta_key = 'leave-end-date';
+			}
+
+			$posts_per_page = 1;
+			
+			$offset = ( $paged - 1 ) * $posts_per_page;
+			if ($offset <=0) {
+				$offset = 0;
+			}
+			
+			$post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = 'rt_biz_contact_user_id' and meta_value = {$bp->displayed_user->id} ");
+			
+			$args = array(
+				'post_type' => $rt_hrm_module->post_type,
+				'meta_key'   => $meta_key,
+				'orderby' => 'meta_value_num',
+				'order'      => $order,
+				'post_status' => 'any',
+				'posts_per_page' => $posts_per_page,
+				'offset' => $offset
+			);
+			
+			// The Query
+			$the_query = new WP_Query( $args );
+			
+			$max_num_pages =  $the_query->max_num_pages;
+			
+			$arrReturn = array();
+			
+			// The Loop
+			if ( $the_query->have_posts() ) {
+				
+				while ( $the_query->have_posts() ) {
+					$the_query->the_post();
+					$get_the_id =  get_the_ID();
+					$get_user_meta = get_post_meta( $get_the_id );
+					$leave_user_value = get_post_meta( $get_the_id, 'leave-user', true );
+					$leave_duration_value = get_post_meta( $get_the_id, 'leave-duration', true );
+					$leave_duration_type = get_term_by('slug', $leave_duration_value, 'rt-leave-type');
+					
+					
+					$leave_user_id = get_post_meta( $get_the_id, 'leave-user-id', true );
+					$rt_biz_contact_user_id = get_post_meta( $leave_user_id, 'rt_biz_contact_user_id', true );
+					$leave_user_approver = get_post_meta( $get_the_id, 'leave-user-approver', true );
+					$approver_info = get_user_by( 'id', $leave_user_approver );
+					if ( ! empty( $approver_info->user_nicename ) ){							
+						$user_nicename = $approver_info->user_nicename;
+					}
+					if ( ! empty( $user_nicename ) && get_post_status() != 'pending' ){
+						$approver = $user_nicename;
+					} else {
+						$approver = 'Awaiting';
+					}
+					
+					$leave_start_date_value = get_post_meta( $get_the_id, 'leave-start-date', true );
+					$leave_end_date_value = get_post_meta( $get_the_id, 'leave-end-date', true );
+					
+					//Returns Array of Term Names for "rt-leave-type"
+					$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // todo:need to call in correct way
+					
+					$get_post_status = get_post_status();
+					$get_edit_post_link = get_edit_post_link( $get_the_id );
+					$get_permalink = get_permalink( $get_the_id );
+					
+					
+					$arrReturn[] = array(
+						"avatar" => get_avatar( $rt_biz_contact_user_id, 24 ),
+						"leaveuservalue" => $leave_user_value,
+						"leavetype" =>  $rt_leave_type_list[0],
+						"leavestartdate" => $leave_start_date_value, 
+						"leaveenddate" => $leave_end_date_value, 
+						"poststatus" => $get_post_status,
+						"approver"  => $approver,
+						"editpostlink" => $get_edit_post_link,
+						"permalink" => $get_permalink,
+						"deletepostlink" => get_delete_post_link( $get_the_id ),
 						"max_num_pages" => $max_num_pages,
 						"order" => $order,
 						"attr" => $attr

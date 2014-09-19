@@ -23,25 +23,46 @@
 				</div>
 				<!-- code for requests -->
 				<?php 
-				global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb;
+				global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb,  $wp_query;
+				$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+				
+				$posts_per_page = 1;
+		
+				$offset = ( $paged - 1 ) * $posts_per_page;
+				if ($offset <=0) {
+					$offset = 0;
+				}
 				
 				$post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = 'rt_biz_contact_user_id' and meta_value = {$bp->displayed_user->id} ");
 				$args = array(
 					'post_type' => $rt_hrm_module->post_type,
 					'post_status' => 'any',
-					'nopaging' => true
+					'posts_per_page' => $posts_per_page,
+					'offset' => $offset
 				);
 				$leave_posts = get_posts($args);
 				?>
 				<h2><?php esc_html_e('requests', 'rt_hrm');?></h2>
 				<table cellspacing="0" class="requests-lists">
 					<tbody>
-						<tr>
+						<tr class="lists-header">
 							<th align="center" scope="row"></th>
 							<th align="center" scope="row"><?php esc_html_e('Name', 'rt_hrm');?></th>
 							<th align="center" scope="row"><?php esc_html_e('Leave Type', 'rt_hrm');?></th>
-							<th align="center" scope="row"><?php esc_html_e('Start Date', 'rt_hrm');?></th>
-							<th align="center" scope="row"><?php esc_html_e('End Date', 'rt_hrm');?></th>
+							<th align="center" scope="row">
+								<?php esc_html_e('Start Date', 'rt_hrm');?>
+								<select name="startdate" class="order startdate">
+								  <option value="ASC">ASC</option>
+								  <option value="DESC">DESC</option>
+								</select>
+							</th>
+							<th align="center" scope="row">
+								<?php esc_html_e('End Date', 'rt_hrm');?>
+								<select name="enddate" class="order enddate">
+								  <option value="ASC">ASC</option>
+								  <option value="DESC">DESC</option>
+								</select>
+							</th>
 							<th align="center" scope="row"><?php esc_html_e('Status', 'rt_hrm');?></th>
 							<th align="center" scope="row"><?php esc_html_e('Approver', 'rt_hrm');?></th>
 						</tr>
@@ -69,9 +90,9 @@
 									//Returns Array of Term Names for "rt-leave-type"
 									$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // todo:need to call in correct way
 								?>
-								<tr>
-									<th align="center" scope="row"><?php echo get_avatar( $rt_biz_contact_user_id, 24 ); ?> </th>
-									<th align="center" scope="row">
+								<tr class="lists-data">
+									<td align="center" scope="row"><?php echo get_avatar( $rt_biz_contact_user_id, 24 ); ?> </td>
+									<td align="center" scope="row">
 										<?php echo $leave_user_value;
 										if ( current_user_can('edit_posts') ) {
 											edit_post_link('Edit', '<br /><span>', '</span>&nbsp;&#124;');
@@ -86,8 +107,8 @@
 										}
 										?>
 										
-									</th>
-									<th align="center" scope="row"><?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0]; ?></th>
+									</td>
+									<td align="center" scope="row"><?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0]; ?></td>
 									<th align="center" scope="row"><?php echo $leave_start_date_value;?></th>
 									<td align="center" scope="row"><?php echo $leave_end_date_value;?></td>
 									<td align="center" scope="row" class="<?php echo strtolower ( get_post_status() ); ?>"><?php echo get_post_status(); ?></td>
@@ -107,6 +128,9 @@
 						?>
 					</tbody>
 				</table>
+				<?php if ( count($leave_posts) > 0 ) { ?>
+					<ul id="pagination"><li id="prev"><a class="page-link">Previous</a></li><li id="next"><a class="page-link next">Next</a></li></ul>
+				<?php } ?>
 			</div><!-- #item-body -->
 
 		</div><!-- .padder -->
