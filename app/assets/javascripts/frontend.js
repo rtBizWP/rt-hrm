@@ -14,19 +14,19 @@ jQuery(document).ready(function($) {
 			var attr = "";
 			var max_num_pages = 999999;
 			if ( 1 == paged ){
-				$( "li#prev" ).hide();
+				$( "#leave-pagination li#prev" ).hide();
 			} else {
-				$( "li#prev" ).show();
+				$( "#leave-pagination li#prev" ).show();
 			}
 			if ( max_num_pages == paged ){
-				$( "li#next" ).hide();
+				$( "#leave-pagination li#next" ).hide();
 			} else {
-				$( "li#next" ).show();
+				$( "#leave-pagination li#next" ).show();
 			}
-			$( ".lists .order" ).change(function() {
+			$( ".leave-lists .order" ).change(function() {
 				order = $(this).val();
 				attr =  $(this).attr('name');
-				$( ".lists tr.lists-data" ).remove();
+				$( ".leave-lists tr.lists-data" ).remove();
 				$.ajax({
 					url: ajaxurl,
 					dataType: "json",
@@ -45,28 +45,28 @@ jQuery(document).ready(function($) {
 					},
 					success: function( data ) {
 						$.each( data, function( i, val ) {
-							$( ".lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td></tr>' );
+							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
-							$( ".lists tr.lists-data" ).remove();
-							$( "ul#pagination" ).remove();
-							$( ".lists tr.lists-header" ).after( '<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>' );
-							$( ".lists #loading" ).remove();
+							$( ".leave-lists tr.lists-data" ).remove();
+							$( "ul#leave-pagination" ).remove();
+							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>' );
+							$( ".leave-lists #loading" ).remove();
 							
 						} else {
-							$( ".lists #loading" ).remove();
+							$( ".leave-lists #loading" ).remove();
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
-					    $( ".lists #loading" ).remove();
+					    $( ".leave-lists #loading" ).remove();
 						alert(jqXHR + " :: " + textStatus + " :: " + errorThrown);
 					}
 				});
 				
 			});
-			$( "#next" ).click(function() {
+			$( "#leave-pagination li#next" ).click(function() {
 				paged++;
-				$( ".lists tr.lists-data" ).remove();
+				$( ".leave-lists tr.lists-data" ).remove();
 				$.ajax({
 					url: ajaxurl,
 					dataType: "json",
@@ -78,7 +78,7 @@ jQuery(document).ready(function($) {
 						paged: paged
 					},
 					beforeSend : function(){
-						$( ".lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
+						$( ".leave-lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
                             '<img src="' + rthrmurl +'app/assets/img/loading.gif"/>' +
                             '</td></tr>'
 						);
@@ -88,37 +88,37 @@ jQuery(document).ready(function($) {
 							max_num_pages = data[0].max_num_pages;
 						}
 						if ( max_num_pages == paged ){
-							$( "li#next" ).hide();
+							$( "#leave-pagination li#next" ).hide();
 						} else {
-							$( "li#next" ).show();
+							$( "#leave-pagination li#next" ).show();
 						}
 						if ( 1 == paged ){
-							$( "li#prev" ).hide();
+							$( "#leave-pagination li#prev" ).hide();
 						} else {
-							$( "li#prev" ).show();
+							$( "#leave-pagination li#prev" ).show();
 						}
 						$.each( data, function( i, val ) {
-							$( ".lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td></tr>' );
+							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
-							$( ".lists tr.lists-data" ).remove();
-							$( "ul#pagination" ).remove();
-							$( ".lists tr.lists-header" ).after( '<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>' );
-							$( ".lists #loading" ).remove();
+							$( ".leave-lists tr.lists-data" ).remove();
+							$( "ul#leave-pagination" ).remove();
+							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>' );
+							$( ".leave-lists #loading" ).remove();
 							
 						} else {
-							$( ".lists #loading" ).remove();
+							$( ".leave-lists #loading" ).remove();
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
-					    $( ".lists #loading" ).remove();
+					    $( ".leave-lists #loading" ).remove();
 						alert(jqXHR + " :: " + textStatus + " :: " + errorThrown);
 					}
 				});
 			});
-			$( "#prev" ).click(function() {
+			$( "#leave-pagination li#prev" ).click(function() {
 				paged--;
-				$( ".lists tr.lists-data" ).remove();
+				$( ".leave-lists tr.lists-data" ).remove();
 				$.ajax({
 					url: ajaxurl,
 					dataType: "json",
@@ -130,7 +130,7 @@ jQuery(document).ready(function($) {
 						paged: paged
 					},
 					beforeSend : function(){
-						$( ".lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
+						$( ".leave-lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
                             '<img src="' + rthrmurl +'app/assets/img/loading.gif"/>' +
                             '</td></tr>'
 						);
@@ -140,30 +140,30 @@ jQuery(document).ready(function($) {
 							max_num_pages = data[0].max_num_pages;
 						}
 						if ( max_num_pages == paged ){
-							$( "li#next" ).hide();
+							$( "#leave-pagination li#next" ).hide();
 						} else {
-							$( "li#next" ).show();
+							$( "#leave-pagination li#next" ).show();
 						}
 						if ( 1 == paged ){
-							$( "li#prev" ).hide();
+							$( "#leave-pagination li#prev" ).hide();
 						} else {
-							$( "li#prev" ).show();
+							$( "#leave-pagination li#prev" ).show();
 						}
 						$.each( data, function( i, val ) {
-							$( ".lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td></tr>' );
+							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
-							$( ".lists tr.lists-data" ).remove();
-							$( "ul#pagination" ).remove();
-							$( ".lists tr.lists-header" ).after( '<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>' );
-							$( ".lists #loading" ).remove();
+							$( ".leave-lists tr.lists-data" ).remove();
+							$( "ul#leave-pagination" ).remove();
+							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>' );
+							$( ".leave-lists #loading" ).remove();
 							
 						} else {
-							$( ".lists #loading" ).remove();
+							$( ".leave-lists #loading" ).remove();
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
-					    $( ".lists #loading" ).remove();
+					    $( ".leave-lists #loading" ).remove();
 						alert(jqXHR + " :: " + textStatus + " :: " + errorThrown);
 					}
 				});
@@ -225,7 +225,7 @@ jQuery(document).ready(function($) {
 				});
 				
 			});
-			$( "#next" ).click(function() {
+			$( "#requests-pagination li#next" ).click(function() {
 				paged++;
 				$( ".requests-lists tr.lists-data" ).remove();
 				$.ajax({
@@ -249,21 +249,21 @@ jQuery(document).ready(function($) {
 							max_num_pages = data[0].max_num_pages;
 						}
 						if ( max_num_pages == paged ){
-							$( "li#next" ).hide();
+							$( "#requests-pagination li#next" ).hide();
 						} else {
-							$( "li#next" ).show();
+							$( "#requests-pagination li#next" ).show();
 						}
 						if ( 1 == paged ){
-							$( "li#prev" ).hide();
+							$( "#requests-pagination li#prev" ).hide();
 						} else {
-							$( "li#prev" ).show();
+							$( "#requests-pagination li#prev" ).show();
 						}
 						$.each( data, function( i, val ) {
 							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td align="center" scope="row">' + data[i].avatar + '</td><td class="leaveuservalue">' + data[i].leaveuservalue + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a>&#124;&nbsp;<a href="' + data[i].deletepostlink + '">Delete</a></td><td>' + data[i].leavetype + '</td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td><td>' + data[i].approver + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
 							$( ".requests-lists tr.lists-data" ).remove();
-							$( "ul#pagination" ).remove();
+							$( "ul#requests-pagination" ).remove();
 							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>' );
 							$( ".requests-lists #loading" ).remove();
 							
@@ -277,7 +277,7 @@ jQuery(document).ready(function($) {
 					}
 				});
 			});
-			$( "#prev" ).click(function() {
+			$( "#requests-pagination li#prev" ).click(function() {
 				paged--;
 				$( ".requests-lists tr.lists-data" ).remove();
 				$.ajax({
@@ -301,21 +301,21 @@ jQuery(document).ready(function($) {
 							max_num_pages = data[0].max_num_pages;
 						}
 						if ( max_num_pages == paged ){
-							$( "li#next" ).hide();
+							$( "#requests-pagination li#next" ).hide();
 						} else {
-							$( "li#next" ).show();
+							$( "#requests-pagination li#next" ).show();
 						}
 						if ( 1 == paged ){
-							$( "li#prev" ).hide();
+							$( "#requests-pagination li#prev" ).hide();
 						} else {
-							$( "li#prev" ).show();
+							$( "#requests-pagination li#prev" ).show();
 						}
 						$.each( data, function( i, val ) {
 							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td align="center" scope="row">' + data[i].avatar + '</td><td class="leaveuservalue">' + data[i].leaveuservalue + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a>&#124;&nbsp;<a href="' + data[i].deletepostlink + '">Delete</a></td><td>' + data[i].leavetype + '</td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td><td>' + data[i].approver + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
 							$( ".requests-lists tr.lists-data" ).remove();
-							$( "ul#pagination" ).remove();
+							$( "ul#requests-pagination" ).remove();
 							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>' );
 							$( ".requests-lists #loading" ).remove();
 							
