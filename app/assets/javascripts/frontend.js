@@ -38,7 +38,7 @@ jQuery(document).ready(function($) {
 						paged: paged
 					},
 					beforeSend : function(){
-						$( ".lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
+						$( ".leave-lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
                             '<img src="' + rthrmurl +'app/assets/img/loading.gif"/>' +
                             '</td></tr>'
 						);
