@@ -115,6 +115,10 @@
 								<?php
 								} endforeach; 
 								wp_reset_postdata();
+							} else {
+								?>
+								<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>
+								<?php
 							}
 							?>
 						</tbody>
