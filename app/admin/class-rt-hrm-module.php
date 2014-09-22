@@ -1039,7 +1039,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				$meta_key = 'leave-end-date';
 			}
 
-			$posts_per_page = 1;
+			$posts_per_page = get_option( 'posts_per_page' );
 			
 			$offset = ( $paged - 1 ) * $posts_per_page;
 			if ($offset <=0) {
@@ -1063,6 +1063,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'posts_per_page' => $posts_per_page,
 				'offset' => $offset
 			);
+			
+			// print_r($args);
 			
 			// The Query
 			$the_query = new WP_Query( $args );
@@ -1147,7 +1149,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				$meta_key = 'leave-end-date';
 			}
 
-			$posts_per_page = 1;
+			$posts_per_page = get_option( 'posts_per_page' );
 			
 			$offset = ( $paged - 1 ) * $posts_per_page;
 			if ($offset <=0) {

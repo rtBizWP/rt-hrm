@@ -23,9 +23,18 @@ jQuery(document).ready(function($) {
 			} else {
 				$( "#leave-pagination li#next" ).show();
 			}
-			$( ".leave-lists .order" ).change(function() {
-				order = $(this).val();
-				attr =  $(this).attr('name');
+			$( ".leave-lists i.fa-caret-up" ).hide();
+			$( ".leave-lists i" ).click(function() {
+				order = $(this).data("sorting-type");
+				attr =  $(this).data("attr-type");
+				if ( $( ".leave-lists i" ).data( "sorting-type" ) === "DESC" ) {
+					$(this).siblings().show();
+					$(this).hide();
+				}
+				if ( $( ".leave-lists i" ).data( "sorting-type" ) === "ASC" ) {
+					$(this).siblings().show();
+					$(this).hide();
+				}
 				$( ".leave-lists tr.lists-data" ).remove();
 				$.ajax({
 					url: ajaxurl,
@@ -184,9 +193,18 @@ jQuery(document).ready(function($) {
 			} else {
 				$( "#requests-pagination li#next" ).show();
 			}
-			$( ".requests-lists .order" ).change(function() {
-				order = $(this).val();
-				attr =  $(this).attr('name');
+			$( ".requests-lists i.fa-caret-up" ).hide();
+			$( ".requests-lists i" ).click(function() {
+				order = $(this).data("sorting-type");
+				attr =  $(this).data("attr-type");
+				if ( $( ".requests-lists i" ).data( "sorting-type" ) === "DESC" ) {
+					$(this).siblings().show();
+					$(this).hide();
+				}
+				if ( $( ".requests-lists i" ).data( "sorting-type" ) === "ASC" ) {
+					$(this).siblings().show();
+					$(this).hide();
+				}
 				$( ".requests-lists tr.lists-data" ).remove();
 				$.ajax({
 					url: ajaxurl,

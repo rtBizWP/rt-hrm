@@ -26,7 +26,16 @@
 					global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb,  $wp_query;
 					$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 					
-					$posts_per_page = 1;
+					$posts_per_page = get_option( 'posts_per_page' );
+					
+					$order = 'DESC';
+					$attr = 'startdate';
+					$meta_key = 'leave-start-date';
+					if ( $attr == "startdate" ){
+						$meta_key = 'leave-start-date';
+					} else if( $attr == "enddate" ) {
+						$meta_key = 'leave-end-date';
+					}
 			
 					$offset = ( $paged - 1 ) * $posts_per_page;
 					if ($offset <=0) {
@@ -42,6 +51,9 @@
 							)
 						),
 						'post_type' => $rt_hrm_module->post_type,
+						'meta_key'   => $meta_key,
+						'orderby' => 'meta_value_num',
+						'order'      => $order,
 						'post_status' => array( 'approved', 'rejected' ),
 						'posts_per_page' => $posts_per_page,
 						'offset' => $offset
@@ -64,17 +76,25 @@
 								</th>
 								<th align="center" scope="row">
 									<?php esc_html_e('Start Date', 'rt_hrm');?>
-									<select name="startdate" class="order startdate">
-									  <option value="ASC">ASC</option>
+									<span>
+										<i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-down"></i>
+										<i data-sorting-type="DESC"  data-attr-type="startdate"  class="fa fa-caret-up"></i>
+									</span>
+									<!--<select name="startdate" class="order startdate">
 									  <option value="DESC">DESC</option>
-									</select>
+									  <option value="ASC">ASC</option>
+									</select>-->
 								</th>
 								<th align="center" scope="row">
 									<?php esc_html_e('End Date', 'rt_hrm');?>
-									<select name="enddate" class="order enddate">
-									  <option value="ASC">ASC</option>
+									<span>
+										<i data-sorting-type="ASC" data-attr-type="enddate" class="fa fa-caret-down"></i>
+										<i data-sorting-type="DESC"  data-attr-type="enddate"  class="fa fa-caret-up"></i>
+									</span>
+									<!--<select name="enddate" class="order enddate">
 									  <option value="DESC">DESC</option>
-									</select>
+									  <option value="ASC">ASC</option>
+									</select>-->
 								</th>
 								<th align="center" scope="row">
 									<?php esc_html_e('Status', 'rt_hrm');?>
