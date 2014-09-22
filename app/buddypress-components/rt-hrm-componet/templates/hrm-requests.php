@@ -126,7 +126,7 @@
 										<?php
 										if ( current_user_can('delete_posts') ) {
 										?>
-										&#124;&nbsp;<a href="<?php echo get_delete_post_link( $get_the_id ); ?>"><?php esc_html_e('Delete', 'rt_hrm');?></a>
+										&#124;&nbsp;<a class="deletepostlink" href="<?php echo get_delete_post_link( $get_the_id ); ?>"><?php esc_html_e('Delete', 'rt_hrm');?></a>
 										<?php
 										}
 										?>

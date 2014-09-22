@@ -97,7 +97,7 @@
 									</select>-->
 								</th>
 								<th align="center" scope="row">
-									<?php esc_html_e('Status', 'rt_hrm');?>
+									<?php esc_html_e('Approved/Rejected', 'rt_hrm');?>
 									<!--<select name="status" class="order status">
 									  <option value="ASC">ASC</option>
 									  <option value="DESC">DESC</option>

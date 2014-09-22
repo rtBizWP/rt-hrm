@@ -54,7 +54,7 @@ jQuery(document).ready(function($) {
 					},
 					success: function( data ) {
 						$.each( data, function( i, val ) {
-							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td></tr>' );
+							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td class="' + data[i].poststatus + '">' + data[i].poststatus + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
 							$( ".leave-lists tr.lists-data" ).remove();
@@ -107,7 +107,7 @@ jQuery(document).ready(function($) {
 							$( "#leave-pagination li#prev" ).show();
 						}
 						$.each( data, function( i, val ) {
-							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td></tr>' );
+							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td class="' + data[i].poststatus + '">' + data[i].poststatus + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
 							$( ".leave-lists tr.lists-data" ).remove();
@@ -159,7 +159,7 @@ jQuery(document).ready(function($) {
 							$( "#leave-pagination li#prev" ).show();
 						}
 						$.each( data, function( i, val ) {
-							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td></tr>' );
+							$( ".leave-lists tr.lists-header" ).after( '<tr class="lists-data"><td class="leavetype">' + data[i].leavetype + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a></td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td class="' + data[i].poststatus + '">' + data[i].poststatus + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
 							$( ".leave-lists tr.lists-data" ).remove();
@@ -224,7 +224,7 @@ jQuery(document).ready(function($) {
 					},
 					success: function( data ) {
 						$.each( data, function( i, val ) {
-							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td align="center" scope="row">' + data[i].avatar + '</td><td class="leaveuservalue">' + data[i].leaveuservalue + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a>&#124;&nbsp;<a href="' + data[i].deletepostlink + '">Delete</a></td><td>' + data[i].leavetype + '</td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td><td>' + data[i].approver + '</td></tr>' );
+							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td align="center" scope="row">' + data[i].avatar + '</td><td class="leaveuservalue">' + data[i].leaveuservalue + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a>&#124;&nbsp;<a class="deletepostlink" href="' + data[i].deletepostlink + '">Delete</a></td><td>' + data[i].leavetype + '</td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td><td>' + data[i].approver + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
 							$( ".requests-lists tr.lists-data" ).remove();
@@ -277,7 +277,7 @@ jQuery(document).ready(function($) {
 							$( "#requests-pagination li#prev" ).show();
 						}
 						$.each( data, function( i, val ) {
-							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td align="center" scope="row">' + data[i].avatar + '</td><td class="leaveuservalue">' + data[i].leaveuservalue + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a>&#124;&nbsp;<a href="' + data[i].deletepostlink + '">Delete</a></td><td>' + data[i].leavetype + '</td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td><td>' + data[i].approver + '</td></tr>' );
+							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td align="center" scope="row">' + data[i].avatar + '</td><td class="leaveuservalue">' + data[i].leaveuservalue + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a>&#124;&nbsp;<a class="deletepostlink" href="' + data[i].deletepostlink + '">Delete</a></td><td>' + data[i].leavetype + '</td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td><td>' + data[i].approver + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
 							$( ".requests-lists tr.lists-data" ).remove();
@@ -329,7 +329,7 @@ jQuery(document).ready(function($) {
 							$( "#requests-pagination li#prev" ).show();
 						}
 						$.each( data, function( i, val ) {
-							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td align="center" scope="row">' + data[i].avatar + '</td><td class="leaveuservalue">' + data[i].leaveuservalue + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a>&#124;&nbsp;<a href="' + data[i].deletepostlink + '">Delete</a></td><td>' + data[i].leavetype + '</td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td><td>' + data[i].approver + '</td></tr>' );
+							$( ".requests-lists tr.lists-header" ).after( '<tr class="lists-data"><td align="center" scope="row">' + data[i].avatar + '</td><td class="leaveuservalue">' + data[i].leaveuservalue + '<br /><span><a href="' + data[i].editpostlink + '">Edit</a></span>&nbsp;&#124;<a href="' + data[i].permalink + '">View</a>&#124;&nbsp;<a class="deletepostlink" href="' + data[i].deletepostlink + '">Delete</a></td><td>' + data[i].leavetype + '</td><td>' + data[i].leavestartdate + '</td><td>' + data[i].leaveenddate + '</td><td>' + data[i].poststatus + '</td><td>' + data[i].approver + '</td></tr>' );
 						});
 						if ( data.length === 0 ){
 							$( ".requests-lists tr.lists-data" ).remove();
