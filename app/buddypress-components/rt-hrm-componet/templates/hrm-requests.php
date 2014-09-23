@@ -58,7 +58,7 @@
 				$max_num_pages =  $the_query->max_num_pages;
 				
 				?>
-				<h2><?php esc_html_e('requests', 'rt_hrm');?></h2>
+				<h4><?php _e( 'Leave Approval', 'rt_hrm' ) ?></h4>
 				<table cellspacing="0" class="requests-lists">
 					<tbody>
 						<tr class="lists-header">
