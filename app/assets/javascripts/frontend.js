@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
 				$( "#leave-pagination li#next" ).show();
 			}
 			
-			$( ".leave-lists .lists-header th" ).click(function() {
+			$( ".leave-lists .lists-header th.order" ).click(function() {
 				order = $(this).data("sorting-type");
 				attr =  $(this).data("attr-type");
 				
@@ -196,7 +196,7 @@ jQuery(document).ready(function($) {
 			} else {
 				$( "#requests-pagination li#next" ).show();
 			}
-			$( ".requests-lists .lists-header th" ).click(function() {
+			$( ".requests-lists .lists-header th.order" ).click(function() {
 				order = $(this).data("sorting-type");
 				attr =  $(this).data("attr-type");
 				if ( order === "DESC" ) {

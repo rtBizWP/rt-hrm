@@ -1033,11 +1033,16 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$attr = stripslashes( trim( $_POST['attr'] ) );
 			$paged = stripslashes( trim( $_POST['paged'] ) ) ? stripslashes( trim( $_POST['paged'] ) ) : 1;
 			
+			$orderby = 'meta_value_num';
+			
 			$meta_key = 'leave-start-date';
 			if ( $attr == "startdate" ){
 				$meta_key = 'leave-start-date';
 			} else if( $attr == "enddate" ) {
 				$meta_key = 'leave-end-date';
+			} else if( $attr == "leavetype" ) {
+				$meta_key = 'leave-start-date';
+				$orderby = 'rt-leave-type';
 			}
 
 			$posts_per_page = get_option( 'posts_per_page' );
@@ -1058,7 +1063,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				),
 				'post_type' => $rt_hrm_module->post_type,
 				'meta_key'   => $meta_key,
-				'orderby' => 'meta_value_num',
+				'orderby' => $orderby,
 				'order'      => $order,
 				'post_status' => array( 'approved', 'rejected' ),
 				'posts_per_page' => $posts_per_page,
@@ -1142,12 +1147,16 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$order = stripslashes( trim( $_POST['order'] ) );
 			$attr = stripslashes( trim( $_POST['attr'] ) );
 			$paged = stripslashes( trim( $_POST['paged'] ) ) ? stripslashes( trim( $_POST['paged'] ) ) : 1;
+			$orderby = 'meta_value_num';
 			
 			$meta_key = 'leave-start-date';
 			if ( $attr == "startdate" ){
 				$meta_key = 'leave-start-date';
 			} else if( $attr == "enddate" ) {
 				$meta_key = 'leave-end-date';
+			} else if( $attr == "leavetype" ) {
+				$meta_key = 'leave-start-date';
+				$orderby = 'rt-leave-type';
 			}
 
 			$posts_per_page = get_option( 'posts_per_page' );
@@ -1162,7 +1171,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$args = array(
 				'post_type' => $rt_hrm_module->post_type,
 				'meta_key'   => $meta_key,
-				'orderby' => 'meta_value_num',
+				'orderby' => $orderby,
 				'order'      => $order,
 				'post_status' => 'any',
 				'posts_per_page' => $posts_per_page,
