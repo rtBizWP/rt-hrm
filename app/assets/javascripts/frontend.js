@@ -30,13 +30,13 @@ jQuery(document).ready(function($) {
 				
 				if ( order === "DESC" ) {
 					$(this).children().remove();
-					$(this).append( '<span><i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-down"></i></span>' );
-					$( ".leave-lists .lists-header th" ).data( "sorting-type", "ASC" );
+					$(this).append( '<span><i class="fa fa-caret-down"></i></span>' );
+					$(this).data( "sorting-type", "ASC" );
 				}
 				if ( order === "ASC" ) {
 					$(this).children().remove();
-					$(this).append( '<span><i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-up"></i></span>' );
-					$( ".leave-lists .lists-header th" ).data( "sorting-type", "DESC" );
+					$(this).append( '<span><i class="fa fa-caret-up"></i></span>' );
+					$(this).data( "sorting-type", "DESC" );
 				}
 				$( ".leave-lists tr.lists-data" ).remove();
 				$.ajax({
@@ -201,13 +201,13 @@ jQuery(document).ready(function($) {
 				attr =  $(this).data("attr-type");
 				if ( order === "DESC" ) {
 					$(this).children().remove();
-					$(this).append( '<span><i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-down"></i></span>' );
-					$( ".requests-lists .lists-header th" ).data( "sorting-type", "ASC" );
+					$(this).append( '<span><i class="fa fa-caret-down"></i></span>' );
+					$(this).data( "sorting-type", "ASC" );
 				}
 				if ( order === "ASC" ) {
 					$(this).children().remove();
-					$(this).append( '<span><i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-up"></i></span>' );
-					$( ".requests-lists .lists-header th" ).data( "sorting-type", "DESC" );
+					$(this).append( '<span><i class="fa fa-caret-up"></i></span>' );
+					$(this).data( "sorting-type", "DESC" );
 				}
 				$( ".requests-lists tr.lists-data" ).remove();
 				$.ajax({
