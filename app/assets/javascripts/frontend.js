@@ -196,17 +196,18 @@ jQuery(document).ready(function($) {
 			} else {
 				$( "#requests-pagination li#next" ).show();
 			}
-			$( ".requests-lists i.fa-caret-up" ).hide();
-			$( ".requests-lists i" ).click(function() {
+			$( ".requests-lists .lists-header th" ).click(function() {
 				order = $(this).data("sorting-type");
 				attr =  $(this).data("attr-type");
-				if ( $( ".requests-lists i" ).data( "sorting-type" ) === "DESC" ) {
-					$(this).siblings().show();
-					$(this).hide();
+				if ( order === "DESC" ) {
+					$(this).children().remove();
+					$(this).append( '<span><i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-down"></i></span>' );
+					$( ".requests-lists .lists-header th" ).data( "sorting-type", "ASC" );
 				}
-				if ( $( ".requests-lists i" ).data( "sorting-type" ) === "ASC" ) {
-					$(this).siblings().show();
-					$(this).hide();
+				if ( order === "ASC" ) {
+					$(this).children().remove();
+					$(this).append( '<span><i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-up"></i></span>' );
+					$( ".requests-lists .lists-header th" ).data( "sorting-type", "DESC" );
 				}
 				$( ".requests-lists tr.lists-data" ).remove();
 				$.ajax({

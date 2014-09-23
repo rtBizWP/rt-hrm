@@ -56,7 +56,7 @@
 				$the_query = new WP_Query( $args );
 				
 				$max_num_pages =  $the_query->max_num_pages;
-				$leave_posts = get_posts($args);
+				
 				?>
 				<h2><?php esc_html_e('requests', 'rt_hrm');?></h2>
 				<table cellspacing="0" class="requests-lists">
@@ -65,22 +65,20 @@
 							<th align="center" scope="row"></th>
 							<th align="center" scope="row"><?php esc_html_e('Name', 'rt_hrm');?></th>
 							<th align="center" scope="row"><?php esc_html_e('Leave Type', 'rt_hrm');?></th>
-							<th align="center" scope="row">
+							<th align="center" scope="row" data-sorting-type="ASC" data-attr-type="startdate">
 								<?php esc_html_e('Start Date', 'rt_hrm');?>
 								<span>
-									<i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-down"></i>
-									<i data-sorting-type="DESC"  data-attr-type="startdate"  class="fa fa-caret-up"></i>
+									<i class="fa fa-caret-down"></i>
 								</span>
 								<!--<select name="startdate" class="order startdate">
 								  <option value="DESC">DESC</option>
 								  <option value="ASC">ASC</option>
 								</select>-->
 							</th>
-							<th align="center" scope="row">
+							<th align="center" scope="row" data-sorting-type="ASC" data-attr-type="enddate">
 								<?php esc_html_e('End Date', 'rt_hrm');?>
 								<span>
-									<i data-sorting-type="ASC" data-attr-type="enddate" class="fa fa-caret-down"></i>
-									<i data-sorting-type="DESC"  data-attr-type="enddate"  class="fa fa-caret-up"></i>
+									<i class="fa fa-caret-down"></i>
 								</span>
 								<!--<select name="enddate" class="order enddate">
 								  <option value="DESC">DESC</option>
@@ -91,9 +89,11 @@
 							<th align="center" scope="row"><?php esc_html_e('Approver', 'rt_hrm');?></th>
 						</tr>
 						<?php
-							if ( count($leave_posts) > 0 ) {
-								foreach ( $leave_posts as $post ) : setup_postdata( $post ); ?>
-									<?php $get_the_id =  get_the_ID();
+							if ( $the_query->have_posts() ) {
+								while ( $the_query->have_posts() ) { ?>
+									<?php 
+									$the_query->the_post();
+									$get_the_id =  get_the_ID();
 									$get_user_meta = get_post_meta( $get_the_id );
 									$leave_user_value = get_post_meta( $get_the_id, 'leave-user', true );
 									$leave_duration_value = get_post_meta( $get_the_id, 'leave-duration', true );
@@ -146,13 +146,14 @@
 										?>
 									</th>
 								</tr>
-								<?php endforeach; 
-								wp_reset_postdata();
+								<?php
+								}
 							} else {
 								?>
 								<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>
 								<?php
 							}
+							wp_reset_postdata();
 						?>
 					</tbody>
 				</table>
