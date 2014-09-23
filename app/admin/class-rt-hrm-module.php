@@ -89,6 +89,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
 			add_action( 'save_post', array( $this, 'save_leave_meta' ), 1, 2);
 			add_action( 'wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
+			add_filter( 'posts_orderby', array( $this, 'hrm_leave_type_orderby' ), 10, 2 );
 
             add_action( 'wp_ajax_seach_employees_name', array( $this, 'employees_autocomplete_ajax' ) );
 			
@@ -1240,6 +1241,26 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             die(0);
 
 		}
+
+		function hrm_leave_type_orderby( $orderby, $wp_query ) {
+			global $wpdb;
+		
+			if ( isset( $wp_query->query['orderby'] ) && 'rt-leave-type' == $wp_query->query['orderby'] ) {
+				$orderby = "(
+					SELECT GROUP_CONCAT(name ORDER BY name ASC)
+					FROM $wpdb->term_relationships
+					INNER JOIN $wpdb->term_taxonomy USING (term_taxonomy_id)
+					INNER JOIN $wpdb->terms USING (term_id)
+					WHERE $wpdb->posts.ID = object_id
+					AND taxonomy = 'rt-leave-type'
+					GROUP BY object_id
+				) ";
+				$orderby .= ( 'ASC' == strtoupper( $wp_query->get('order') ) ) ? 'ASC' : 'DESC';
+			}
+		
+			return $orderby;
+		}
+
 
 	}
 }

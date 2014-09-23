@@ -23,17 +23,20 @@ jQuery(document).ready(function($) {
 			} else {
 				$( "#leave-pagination li#next" ).show();
 			}
-			$( ".leave-lists i.fa-caret-up" ).hide();
-			$( ".leave-lists i" ).click(function() {
+			
+			$( ".leave-lists .lists-header th" ).click(function() {
 				order = $(this).data("sorting-type");
 				attr =  $(this).data("attr-type");
-				if ( $( ".leave-lists i" ).data( "sorting-type" ) === "DESC" ) {
-					$(this).siblings().show();
-					$(this).hide();
+				
+				if ( order === "DESC" ) {
+					$(this).children().remove();
+					$(this).append( '<span><i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-down"></i></span>' );
+					$( ".leave-lists .lists-header th" ).data( "sorting-type", "ASC" );
 				}
-				if ( $( ".leave-lists i" ).data( "sorting-type" ) === "ASC" ) {
-					$(this).siblings().show();
-					$(this).hide();
+				if ( order === "ASC" ) {
+					$(this).children().remove();
+					$(this).append( '<span><i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-up"></i></span>' );
+					$( ".leave-lists .lists-header th" ).data( "sorting-type", "DESC" );
 				}
 				$( ".leave-lists tr.lists-data" ).remove();
 				$.ajax({

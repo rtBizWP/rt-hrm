@@ -62,7 +62,7 @@
 					$the_query = new WP_Query( $args );
 					
 					$max_num_pages =  $the_query->max_num_pages;
-					$leave_posts = get_posts($args);
+					
 					?>
 					<table cellspacing="0" class="leave-lists">
 						<tbody>
@@ -74,22 +74,20 @@
 									  <option value="DESC">DESC</option>
 									</select>-->
 								</th>
-								<th align="center" scope="row">
+								<th align="center" scope="row" data-sorting-type="ASC" data-attr-type="startdate">
 									<?php esc_html_e('Start Date', 'rt_hrm');?>
 									<span>
-										<i data-sorting-type="ASC" data-attr-type="startdate" class="fa fa-caret-down"></i>
-										<i data-sorting-type="DESC"  data-attr-type="startdate"  class="fa fa-caret-up"></i>
+										<i class="fa fa-caret-down"></i>
 									</span>
 									<!--<select name="startdate" class="order startdate">
 									  <option value="DESC">DESC</option>
 									  <option value="ASC">ASC</option>
 									</select>-->
 								</th>
-								<th align="center" scope="row">
+								<th align="center" scope="row" data-sorting-type="ASC" data-attr-type="enddate">
 									<?php esc_html_e('End Date', 'rt_hrm');?>
 									<span>
-										<i data-sorting-type="ASC" data-attr-type="enddate" class="fa fa-caret-down"></i>
-										<i data-sorting-type="DESC"  data-attr-type="enddate"  class="fa fa-caret-up"></i>
+										<i class="fa fa-caret-down"></i>
 									</span>
 									<!--<select name="enddate" class="order enddate">
 									  <option value="DESC">DESC</option>
@@ -105,9 +103,11 @@
 								</th>
 							</tr>
 							<?php
-							if ( count($leave_posts) > 0 ) {
-								foreach ( $leave_posts as $post ) : setup_postdata( $post ); ?>
-									<?php $get_the_id =  get_the_ID();
+							if ( $the_query->have_posts() ) {
+								while ( $the_query->have_posts() ) { ?>
+									<?php
+									$the_query->the_post();
+									$get_the_id =  get_the_ID();
 									$get_user_meta = get_post_meta($get_the_id);
 									$leave_user_value = get_post_meta( $get_the_id, 'leave-user', true );
 									$leave_duration_value = get_post_meta( $get_the_id, 'leave-duration', true );
@@ -120,26 +120,27 @@
 									
 									//Returns Array of Term Names for "rt-leave-type"
 									$rt_leave_type_list = wp_get_post_terms($post->ID, 'rt-leave-type', array("fields" => "names")); // tod0:need to call in correct way
-								if ( bp_loggedin_user_id() == bp_displayed_user_id() ) {
-								?>
-								<tr class="lists-data">
-									<td align="center" scope="row">
-										<?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0];
-										edit_post_link('Edit', '<br /><span>', '</span>&nbsp;&#124;');?>
-										<a href="<?php the_permalink();?>">View</a>
-									</td>
-									<td align="center" scope="row"><?php echo $leave_start_date_value;?></td>
-									<td align="center" scope="row"><?php echo $leave_end_date_value;?></td>
-									<td align="center" scope="row" class="<?php echo strtolower ( get_post_status() ); ?>"><?php echo get_post_status(); ?></td>
-								</tr>
-								<?php
-								} endforeach; 
-								wp_reset_postdata();
+									if ( bp_loggedin_user_id() == bp_displayed_user_id() ) {
+									?>
+									<tr class="lists-data">
+										<td align="center" scope="row">
+											<?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0];
+											edit_post_link('Edit', '<br /><span>', '</span>&nbsp;&#124;');?>
+											<a href="<?php the_permalink();?>">View</a>
+										</td>
+										<td align="center" scope="row"><?php echo $leave_start_date_value;?></td>
+										<td align="center" scope="row"><?php echo $leave_end_date_value;?></td>
+										<td align="center" scope="row" class="<?php echo strtolower ( get_post_status() ); ?>"><?php echo get_post_status(); ?></td>
+									</tr>
+									<?php
+									} 
+								}
 							} else {
 								?>
 								<tr class="lists-data"><td colspan="7" align="center" scope="row">No Leave Listing</td></tr>
 								<?php
 							}
+							wp_reset_postdata();
 							?>
 						</tbody>
 					</table>
