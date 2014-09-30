@@ -41,7 +41,21 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
                 if ( ! defined( 'RT_HRM_BP_HRM_PATH' ) ) {
                         define( 'RT_HRM_BP_HRM_PATH', plugin_dir_path( __FILE__ ) );
                 }
+				if ( ! defined( 'RT_HRM_BP_HRM_SLUG' ) ){
+			        define( 'RT_HRM_BP_HRM_SLUG', 'hrm' );
+			}
         }
+		
+		function get_component_root_url(){
+			global $bp;
+			foreach ( $bp->bp_nav as $nav ) {
+			    
+			  if ( $nav['slug'] == RT_HRM_BP_HRM_SLUG ){
+				$link = $nav['link'];
+			  }
+			}
+			return $link;
+		}
 		
 		/**
 		 * hooks function.

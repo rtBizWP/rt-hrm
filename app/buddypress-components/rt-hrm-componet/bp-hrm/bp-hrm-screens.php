@@ -50,7 +50,11 @@ function bp_hrm_requests() {
 }
 
 function load_requests_template() {
-    return  RT_HRM_BP_HRM_PATH.'/templates/hrm-requests.php';
+	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'view' || $_GET['action'] == 'edit' || $_GET['action'] == 'update' || $_GET['action'] == 'deletepost' ) ) {
+          return  RT_HRM_BP_HRM_PATH.'/templates/hrm-requests-edit.php';
+    }else{
+          return  RT_HRM_BP_HRM_PATH.'/templates/hrm-requests.php';
+    }
 }
 
 ?>

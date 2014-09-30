@@ -128,14 +128,14 @@
 									<td align="center" scope="row">
 										<?php echo $leave_user_value;
 										if ( current_user_can('edit_posts') ) {
-											edit_post_link('Edit', '<br /><span>', '</span>&nbsp;&#124;');
+											printf( __('<br /><span><a href="%s">Edit</a></span>&nbsp;&#124;'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ) ) ) );
 										}
+										printf( __('<span><a href="%s">View</a></span>'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ) ) ) );
 										?>
-										<a href="<?php the_permalink();?>"><?php esc_html_e('View', 'rt_hrm');?></a>
 										<?php
 										if ( current_user_can('delete_posts') ) {
 										?>
-										&#124;&nbsp;<a class="deletepostlink" href="<?php echo get_delete_post_link( $get_the_id ); ?>"><?php esc_html_e('Delete', 'rt_hrm');?></a>
+										&#124;&nbsp;<?php printf( __('<span><a class="deletepostlink" href="%s">Delete</a></span>'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'deletepost' ) ) ) );?>
 										<?php
 										}
 										?>
