@@ -100,7 +100,7 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 			global $rt_hrm_module, $rt_hrm_dashboard, $rt_hrm_calendar,
 				$rt_calendar, $rt_hrm_attributes, $rt_form, $rt_hrm_acl,
 				$rt_hrm_settings, $rt_hrm_help, $rt_hrm_bp_hrm, $rt_hrm_bp_hrm_calendar,
-				$rt_hrm_bp_hrm_frontend;
+				$rt_hrm_bp_hrm_frontend, $rt_hrm_bp_hrm_module;
 
 			$rt_form = new Rt_Form();
 
@@ -115,6 +115,8 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 			$rt_hrm_bp_hrm = new Rt_Hrm_Bp_Hrm();
 			$rt_hrm_bp_hrm_calendar = new Rt_Hrm_Bp_Hrm_Calendar();
 			$rt_hrm_bp_hrm_frontend = new Rt_Hrm_Bp_Hrm_Frontend();
+			if ( ! is_admin() )
+				$rt_hrm_bp_hrm_module = new Rt_HRM_Bp_Hrm_Module();
 		}
 
         /**

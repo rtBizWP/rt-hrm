@@ -130,8 +130,10 @@
 									<tr class="lists-data">
 										<td align="center" scope="row">
 											<?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0];
-											edit_post_link('Edit', '<br /><span>', '</span>&nbsp;&#124;');?>
-											<a href="<?php the_permalink();?>">View</a>
+											// edit_post_link('Edit', '<br /><span>', '</span>&nbsp;&#124;');
+											printf( __('<br /><span><a href="%s">Edit</a></span>&nbsp;&#124;'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ) ) ) );
+											printf( __('<span><a href="%s">View</a></span>'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ) ) ) );
+											?>
 										</td>
 										<td align="center" scope="row"><?php echo $leave_start_date_value;?></td>
 										<td align="center" scope="row"><?php echo $leave_end_date_value;?></td>
