@@ -789,6 +789,42 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
             }
 			?>
 			<form action="<?php //echo esc_url( add_query_arg( array( 'rt_leave_id'=> $rt_leave_id, 'action'=>'update' ) )); ?>" class="" method="POST" id="form-add-leave" style="display: block;">
+			<div id="titlewrap">
+				<label for="title" id="title-prompt-text" class="screen-reader-text">Enter title here</label>
+				<input type="text" autocomplete="off" id="title" value="" size="30" name="post_title" readonly="readonly">
+				&nbsp;&nbsp;
+	                <?php
+	                if (isset($post->ID))
+	                    $pstatus = $post->post_status;
+	                else
+	                    $pstatus = "";
+	                $post_status = $this->get_custom_statuses();
+	                $custom_status_flag = true;
+					$user_edit = current_user_can('moderate_comments');
+	                ?>
+	                <?php if( $user_edit ) { ?>
+	                    <select id="rtpm_post_status" class="right" name="post[post_status]">
+	                        <?php foreach ($post_status as $status) {
+	                            if ($status['slug'] == $pstatus) {
+	                                $selected = 'selected="selected"';
+	                                $custom_status_flag = false;
+	                            } else {
+	                                $selected = '';
+	                            }
+	                            printf('<option value="%s" %s >%s</option>', $status['slug'], $selected, $status['name']);
+	                        } ?>
+	                        <?php if ( $custom_status_flag && isset( $post->ID ) ) { echo '<option selected="selected" value="'.$pstatus.'">'.$pstatus.'</option>'; } ?>
+	                    </select>
+	                <?php } else {
+	                    foreach ( $post_status as $status ) {
+	                        if($status['slug'] == $pstatus) {
+	                            echo '<span class="rtpm_view_mode">'.$status['name'].'</span>';
+	                            break;
+	                        }
+	                    }
+	                } ?>
+			</div>
+			<br /><br />
 			<table class="form-table rthrm-container">
 				<tbody>
 
@@ -924,16 +960,16 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
          */
         function save_leave( $post_id, $post ){
 			global $rt_hrm_module,$rt_hrm_attributes;
-			// print_r($_POST);	
-			// Update post 37
-		  	$my_post = array(
+		  	$save_leave_post = array(
 		      'ID'           => $post_id,
-		      'post_content' => $_POST['content']
+		      'post_content' => $_POST['content'],
+		      'post_title' => $_POST['post_title'],
+		      'post_status' => $_POST['post_status']
 		  	);
 			
 			// Update the post into the database
 			if ( ! empty( $_POST['content'] ) )
-				wp_update_post( $my_post );
+				wp_update_post( $save_leave_post );
 		}
 
         /**
@@ -986,7 +1022,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
         function add_leave_custom_status(){
 			global $post, $pagenow;
 			$complete = '';
-			if( isset( $post) && !empty( $post ) && $post->post_type == $this->post_type){
+			if( isset( $post) && !empty( $post ) && $post->post_type == 'page'){
 				$option='';
                 $custom_statuses = $this->get_custom_statuses();
                 if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) {
@@ -1001,7 +1037,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 					}
 					$option .= "<option value='" . $status['slug'] . "' " . $complete . ">"  .  $status['name'] .  "</option>";
 				}
-                if ( $pagenow == 'post-new.php' || $pagenow == 'post.php' ){
+                if ( $pagenow == 'post-new.php' || isset($_GET['rt_leave_id']) ){
                     echo '<script>
                         jQuery(document).ready(function($) {
                             $("select#post_status").html("'. $option .'");
