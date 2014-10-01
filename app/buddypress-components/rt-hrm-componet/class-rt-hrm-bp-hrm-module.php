@@ -964,11 +964,11 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 		      'ID'           => $post_id,
 		      'post_content' => $_POST['content'],
 		      'post_title' => $_POST['post_title'],
-		      'post_status' => $_POST['post_status']
+		      'post_status' => $_POST['post']['post_status']
 		  	);
 			
 			// Update the post into the database
-			if ( ! empty( $_POST['content'] ) )
+			if ( ! empty( $_POST['content'] ) || ! empty( $_POST['post'] ) )
 				wp_update_post( $save_leave_post );
 		}
 
