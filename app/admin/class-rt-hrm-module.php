@@ -1024,7 +1024,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		 * @return json json_encode($arrReturn)
 		 */
 		function leave_listing() {
-			global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb, $wp_query, $paged;
+			global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb, $wp_query, $paged, $rt_hrm_bp_hrm;
 			
 			// Get post data
 			$post_data = array();
@@ -1101,8 +1101,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // tod0:need to call in correct way
 					
 					$get_post_status = get_post_status();
-					$get_edit_post_link = get_edit_post_link( $get_the_id );
-					$get_permalink = get_permalink( $get_the_id );
+					$get_edit_post_link = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ), $rt_hrm_bp_hrm->get_component_root_url(). 'leave/' ) );
+					$get_permalink = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ), $rt_hrm_bp_hrm->get_component_root_url(). 'leave/' ) );
 					
 					
 					$arrReturn[] = array(
@@ -1139,7 +1139,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		 * @return json json_encode($arrReturn)
 		 */
 		function requests_listing() {
-			global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb, $wp_query, $paged;
+			global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb, $wp_query, $paged, $rt_hrm_bp_hrm;
 			
 			// Get post data
 			$post_data = array();
@@ -1217,9 +1217,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // todo:need to call in correct way
 					
 					$get_post_status = get_post_status();
-					$get_edit_post_link = get_edit_post_link( $get_the_id );
-					$get_permalink = get_permalink( $get_the_id );
-					
+					$get_edit_post_link = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ), $rt_hrm_bp_hrm->get_component_root_url(). 'requests/' ) );
+					$get_permalink = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ), $rt_hrm_bp_hrm->get_component_root_url(). 'requests/' ) );
+					$get_delete_post_link = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'deletepost' ), $rt_hrm_bp_hrm->get_component_root_url(). 'requests/' ) );
 					
 					$arrReturn[] = array(
 						"avatar" => get_avatar( $rt_biz_contact_user_id, 24 ),
@@ -1231,7 +1231,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 						"approver"  => $approver,
 						"editpostlink" => $get_edit_post_link,
 						"permalink" => $get_permalink,
-						"deletepostlink" => get_delete_post_link( $get_the_id ),
+						"deletepostlink" => $get_delete_post_link,
 						"max_num_pages" => $max_num_pages,
 						"order" => $order,
 						"attr" => $attr
