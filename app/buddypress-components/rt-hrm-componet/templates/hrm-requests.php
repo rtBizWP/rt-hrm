@@ -167,7 +167,7 @@
 					</tbody>
 				</table>
 				<?php if ( $max_num_pages > 1 ) { ?>
-					<ul id="requests-pagination"><li id="prev"><a class="page-link">Previous</a></li><li id="next"><a class="page-link next">Next</a></li></ul>
+					<ul id="requests-pagination"><li id="prev"><a class="page-link"> &laquo; Previous</a></li><li id="next"><a class="page-link next">Next &raquo;</a></li></ul>
 				<?php } ?>
 			</div><!-- #item-body -->
 

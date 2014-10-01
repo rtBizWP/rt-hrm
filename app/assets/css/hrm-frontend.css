@@ -79,3 +79,11 @@ table.requests-lists tr th {
 	border-left: 1px solid #eee;
     border-right: 1px solid #eee;
 }
+#leave-pagination > li,
+#requests-pagination > li  {
+    display: inline-table;
+}
+#item-body ul#leave-pagination,
+#item-body ul#requests-pagination {
+    float: right;
+}
