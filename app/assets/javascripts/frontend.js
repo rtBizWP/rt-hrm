@@ -58,7 +58,7 @@ jQuery(document).ready(function($) {
 						paged: paged
 					},
 					beforeSend : function(){
-						$( ".leave-lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
+						$( ".leave-lists tr.lists-header" ).after('<tr id="loading" style="text-align:right"><td colspan="7" align="right">' +
                             '<img src="' + rthrmurl +'app/assets/img/loading.gif"/>' +
                             '</td></tr>'
 						);
@@ -98,7 +98,7 @@ jQuery(document).ready(function($) {
 						paged: paged
 					},
 					beforeSend : function(){
-						$( ".leave-lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
+						$( ".leave-lists tr.lists-header" ).after('<tr id="loading" style="text-align:right"><td colspan="7" align="right">' +
                             '<img src="' + rthrmurl +'app/assets/img/loading.gif"/>' +
                             '</td></tr>'
 						);
@@ -150,7 +150,7 @@ jQuery(document).ready(function($) {
 						paged: paged
 					},
 					beforeSend : function(){
-						$( ".leave-lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
+						$( ".leave-lists tr.lists-header" ).after('<tr id="loading" style="text-align:right"><td colspan="7" align="right">' +
                             '<img src="' + rthrmurl +'app/assets/img/loading.gif"/>' +
                             '</td></tr>'
 						);
@@ -229,7 +229,7 @@ jQuery(document).ready(function($) {
 						paged: paged
 					},
 					beforeSend : function(){
-						$( ".requests-lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
+						$( ".requests-lists tr.lists-header" ).after('<tr id="loading" style="text-align:right"><td colspan="7" align="right">' +
                             '<img src="' + rthrmurl +'app/assets/img/loading.gif"/>' +
                             '</td></tr>'
 						);
@@ -269,7 +269,7 @@ jQuery(document).ready(function($) {
 						paged: paged
 					},
 					beforeSend : function(){
-						$( ".requests-lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
+						$( ".requests-lists tr.lists-header" ).after('<tr id="loading" style="text-align:right"><td colspan="7" align="right">' +
                             '<img src="' + rthrmurl +'app/assets/img/loading.gif"/>' +
                             '</td></tr>'
 						);
@@ -321,7 +321,7 @@ jQuery(document).ready(function($) {
 						paged: paged
 					},
 					beforeSend : function(){
-						$( ".requests-lists tr.lists-header" ).append('<tr id="loading" style="text-align:center"><td>' +
+						$( ".requests-lists tr.lists-header" ).after('<tr id="loading" style="text-align:right"><td colspan="7" align="right">' +
                             '<img src="' + rthrmurl +'app/assets/img/loading.gif"/>' +
                             '</td></tr>'
 						);
