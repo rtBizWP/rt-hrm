@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
 	$(".deletepostlink").click(function(){
-		var r = confirm("Are you sure you want to delete?");
+		var r = confirm("Are you sure you want to delete this leave?");
 		if (r != true) {
 			return false;
 		}
