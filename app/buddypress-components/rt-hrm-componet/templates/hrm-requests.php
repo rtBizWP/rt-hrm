@@ -118,8 +118,25 @@
 									}
 									
 									$leave_start_date_value = get_post_meta( $get_the_id, 'leave-start-date', true );
+									if ( ! empty( $leave_start_date_value ) ){
+										$leave_start_date_value_array = explode("/", $leave_start_date_value);
+										$day = $leave_start_date_value_array[0];
+										$month = $leave_start_date_value_array[1];
+										$year = $leave_start_date_value_array[2];
+										$leave_start_date_value = $month .'/'. $day .'/'. $year;
+										$leave_start_date_value = strtotime($leave_start_date_value);
+										$leave_start_date_value = date("d-M-Y",  ((int) $leave_start_date_value));
+									}
 									$leave_end_date_value = get_post_meta( $get_the_id, 'leave-end-date', true );
-									
+									if ( ! empty( $leave_end_date_value ) ){
+										$leave_end_date_value_array = explode("/", $leave_end_date_value);
+										$day = $leave_end_date_value_array[0];
+										$month = $leave_end_date_value_array[1];
+										$year = $leave_end_date_value_array[2];
+										$leave_end_date_value = $month .'/'. $day .'/'. $year;
+										$leave_end_date_value = strtotime($leave_end_date_value);
+										$leave_end_date_value = date("d-M-Y",  ((int) $leave_end_date_value));
+									}
 									//Returns Array of Term Names for "rt-leave-type"
 									$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // todo:need to call in correct way
 								?>
