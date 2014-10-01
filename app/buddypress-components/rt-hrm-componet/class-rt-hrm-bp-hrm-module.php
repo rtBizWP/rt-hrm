@@ -964,14 +964,14 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 				$save_leave_post = array(
 			      'ID'           => $post_id,
 			      'post_content' => $_POST['content'],
-			      'post_title' => $_POST['post_title'],
+			      //'post_title' => $_POST['post_title'],
 			      'post_status' => $_POST['post']['post_status']
 			  	);
 			} else {
 				$save_leave_post = array(
 			      'ID'           => $post_id,
 			      'post_content' => $_POST['content'],
-			      'post_title' => $_POST['post_title']
+			      //'post_title' => $_POST['post_title']
 			  	);
 			}
 		  	
