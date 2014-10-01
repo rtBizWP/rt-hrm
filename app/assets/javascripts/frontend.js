@@ -13,7 +13,7 @@ jQuery(document).ready(function($) {
 		 *
 		 */
 		init : function(){
-            rtHRMFrontend.leaveListing();
+            //rtHRMFrontend.leaveListing();
 			//rtHRMFrontend.requestsListing();
 		},
         leaveListing : function(){
