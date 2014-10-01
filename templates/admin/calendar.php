@@ -111,9 +111,15 @@
 						<label for="leave-start-date">Start Date</label>
 					</td>
 					<td>
-						<label id="lblleave-start-date"></label>
+						<?php if ( is_admin() ) {?>
+							<label id="lblleave-start-date"></label>
+						<?php }?>
 						<div >
-							<input id="leave-start-date" name="post[leave-start-date]"  class="rt-form-text" placeholder="Select Start Date" readonly="readonly" value="" type="hidden">
+							<?php if ( is_admin() ) {?>
+								<input id="leave-start-date" name="post[leave-start-date]"  class="rt-form-text" placeholder="Select Start Date" readonly="readonly" value="" type="hidden">
+							<?php } else {?>
+								<input id="leave-start-date" name="post[leave-start-date]"  class="rt-form-text datepicker" placeholder="Select Start Date" readonly="readonly" value="" type="text">
+							<?php }?>
 						</div>
 					</td>
 				</tr>
