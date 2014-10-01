@@ -64,7 +64,7 @@
 					$max_num_pages =  $the_query->max_num_pages;
 					
 					?>
-					<input type="button"  data-reveal-id="add-new-leave-modal" value="Add New" />  
+					<a href="<?php echo esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'addnew' ) ) ); ?>"><input class="pull-right" type="button"  data-reveal-id="add-new-leave-modal" value="Add New" /></a>
 					<h4><?php _e( 'Leave', 'rt_hrm' ) ?></h4>
 					<table cellspacing="0" class="leave-lists">
 						<tbody>

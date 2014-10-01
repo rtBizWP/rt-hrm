@@ -38,7 +38,10 @@ function bp_hrm_leave() {
 function load_leave_template() {
 	if ( isset( $_GET['action'] ) && ($_GET['action'] == 'view' || $_GET['action'] == 'edit' || $_GET['action'] == 'update') ) {
           return  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave-edit.php';
-    }else{
+    } else if (isset( $_GET['action'] ) && ($_GET['action'] == 'addnew') ) {
+    	return  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave-new.php';
+    }
+    else {
           return  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave.php';
     }
 }
