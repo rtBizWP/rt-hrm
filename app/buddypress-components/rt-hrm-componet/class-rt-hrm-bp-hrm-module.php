@@ -960,12 +960,21 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
          */
         function save_leave( $post_id, $post ){
 			global $rt_hrm_module,$rt_hrm_attributes;
-		  	$save_leave_post = array(
-		      'ID'           => $post_id,
-		      'post_content' => $_POST['content'],
-		      'post_title' => $_POST['post_title'],
-		      'post_status' => $_POST['post']['post_status']
-		  	);
+			if ( ! empty( $_POST['post']['post_status'] ) ){
+				$save_leave_post = array(
+			      'ID'           => $post_id,
+			      'post_content' => $_POST['content'],
+			      'post_title' => $_POST['post_title'],
+			      'post_status' => $_POST['post']['post_status']
+			  	);
+			} else {
+				$save_leave_post = array(
+			      'ID'           => $post_id,
+			      'post_content' => $_POST['content'],
+			      'post_title' => $_POST['post_title']
+			  	);
+			}
+		  	
 			
 			// Update the post into the database
 			if ( ! empty( $_POST['content'] ) || ! empty( $_POST['post'] ) )
