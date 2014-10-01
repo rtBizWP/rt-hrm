@@ -25,11 +25,13 @@
 				<?php
 					global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb,  $wp_query;
 					$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+					$paged = $page = max( 1, get_query_var('paged') );
 					
 					$posts_per_page = get_option( 'posts_per_page' );
 					
 					$order = 'DESC';
 					$attr = 'startdate';
+					$orderby = 'meta_value_num';
 					$meta_key = 'leave-start-date';
 					if ( $attr == "startdate" ){
 						$meta_key = 'leave-start-date';
@@ -41,7 +43,14 @@
 					if ($offset <=0) {
 						$offset = 0;
 					}
-					
+					if( isset( $_GET['orderby'] ) ) {
+	                        $meta_key = $args['orderby'] = $_GET['orderby'];
+	                        $order = $args['order'] =  $_GET['order'];
+	                }
+					if( $meta_key == "rt-leave-type" ) {
+						$meta_key = 'leave-start-date';
+						$orderby = 'rt-leave-type';
+					}
 					$post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = 'rt_biz_contact_user_id' and meta_value = {$bp->displayed_user->id} ");
 					$args = array(
 						'meta_query' => array(
@@ -52,16 +61,47 @@
 						),
 						'post_type' => $rt_hrm_module->post_type,
 						'meta_key'   => $meta_key,
-						'orderby' => 'meta_value_num',
+						'orderby' => $orderby,
 						'order'      => $order,
 						'post_status' => array( 'approved', 'rejected' ),
 						'posts_per_page' => $posts_per_page,
 						'offset' => $offset
 					);
+					
+					/*echo "<pre>";
+					print_r($args);
+					echo "</pre>";*/
+					
+					$columns = array(
+	                    array(
+	                            'column_label' => __( 'Leave Type', RT_HRM_TEXT_DOMAIN ) ,
+	                            'sortable' => true,
+	                            'orderby' => 'rt-leave-type',
+	                            'order' => 'asc'
+	                    ),
+	                    array(
+	                            'column_label' => __( 'Start Date', RT_HRM_TEXT_DOMAIN ) ,
+	                            'sortable' => true,
+	                            'orderby' => 'leave-start-date',
+	                            'order' => 'asc'
+	                    ),
+	                    array(
+	                            'column_label' => __( 'End Date', RT_HRM_TEXT_DOMAIN ) ,
+	                            'sortable' => true,
+	                            'orderby' => 'leave-end-date',
+	                            'order' => 'asc'
+	                    ),
+	                    array(
+	                            'column_label' => __( 'Approved/Rejected', RT_HRM_TEXT_DOMAIN ) ,
+	                            'sortable' => false,
+	                    ),
+	
+	            	);
+					
 					// The Query
 					$the_query = new WP_Query( $args );
 					
-					$max_num_pages =  $the_query->max_num_pages;
+					$totalPage = $max_num_pages =  $the_query->max_num_pages;
 					
 					?>
 					<a href="<?php echo esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'addnew' ) ) ); ?>"><input class="pull-right" type="button"  data-reveal-id="add-new-leave-modal" value="Add New" /></a>
@@ -69,6 +109,33 @@
 					<table cellspacing="0" class="leave-lists">
 						<tbody>
 							<tr class="lists-header">
+		                      <?php foreach ( $columns as $column ) {
+		                      ?>
+		                            <td>
+		                                <?php
+		                                if(  $column['sortable']  ) {
+		
+		                                        if ( isset( $_GET['orderby'] ) && $column['orderby']  == $_GET['orderby'] ) {
+		                                           
+		                                            $current_order = $_GET['order'];
+		                                           
+		                                            $order = 'asc' == $current_order ? 'desc' : 'asc';
+		                                            
+		                                            printf( __('<a href="%s">%s <i class="fa fa-sort-%s"></i> </a>'), esc_url( add_query_arg( array( 'orderby' => $column['orderby'] ,'order' => $order ) ) ), $column['column_label'], $order );
+		                                            
+		                                        }else{
+		                                              printf( __('<a href="%s">%s <i class="fa fa-sort"></i> </a>'), esc_url( add_query_arg( array( 'orderby' => $column['orderby'] ,'order' => 'desc' ) ) ), $column['column_label'] );
+		                                        }
+		                                      
+		                                }else{
+		                                        echo $column['column_label'];
+		                                }
+		
+		                                ?>
+		                            </td>
+		                    <?php  } ?>
+	                        </tr>
+							<?php /*<tr class="lists-header">
 								<th align="center" scope="row" data-sorting-type="ASC" data-attr-type="leavetype" class="order leavetype">
 									<?php esc_html_e('Leave Type', 'rt_hrm');?>
 									<span>
@@ -106,7 +173,7 @@
 									  <option value="DESC">DESC</option>
 									</select>-->
 								</th>
-							</tr>
+							</tr> */ ?>
 							<?php
 							if ( $the_query->have_posts() ) {
 								while ( $the_query->have_posts() ) { ?>
@@ -151,9 +218,22 @@
 							?>
 						</tbody>
 					</table>
-					<?php if ( $max_num_pages > 1 ) { ?>
+					<?php /*if ( $max_num_pages > 1 ) { ?>
 					<ul id="leave-pagination"><li id="prev"><a class="page-link">&laquo; Previous</a></li><li id="next"><a class="page-link next">Next &raquo;</a></li></ul>
-					<?php } ?>
+					<?php } */?>
+					<?php       
+	                if($totalPage > 1){
+	                    $customPagHTML     =  '<div class="pagination" role="menubar" aria-label="Pagination"><span class="current">Page '.$page.' of '.$totalPage.'</span>'.paginate_links( array(
+	                    //'format' => 'page/%#%/?orderby='.$_GET['orderby'].'&order='.$_GET['order'],
+	                    'format' => 'page/%#%',
+	                    'prev_text' => __('Newer'),
+	                    'next_text' => __('Older'),
+	                    'total' => $totalPage,
+	                    'current' => $page
+	                    )).'</div>';
+	                    echo $customPagHTML;
+	                }
+	                ?>
 			</div><!-- #item-body -->
 
 		</div><!-- .padder -->

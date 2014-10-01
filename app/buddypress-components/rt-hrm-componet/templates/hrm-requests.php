@@ -117,10 +117,10 @@
 				$totalPage = $max_num_pages =  $the_query->max_num_pages;
 				
 				?>
-				<h4><?php _e( 'Leave Approval', 'rt_hrm' ) ?></h4>
+				<h4><?php _e( 'Leave Approval', RT_HRM_TEXT_DOMAIN ) ?></h4>
 				<table cellspacing="0" class="requests-lists">
 					<tbody>
-						<tr>
+						<tr class="lists-header">
 	                      <?php foreach ( $columns as $column ) {
 	                      ?>
 	                            <td>
