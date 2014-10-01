@@ -14,7 +14,7 @@ jQuery(document).ready(function($) {
 		 */
 		init : function(){
             rtHRMFrontend.leaveListing();
-			rtHRMFrontend.requestsListing();
+			//rtHRMFrontend.requestsListing();
 		},
         leaveListing : function(){
 			var paged = 1;
