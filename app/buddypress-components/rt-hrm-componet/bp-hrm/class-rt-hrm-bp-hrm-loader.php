@@ -43,6 +43,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
                     
                        $includes = array(
 							'screens',
+							'functions',
 						);
 
                        

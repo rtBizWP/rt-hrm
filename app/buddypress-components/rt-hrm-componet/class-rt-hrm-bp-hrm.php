@@ -49,9 +49,9 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
 		function get_component_root_url(){
 			global $bp;
 			foreach ( $bp->bp_nav as $nav ) {
-			    
-			  if ( $nav['slug'] == RT_HRM_BP_HRM_SLUG ){
-				$link = $nav['link'];
+			  if ( $nav['slug'] == RT_HRM_BP_HRM_SLUG .'/calender' ){
+				$nav['link'] = explode("calender", $nav['link']);
+				$link = $nav['link'][0];
 			  }
 			}
 			return $link;
