@@ -16,24 +16,13 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * @author kishore
  */
 
-function get_component_root_url(){
-	global $bp;
-	foreach ( $bp->bp_nav as $nav ) {
-	  if ( $nav['slug'] == RT_HRM_BP_HRM_SLUG .'/calender' ){
-		$nav['link'] = explode("calender", $nav['link']);
-		$link = $nav['link'][0];
-	  }
-	}
-	return $link;
-}
-
 
 function add_pagination( $totalPage, $page ){
     global $rt_hrm_bp_hrm;
    
     if( $totalPage > 1 ){
                                             
-        $base = get_component_root_url().bp_current_action().'/%_%';
+        $base = $rt_hrm_bp_hrm->get_component_root_url().bp_current_action().'/%_%';
         $formate = 'page/%#%';
         if( isset( $_GET['orderby'] ) ) {
 
