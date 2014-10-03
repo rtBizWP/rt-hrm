@@ -186,7 +186,25 @@
 									$leave_duration_type = get_term_by('slug', $leave_duration_value, 'rt-leave-type');
 									
 									$leave_start_date_value = get_post_meta( $get_the_id, 'leave-start-date', true );
+									if ( ! empty( $leave_start_date_value ) ){
+										$leave_start_date_value_array = explode("/", $leave_start_date_value);
+										$day = $leave_start_date_value_array[0];
+										$month = $leave_start_date_value_array[1];
+										$year = $leave_start_date_value_array[2];
+										$leave_start_date_value = $month .'/'. $day .'/'. $year;
+										$leave_start_date_value = strtotime($leave_start_date_value);
+										$leave_start_date_value = date("d-M-Y",  ((int) $leave_start_date_value));
+									}
 									$leave_end_date_value = get_post_meta( $get_the_id, 'leave-end-date', true );
+									if ( ! empty( $leave_end_date_value ) ){
+										$leave_end_date_value_array = explode("/", $leave_end_date_value);
+										$day = $leave_end_date_value_array[0];
+										$month = $leave_end_date_value_array[1];
+										$year = $leave_end_date_value_array[2];
+										$leave_end_date_value = $month .'/'. $day .'/'. $year;
+										$leave_end_date_value = strtotime($leave_end_date_value);
+										$leave_end_date_value = date("d-M-Y",  ((int) $leave_end_date_value));
+									}
 									$leave_user_id = get_post_meta( $get_the_id, 'leave-user-id', true );
 									$rt_biz_contact_user_id = get_post_meta( $leave_user_id, 'rt_biz_contact_user_id', true );
 									
