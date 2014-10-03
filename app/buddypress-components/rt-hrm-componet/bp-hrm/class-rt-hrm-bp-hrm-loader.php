@@ -110,10 +110,10 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			// Add 'hrm' to the main navigation
 			$main_nav = array(
 				'name' 		      => __( 'HRM' ),
-				'slug' 		      => $this->id,
+				'slug' 		      => $this->id .'/calender',
 				'position' 	      => 80,
 				'screen_function'     => 'bp_hrm_calender',
-				'default_subnav_slug' => 'hrm',
+				'default_subnav_slug' => 'calender',
 			);
 
             // Determine user to use
