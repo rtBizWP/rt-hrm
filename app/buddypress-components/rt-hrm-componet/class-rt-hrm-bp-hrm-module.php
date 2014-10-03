@@ -789,7 +789,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
             }
 			?>
 			<form action="<?php //echo esc_url( add_query_arg( array( 'rt_leave_id'=> $rt_leave_id, 'action'=>'update' ) )); ?>" class="" method="POST" id="form-add-leave" style="display: block;">
-			<div id="titlewrap">
+			<!--<div id="titlewrap">
 				<label for="title" id="title-prompt-text" class="screen-reader-text">Enter title here</label>
 				<input type="text" autocomplete="off" id="title" value="" size="30" name="post_title" readonly="readonly">
 				&nbsp;&nbsp;
@@ -824,7 +824,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 	                    }
 	                } ?>
 			</div>
-			<br /><br />
+			<br /><br /> -->
 			<table class="form-table rthrm-container">
 				<tbody>
 
@@ -835,6 +835,37 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
                         <td class="tblval">
                             <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; }  ?>">
                             <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->ID; }  ?>">
+                        	&nbsp;&nbsp;
+			                <?php
+			                if (isset($post->ID))
+			                    $pstatus = $post->post_status;
+			                else
+			                    $pstatus = "";
+			                $post_status = $this->get_custom_statuses();
+			                $custom_status_flag = true;
+							$user_edit = current_user_can('moderate_comments');
+			                ?>
+			                <?php if( $user_edit ) { ?>
+			                    <select id="rtpm_post_status" class="right" name="post[post_status]">
+			                        <?php foreach ($post_status as $status) {
+			                            if ($status['slug'] == $pstatus) {
+			                                $selected = 'selected="selected"';
+			                                $custom_status_flag = false;
+			                            } else {
+			                                $selected = '';
+			                            }
+			                            printf('<option value="%s" %s >%s</option>', $status['slug'], $selected, $status['name']);
+			                        } ?>
+			                        <?php if ( $custom_status_flag && isset( $post->ID ) ) { echo '<option selected="selected" value="'.$pstatus.'">'.$pstatus.'</option>'; } ?>
+			                    </select>
+			                <?php } else {
+			                    foreach ( $post_status as $status ) {
+			                        if($status['slug'] == $pstatus) {
+			                            echo '<span class="rtpm_view_mode">'.$status['name'].'</span>';
+			                            break;
+			                        }
+			                    }
+			                } ?>
                         </td>
                     </tr>
 					<tr>
