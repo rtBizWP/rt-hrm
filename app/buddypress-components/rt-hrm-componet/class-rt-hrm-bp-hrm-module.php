@@ -833,7 +833,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
                             <label class="label">Employee Name</label>
                         </td>
                         <td class="tblval">
-                            <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; }  ?>">
+                            <input type="text" id="leave-user" size="" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; }  ?>">
                             <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->ID; }  ?>">
                         	&nbsp;&nbsp;
 			                <?php
@@ -941,7 +941,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 							<label class="label">Description </label>
 						</td>
 						<td>
-							<textarea id="content" class="rt-form-text" name="content" style="resize: none;width: 100%; height: 75px;" aria-hidden="true"><?php echo $post->post_content ?></textarea>
+							<textarea id="content" class="rt-form-text" name="content" aria-hidden="true"><?php echo $post->post_content ?></textarea>
 						</td>
 					</tr>
 				<?php
