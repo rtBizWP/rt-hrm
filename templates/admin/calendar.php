@@ -14,7 +14,7 @@
 		} 
 	?>
 
-	<h2><?php $menu_label = Rt_HRM_Settings::$settings['menu_label']; echo $menu_label . __( ' Calendar' ); ?></h2>
+	<h4><?php $menu_label = Rt_HRM_Settings::$settings['menu_label']; echo $menu_label . __( ' Calendar' ); ?></h4>
 
 	<div id="poststuff">
 
