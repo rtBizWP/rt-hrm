@@ -27,7 +27,7 @@ function hrm_pagination( $totalPage, $page ){
         if( isset( $_GET['orderby'] ) ) {
 
                 $arr_params = array( 'orderby' => $_GET['orderby'], 'order' => $_GET['order'] );
-                $base = add_query_arg( $arr_params, get_component_root_url().bp_current_action() ) .'%_%' ; 
+                $base = add_query_arg( $arr_params, $rt_hrm_bp_hrm->get_component_root_url().bp_current_action() ) .'%_%' ; 
                 $formate = '&paged=%#%';
         }
 
