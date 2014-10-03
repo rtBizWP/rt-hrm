@@ -273,7 +273,7 @@
 					<ul id="requests-pagination"><li id="prev"><a class="page-link"> &laquo; Previous</a></li><li id="next"><a class="page-link next">Next &raquo;</a></li></ul>
 				<?php } */?>
 				<?php       
-                	add_pagination( $totalPage, $page );
+                	hrm_pagination( $totalPage, $page );
                 ?>
 			</div><!-- #item-body -->
 

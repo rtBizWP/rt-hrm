@@ -17,7 +17,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
  */
 
 
-function add_pagination( $totalPage, $page ){
+function hrm_pagination( $totalPage, $page ){
     global $rt_hrm_bp_hrm;
    
     if( $totalPage > 1 ){
