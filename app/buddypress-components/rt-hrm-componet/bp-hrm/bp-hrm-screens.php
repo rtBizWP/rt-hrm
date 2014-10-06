@@ -24,39 +24,39 @@ function bp_hrm_screen() {
 add_action( 'bp_screens', 'bp_hrm_screen' );
 
 function bp_hrm_calender() { 
-	add_filter('bp_located_template','load_calender_template');
+	add_action('bp_template_content','load_calender_template');
 }
 
 function load_calender_template() {
-    return  RT_HRM_BP_HRM_PATH.'/templates/hrm-calender.php';
+    include  RT_HRM_BP_HRM_PATH.'/templates/hrm-calender.php';
 }
 
 function bp_hrm_leave() {
-    add_filter('bp_located_template','load_leave_template');
+    add_action('bp_template_content','load_leave_template');
 }
 
 function load_leave_template() {
 	if ( isset( $_GET['action'] ) && ($_GET['action'] == 'view' || $_GET['action'] == 'edit' || $_GET['action'] == 'update') ) {
-          return  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave-edit.php';
+          include  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave-edit.php';
     } else if (isset( $_GET['action'] ) && ($_GET['action'] == 'addnew') ) {
-    	return  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave-new.php';
+    	include  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave-new.php';
     }
     else {
-          return  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave.php';
+          include  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave.php';
     }
 }
 
 function bp_hrm_requests() {
 	if ( current_user_can('edit_posts') ) {
-		add_filter('bp_located_template','load_requests_template');
+		add_action('bp_template_content','load_requests_template');
 	}
 }
 
 function load_requests_template() {
 	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'view' || $_GET['action'] == 'edit' || $_GET['action'] == 'update' || $_GET['action'] == 'deletepost' ) ) {
-          return  RT_HRM_BP_HRM_PATH.'/templates/hrm-requests-edit.php';
+          include  RT_HRM_BP_HRM_PATH.'/templates/hrm-requests-edit.php';
     }else{
-          return  RT_HRM_BP_HRM_PATH.'/templates/hrm-requests.php';
+          include  RT_HRM_BP_HRM_PATH.'/templates/hrm-requests.php';
     }
 }
 
