@@ -90,6 +90,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'save_post', array( $this, 'save_leave_meta' ), 1, 2);
 			add_action( 'wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
 			add_filter( 'posts_orderby', array( $this, 'hrm_leave_type_orderby' ), 10, 2 );
+			add_filter( 'posts_orderby', array( $this, 'hrm_leave_start_date_orderby' ), 10, 2 );
+			add_filter( 'posts_orderby', array( $this, 'hrm_leave_end_date_orderby' ), 10, 2 );
 
             add_action( 'wp_ajax_seach_employees_name', array( $this, 'employees_autocomplete_ajax' ) );
 			
@@ -1263,6 +1265,46 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					WHERE $wpdb->posts.ID = object_id
 					AND taxonomy = 'rt-leave-type'
 					GROUP BY object_id
+				) ";
+				$orderby .= ( 'ASC' == strtoupper( $wp_query->get('order') ) ) ? 'ASC' : 'DESC';
+			}
+		
+			return $orderby;
+		}
+		
+		/**
+		 * hrm_leave_start_date_orderby
+		 *
+		 * @access public
+		 * @param  void
+		 * @return sql $orderby
+		 */
+		function hrm_leave_start_date_orderby( $orderby, $wp_query ) {
+			global $wpdb;
+		
+			if ( isset( $wp_query->query['orderby'] ) && 'meta_value_num' == $wp_query->query['orderby'] && 'leave-start-date' == $wp_query->query['meta_key'] ) {
+				$orderby = "(
+					str_to_date(wp_postmeta.meta_value, '%e/%m/%Y' )
+				) ";
+				$orderby .= ( 'ASC' == strtoupper( $wp_query->get('order') ) ) ? 'ASC' : 'DESC';
+			}
+		
+			return $orderby;
+		}
+		
+		/**
+		 * hrm_leave_end_date_orderby
+		 *
+		 * @access public
+		 * @param  void
+		 * @return sql $orderby
+		 */
+		function hrm_leave_end_date_orderby( $orderby, $wp_query ) {
+			global $wpdb;
+		
+			if ( isset( $wp_query->query['orderby'] ) && 'meta_value_num' == $wp_query->query['orderby'] && 'leave-end-date' == $wp_query->query['meta_key'] ) {
+				$orderby = "(
+					str_to_date(wp_postmeta.meta_value, '%e/%m/%Y' )
 				) ";
 				$orderby .= ( 'ASC' == strtoupper( $wp_query->get('order') ) ) ? 'ASC' : 'DESC';
 			}
