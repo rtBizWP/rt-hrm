@@ -99,14 +99,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 				return;
 			}
 			
-            // Only grab count if we're on a user page and current user has access
-            if ( bp_is_user() && bp_user_has_access() ) {
-                    $count    = bp_get_total_unread_messages_count();
-                    $class    = ( 0 === $count ) ? 'no-count' : 'count';
-                    $nav_name = sprintf( __( 'Messages <span class="%s">%s</span>', 'buddypress' ), esc_attr( $class ), number_format_i18n( $count ) );
-            } else {
-                    $nav_name = __( 'HRM', 'buddypress' );
-            }
+            $nav_name = __( 'HRM', 'buddypress' );
 
 			// Add 'hrm' to the main navigation
 			$main_nav = array(
