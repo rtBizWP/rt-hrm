@@ -74,18 +74,3 @@
 table tr.even, table tr.alt, table tr:nth-of-type(2n) {
     background: none repeat scroll 0 0 #f9f9f9;
 }
-table.leave-lists tr td,
-table.leave-lists tr th,
-table.requests-lists tr td,
-table.requests-lists tr th {
-	border-left: 1px solid #eee;
-    border-right: 1px solid #eee;
-}
-#leave-pagination > li,
-#requests-pagination > li  {
-    display: inline-table;
-}
-#item-body ul#leave-pagination,
-#item-body ul#requests-pagination {
-    float: right;
-}
