@@ -121,19 +121,6 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 
             // Link to user people
             $people_link = trailingslashit( $user_domain . $this->slug );
-			
-			$this->sub_nav_items = array(
-                array(
-                    'name' => __( 'Calender' ),
-                    'slug'  => 'calender',
-                    'screen_function' => 'bp_hrm_calender',
-                ),
-                array(
-                    'name' =>  'Leave',
-                    'slug'  => 'leave',
-                    'screen_function' => 'bp_hrm_leave',
-                )         
-            );
 
 
 			// Add the subnav items
@@ -183,6 +170,19 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					// Setup the logged in user variables
 					$user_domain   = bp_loggedin_user_domain();
 					$crm_link = trailingslashit( $user_domain . $this->slug );
+					
+					$this->sub_nav_items = array(
+		                array(
+		                    'name' => __( 'Calender' ),
+		                    'slug'  => 'calender',
+		                    'screen_function' => 'bp_hrm_calender',
+		                ),
+		                array(
+		                    'name' =>  'Leave',
+		                    'slug'  => 'leave',
+		                    'screen_function' => 'bp_hrm_leave',
+		                )         
+		            );
 		
 					// Add main Settings menu
 					$wp_admin_nav[] = array(
