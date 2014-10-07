@@ -105,7 +105,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			$main_nav = array(
 				'name' 		      => __( 'HRM' ),
 				'slug' 		      => $this->id,
-				'position' 	      => 85,
+				'position' 	      => 81,
 				'screen_function'     => 'bp_hrm_calender',
 				'default_subnav_slug' => 'calender',
 			);
