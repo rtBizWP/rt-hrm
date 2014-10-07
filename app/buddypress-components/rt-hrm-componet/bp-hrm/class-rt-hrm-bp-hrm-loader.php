@@ -27,7 +27,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
                         __( 'HRM', 'buddypress' ),
                        RT_HRM_BP_HRM_PATH,
                         array(
-                                'adminbar_myaccount_order' => 9999
+                                'adminbar_myaccount_order' => 10000
                         )
                 );
                 $this->includes();
@@ -105,7 +105,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			$main_nav = array(
 				'name' 		      => __( 'HRM' ),
 				'slug' 		      => $this->id,
-				'position' 	      => 90,
+				'position' 	      => 80,
 				'screen_function'     => 'bp_hrm_calender',
 				'default_subnav_slug' => 'calender',
 			);
