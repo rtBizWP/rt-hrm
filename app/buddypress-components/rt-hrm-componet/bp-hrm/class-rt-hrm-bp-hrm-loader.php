@@ -15,72 +15,72 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 	class Rt_Hrm_Bp_Hrm_Loader extends BP_Component {
             
-                /**
-                 * Start the messages component creation process
-                 *
-                 * @since BuddyPress (1.5)
-                 */
-                public function __construct() {
-                    
-                        parent::start(
-                                'hrm',
-                                __( 'HRM', 'buddypress' ),
-                               RT_HRM_BP_HRM_PATH,
-                                array(
-                                        'adminbar_myaccount_order' => 9999
-                                )
-                        );
-                        $this->includes();
-                }
+        /**
+         * Start the messages component creation process
+         *
+         * @since BuddyPress (1.5)
+         */
+        public function __construct() {
+            
+                parent::start(
+                        'hrm',
+                        __( 'HRM', 'buddypress' ),
+                       RT_HRM_BP_HRM_PATH,
+                        array(
+                                'adminbar_myaccount_order' => 9999
+                        )
+                );
+                $this->includes();
+        }
         
 	
-                /**
-                 * Include files
-                 *
-                 * @global BuddyPress $bp The one true BuddyPress instance
-                 */
-                public function includes( $includes = array() ) {
-                    
-                       $includes = array(
-							'screens',
-							'functions',
-						);
+        /**
+         * Include files
+         *
+         * @global BuddyPress $bp The one true BuddyPress instance
+         */
+        public function includes( $includes = array() ) {
+            
+               $includes = array(
+					'screens',
+					'functions',
+				);
 
-                       
-                        parent::includes( $includes );
-                }
-                
-                /**
-                 * Setup globals
-                 *
-                 * The BP_MESSAGES_SLUG constant is deprecated, and only used here for
-                 * backwards compatibility.
-                 *
-                 * @since BuddyPress (1.5)
-                 */
-                public function setup_globals( $args = array() ) {
-                        $bp = buddypress();
+               
+                parent::includes( $includes );
+        }
+        
+        /**
+         * Setup globals
+         *
+         * The BP_MESSAGES_SLUG constant is deprecated, and only used here for
+         * backwards compatibility.
+         *
+         * @since BuddyPress (1.5)
+         */
+        public function setup_globals( $args = array() ) {
+                $bp = buddypress();
 
-                        // Define a slug, if necessary
-                        if ( !defined( 'BP_HRM_SLUG' ) )
-                                define( 'BP_HRM_SLUG', $this->id );
+                // Define a slug, if necessary
+                if ( !defined( 'BP_HRM_SLUG' ) )
+                        define( 'BP_HRM_SLUG', $this->id );
 
-                       
+               
 
-                        // All globals for messaging component.
-                        // Note that global_tables is included in this array.
-                        $globals = array(
-                                'slug'                  => BP_HRM_SLUG,
-                                'has_directory'         => false,
-                                'notification_callback' => 'messages_format_notifications',
-                                'search_string'         => __( 'Search Messages...', 'buddypress' ),
-                                
-                        );
+                // All globals for messaging component.
+                // Note that global_tables is included in this array.
+                $globals = array(
+                        'slug'                  => BP_HRM_SLUG,
+                        'has_directory'         => false,
+                        'notification_callback' => 'messages_format_notifications',
+                        'search_string'         => __( 'Search Messages...', 'buddypress' ),
+                        
+                );
 
-                        $this->autocomplete_all = defined( 'BP_MESSAGES_AUTOCOMPLETE_ALL' );
+                $this->autocomplete_all = defined( 'BP_MESSAGES_AUTOCOMPLETE_ALL' );
 
-                        parent::setup_globals( $globals );
-                }
+                parent::setup_globals( $globals );
+        }
         
 		/**
 		 * Set up your component's navigation.
@@ -104,8 +104,8 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			// Add 'hrm' to the main navigation
 			$main_nav = array(
 				'name' 		      => __( 'HRM' ),
-				'slug' 		      => $this->id .'/calender',
-				'position' 	      => 95,
+				'slug' 		      => $this->id,
+				'position' 	      => 90,
 				'screen_function'     => 'bp_hrm_calender',
 				'default_subnav_slug' => 'calender',
 			);
@@ -121,6 +121,19 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 
             // Link to user people
             $people_link = trailingslashit( $user_domain . $this->slug );
+			
+			$this->sub_nav_items = array(
+                array(
+                    'name' => __( 'Calender' ),
+                    'slug'  => 'calender',
+                    'screen_function' => 'bp_hrm_calender',
+                ),
+                array(
+                    'name' =>  'Leave',
+                    'slug'  => 'leave',
+                    'screen_function' => 'bp_hrm_leave',
+                )         
+            );
 
 
 			// Add the subnav items
@@ -157,6 +170,44 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 
 			parent::setup_nav( $main_nav, $sub_nav );
 
+		}
+
+		public function setup_admin_bar( $wp_admin_nav = array() ) {
+                   
+				// The instance
+				$bp = buddypress();
+		
+				// Menus for logged in user
+				if ( is_user_logged_in() ) {
+		
+					// Setup the logged in user variables
+					$user_domain   = bp_loggedin_user_domain();
+					$crm_link = trailingslashit( $user_domain . $this->slug );
+		
+					// Add main Settings menu
+					$wp_admin_nav[] = array(
+						'parent' => $bp->my_account_menu_id,
+						'id'     => 'my-account-' . $this->id,
+						'title'  => __( 'HRM', 'buddypress' ),
+						'href'   => trailingslashit( $crm_link )
+					);
+		
+					
+					foreach ($this->sub_nav_items as $item) {
+						// Add a few subnav items
+						$wp_admin_nav[] = array(
+							'parent' => 'my-account-' . $this->id,
+							'id'     => 'my-account-' . $this->id . '-'.$item['slug'],
+							'title'  => __( $item['name'], 'buddypress' ),
+							'href'   => trailingslashit( $crm_link . $item['slug'] )
+						);
+					}
+		
+					
+				}
+		
+				parent::setup_admin_bar( $wp_admin_nav );
+			
 		}
 
 	
