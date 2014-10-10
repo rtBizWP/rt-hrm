@@ -1284,7 +1284,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		
 			if ( isset( $wp_query->query['orderby'] ) && 'meta_value_num' == $wp_query->query['orderby'] && 'leave-start-date' == $wp_query->query['meta_key'] ) {
 				$orderby = "(
-					str_to_date(wp_postmeta.meta_value, '%e/%m/%Y' )
+					str_to_date($wpdb->postmeta.meta_value, '%e/%m/%Y' )
 				) ";
 				$orderby .= ( 'ASC' == strtoupper( $wp_query->get('order') ) ) ? 'ASC' : 'DESC';
 			}
@@ -1304,7 +1304,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		
 			if ( isset( $wp_query->query['orderby'] ) && 'meta_value_num' == $wp_query->query['orderby'] && 'leave-end-date' == $wp_query->query['meta_key'] ) {
 				$orderby = "(
-					str_to_date(wp_postmeta.meta_value, '%e/%m/%Y' )
+					str_to_date($wpdb->postmeta.meta_value, '%e/%m/%Y' )
 				) ";
 				$orderby .= ( 'ASC' == strtoupper( $wp_query->get('order') ) ) ? 'ASC' : 'DESC';
 			}

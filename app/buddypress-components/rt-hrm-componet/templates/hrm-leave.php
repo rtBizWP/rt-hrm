@@ -44,9 +44,9 @@
 		'offset' => $offset
 	);
 	
-	echo "<pre>";
+	/*echo "<pre>";
 	print_r($args);
-	echo "</pre>";
+	echo "</pre>";*/
 	
 	$columns = array(
         array(
@@ -76,9 +76,6 @@
 	
 	// The Query
 	$the_query = new WP_Query( $args );
-	echo "<pre>";
-	print_r($the_query);
-	echo "</pre>";
 	
 	$totalPage = $max_num_pages =  $the_query->max_num_pages;
 	
