@@ -185,7 +185,7 @@
 					$rt_biz_contact_user_id = get_post_meta( $leave_user_id, 'rt_biz_contact_user_id', true );
 					
 					//Returns Array of Term Names for "rt-leave-type"
-					$rt_leave_type_list = wp_get_post_terms($post->ID, 'rt-leave-type', array("fields" => "names")); // tod0:need to call in correct way
+					$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // tod0:need to call in correct way
 					if ( bp_loggedin_user_id() == bp_displayed_user_id() ) {
 					?>
 					<tr class="lists-data">
