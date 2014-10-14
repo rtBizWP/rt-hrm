@@ -826,11 +826,10 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			</div>
 			<br /><br /> -->
 			<div class="row">
-                <div class="large-8 columns">
+                <div class="large-6 columns">
                       <h2>Edit Leaves</h2>
                 </div>
-                <div class="large-4 columns">
-                    <a href="" class="button">Cancel</a>
+                <div class="large-6 columns">
                     <input type="submit" value="Update Leave">
                 </div>
             </div>
@@ -876,12 +875,12 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 	          </div>
         	</div>
         	<div class="row">
-                <div class="large-4 columns">
+                <div class="large-6 columns">
                       <label for="<?php echo $rt_hrm_attributes->leave_type_tax_label; ?>">
 						<?php echo $rt_hrm_attributes->leave_type_tax_label; ?>
 					</label>
                 </div>
-                <div class="large-8 columns">
+                <div class="large-6 columns">
                     <?php
 						$options = array();
 						$terms = get_terms( Rt_HRM_Attributes::$leave_type_tax, array( 'hide_empty' => false, 'order' => 'asc' ) );
@@ -910,10 +909,10 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 
             </div>
             <div class="row">
-	            <div class="large-8 columns">
+	            <div class="large-6 columns">
 	                  <label for="leave-duration">Duration</label>
 	            </div>
-	            <div class="large-4 columns">
+	            <div class="large-6 columns">
 	                <select id="leave-duration" name="post[leave-duration]" class="rt-form-select">
 						<option value="full-day" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'full-day' ) { echo 'selected'; } ?> >Full Day</option>
 						<option value="half-day" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'half-day' ) { echo 'selected'; } ?>>Half Day</option>
@@ -978,10 +977,17 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 
             </div>
 			<?php if( isset( $_REQUEST['action'] ) && $_REQUEST['action'] != 'view' ) {?>
-			<div class="controls">
-				<input type="submit" value="Update Leave" name="form-add-leave" class="button left">
-			</div>
-			<div class="spinner">&nbsp;</div>
+			<div class="row">
+                <div class="large-8 columns">
+               
+                </div>
+                <div class="large-4 columns controls">
+                    <input type="submit" value="Update Leave" name="form-add-leave" class="button">
+                </div>
+                <div class="spinner">&nbsp;</div>
+
+            </div>
+			
 			<?php } ?>
 			</form>
 	
