@@ -68,7 +68,7 @@
                 'order' => 'asc'
         ),
         array(
-                'column_label' => __( 'Approved/Rejected', RT_HRM_TEXT_DOMAIN ) ,
+                'column_label' => __( 'Status', RT_HRM_TEXT_DOMAIN ) ,
                 'sortable' => false,
         ),
 
