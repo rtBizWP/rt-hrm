@@ -970,12 +970,12 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 					</td>
 				</tr>
 				</tbody>
-			</table>>
+			</table>
 			<?php if( isset( $_REQUEST['action'] ) && $_REQUEST['action'] != 'view' ) {?>
 		<div class="controls">
 				<input type="submit" value="Update Leave" name="form-add-leave" class="button left">
 			</div>
-			<div class="spinner">&nbsp;</div>>
+			<div class="spinner">&nbsp;</div>
 			<?php } ?>
 			</form>
 	
