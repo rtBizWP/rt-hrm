@@ -94,6 +94,10 @@ table.requests-lists, table.leave-lists   {
 tr.lists-header th:nth-child(4) {
 	text-align: center;
 }
+#form-add-leave .rt-form-radio  li {
+    float: left;
+    width: 50%;
+}
 
 /** fixes for table header (from  rt-bp-person.css ) **/
 .required{

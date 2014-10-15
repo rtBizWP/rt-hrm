@@ -210,7 +210,7 @@ $totalPage = $max_num_pages =  $the_query->max_num_pages;
 					$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // todo:need to call in correct way
 				?>
 				<tr class="lists-data">
-					<td class="person-avatar"><?php echo get_avatar( $rt_biz_contact_user_id, 24 ); ?> </td>
+					<td class="person-avatar"><?php echo get_avatar( $rt_biz_contact_user_id, 32 ); ?> </td>
 					<td>
 						<?php echo $leave_user_value;
 						if ( current_user_can('edit_posts') ) {
