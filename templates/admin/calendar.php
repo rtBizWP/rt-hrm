@@ -58,7 +58,7 @@
 			<tbody>
 				<tr  <?php if ( ! $is_hrm_manager ) { ?>  class="hide" <?php } ?> >
 					<td class="tblkey">
-						<label class="label">Employee Name</label>
+						<label class="">Employee Name</label>
 					</td>
 					<td class="tblval">
                         <input type="text" id="leave-user" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php  if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; } ?>">
@@ -140,7 +140,7 @@
 				</tr>
 				<tr>
 					<td class="tblkey">
-						<label class="label">Description </label>
+						<label class="">Description </label>
 					</td>
 					<td class="tblval">
 						<textarea id="leave_description"  class="rt-form-text" name="post[leave_description]"></textarea>
