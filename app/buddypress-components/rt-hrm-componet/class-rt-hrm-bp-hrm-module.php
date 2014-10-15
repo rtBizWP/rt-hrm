@@ -971,10 +971,10 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
             </div>
             <?php if( isset( $_REQUEST['action'] ) && $_REQUEST['action'] != 'view' ) {?>
         	<div class="row">
-                <div class="large-8 columns">
-               
+                <div class="large-10 columns">
+               		&nbsp;&nbsp;
                 </div>
-                <div class="large-4 columns controls">
+                <div class="large-2 columns controls pull-1">
                     <input type="submit" value="Update Leave" name="form-add-leave" class="button">
                 </div>
                 <div class="spinner">&nbsp;</div>
