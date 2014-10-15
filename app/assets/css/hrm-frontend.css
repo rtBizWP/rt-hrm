@@ -80,3 +80,6 @@
 table tr.even, table tr.alt, table tr:nth-of-type(2n) {
     background: none repeat scroll 0 0 #f9f9f9;
 }
+table.requests-lists, table.leave-lists   {
+	border: 1px solid #eaeaea;
+}
