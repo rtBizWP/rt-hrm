@@ -94,6 +94,10 @@ table.requests-lists, table.leave-lists   {
 tr.lists-header th:nth-child(4) {
 	text-align: center;
 }
+.leave #form-add-leave,
+.requests  #form-add-leave {
+	margin-left: -3%;
+}
 #form-add-leave .rt-form-radio  li {
     float: left;
     width: 50%;
