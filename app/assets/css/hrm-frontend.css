@@ -83,3 +83,6 @@ table tr.even, table tr.alt, table tr:nth-of-type(2n) {
 table.requests-lists, table.leave-lists   {
 	border: 1px solid #eaeaea;
 }
+.person-avatar img  {
+	border-radius: 50%;
+}
