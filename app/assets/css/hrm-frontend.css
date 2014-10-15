@@ -86,3 +86,6 @@ table.requests-lists, table.leave-lists   {
 .person-avatar img  {
 	border-radius: 50%;
 }
+tr.lists-header th:nth-child(4) {
+	text-align: center;
+}
