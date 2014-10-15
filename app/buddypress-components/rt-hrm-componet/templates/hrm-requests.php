@@ -220,11 +220,11 @@ $totalPage = $max_num_pages =  $the_query->max_num_pages;
 						?>
 						
 					</td>
-					<td align="center" scope="row"><?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0]; ?></td>
-					<td align="center" scope="row"><?php echo $leave_start_date_value;?></td>
-					<td align="center" scope="row"><?php echo $leave_end_date_value;?></td>
-					<td align="center" scope="row" class="<?php echo strtolower ( get_post_status() ); ?>"><?php echo get_post_status(); ?></td>
-					<th align="center" scope="row">
+					<td class="person-avatar"><?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0]; ?></td>
+					<td><?php echo $leave_start_date_value;?></td>
+					<td><?php echo $leave_end_date_value;?></td>
+					<td class="<?php echo strtolower ( get_post_status() ); ?>"><?php echo get_post_status(); ?></td>
+					<th>
 						<?php
 							if ( ! empty( $user_nicename ) && get_post_status() != 'pending' ){
 								echo $user_nicename;
