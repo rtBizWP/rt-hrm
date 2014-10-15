@@ -1032,10 +1032,10 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
             global $rt_hrm_module,$rt_hrm_attributes;
             
 			
-			//if( $post->post_type == 'revision' ) return;
+			if ( $post->post_type == 'revision' ) return;
+			if ( ! isset( $_POST['post'] ) ) return;
 
-			$leave_meta = $_POST['post'];
-			//print_r($leave_meta);
+			$leave_meta = $_POST['post'];			
 
 			if ( isset( $leave_meta[  Rt_HRM_Attributes::$leave_type_tax] ) ) {
 				wp_set_post_terms( $post_id, implode( ',', array_map( 'intval', $leave_meta[Rt_HRM_Attributes::$leave_type_tax] ) ), Rt_HRM_Attributes::$leave_type_tax );
@@ -1060,7 +1060,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 
 			if ( $leave_meta['leave-duration'] == 'other' && isset( $leave_meta['leave-end-date'] ) ){
 				update_post_meta( $post_id, 'leave-end-date', $leave_meta['leave-end-date'] );
-			}else {
+			} else {
 				delete_post_meta( $post_id, 'leave-end-date' );
 			}
                        
