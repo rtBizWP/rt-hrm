@@ -80,8 +80,14 @@
 	$totalPage = $max_num_pages =  $the_query->max_num_pages;
 	
 	?>
-	<a href="<?php echo esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'addnew' ) ) ); ?>"><input class="pull-right" type="button"  data-reveal-id="add-new-leave-modal" value="Add New" /></a>
-	<h4><?php _e( 'Leave', 'rt_hrm' ) ?></h4>
+	<div class="row list-heading">
+        <div class="large-10 columns list-title">
+            <h4><?php _e( 'Leave', 'rt_hrm' ) ?></h4>
+        </div>
+        <div class="large-2 columns">
+          <a href="<?php echo esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'addnew' ) ) ); ?>"><input class="pull-right" type="button"  data-reveal-id="add-new-leave-modal" value="Add New" /></a> 
+        </div>
+    </div>
 	<table cellspacing="0" class="leave-lists">
 		<tbody>
 			<tr class="lists-header">
