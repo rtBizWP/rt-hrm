@@ -57,13 +57,13 @@
 .leave-lists .approved {
 	background-image: url("images/correct-icon.png");
 	background-repeat: no-repeat;
-    background-position: 25% center;
+    background-position: 50% center;
 	text-indent: -9999px;  
 }
 .leave-lists .rejected  {
 	background-image: url("images/cross-icon.png");
 	background-repeat: no-repeat;
-    background-position: 25% center;
+    background-position: 50% center;
 	text-indent: -9999px;  
 }
 .deletepostlink {
