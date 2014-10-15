@@ -69,6 +69,12 @@
 .deletepostlink {
 	color: #C60F13;
 }
+#form-add-leave ul.rt-form-radio  {
+	right: 8.33333%;
+}
+#form-add-leave ul.rt-form-radio li {
+	list-style: none;
+}
 
 /*** Table **/
 table tr.even, table tr.alt, table tr:nth-of-type(2n) {
