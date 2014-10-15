@@ -99,7 +99,7 @@ $totalPage = $max_num_pages =  $the_query->max_num_pages;
 		<tr class="lists-header">
           <?php foreach ( $columns as $column ) {
           ?>
-                <td>
+                <th>
                     <?php
                     if(  $column['sortable']  ) {
 
@@ -120,7 +120,7 @@ $totalPage = $max_num_pages =  $the_query->max_num_pages;
                     }
 
                     ?>
-                </td>
+                </th>
         <?php  } ?>
         </tr>
 		<?php /*<!-- <tr class="lists-header">

@@ -87,7 +87,7 @@
 			<tr class="lists-header">
               <?php foreach ( $columns as $column ) {
               ?>
-                    <td>
+                    <th>
                         <?php
                         if(  $column['sortable']  ) {
 
@@ -108,7 +108,7 @@
                         }
 
                         ?>
-                    </td>
+                    </th>
             <?php  } ?>
             </tr>
 			<?php /*<tr class="lists-header">
