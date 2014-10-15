@@ -830,13 +830,23 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 
                     <tr  <?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { ?>  class="hide" <?php } ?>>
                         <td class="tblkey">
-                            <label class="label">Employee Name</label>
+                            <label>Employee Name</label>
                         </td>
                         <td class="tblval">
                             <input type="text" id="leave-user" size="" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; }  ?>">
                             <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->ID; }  ?>">
                         	&nbsp;&nbsp;
-			                <?php
+			                
+                        </td>
+                    </tr>
+                    <tr>
+						<td>
+							<label for="post[post_status]">
+								Status
+							</label>
+						</td>
+						<td>
+							<?php
 			                if (isset($post->ID))
 			                    $pstatus = $post->post_status;
 			                else
@@ -866,8 +876,8 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			                        }
 			                    }
 			                } ?>
-                        </td>
-                    </tr>
+						</td>
+					</tr>
 					<tr>
 						<td>
 							<label for="<?php echo $rt_hrm_attributes->leave_type_tax_label; ?>">
@@ -938,7 +948,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 					</tr>
 					<tr>
 						<td>
-							<label class="label">Description </label>
+							<label>Description </label>
 						</td>
 						<td>
 							<textarea id="content" class="rt-form-text" name="content" aria-hidden="true"><?php echo $post->post_content ?></textarea>
