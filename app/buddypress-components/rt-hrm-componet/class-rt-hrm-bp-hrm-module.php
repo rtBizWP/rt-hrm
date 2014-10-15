@@ -828,7 +828,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			
 			<div class="row <?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { ?>  hide<?php } ?>">
 	          <div class="large-6 columns">
-	          	   <label>Employee Name <small class="required"> * Required</small></label>
+	          	   <label>Employee Name</label>
 	               <input type="text" id="leave-user" size="" name="post[leave-user]" required="required" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; }  ?>">
                    <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->ID; }  ?>">
                 	
