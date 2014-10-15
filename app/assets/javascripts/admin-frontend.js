@@ -78,17 +78,17 @@ jQuery(document).ready(function($) {
         },
 		leaveDayChange : function(){
 			if ( rtHRMAdmin.eleLevaeDayType.val()=='Other' || rtHRMAdmin.eleLevaeDayType.val()=='other' ) {
-				rtHRMAdmin.eleLevaeEndDate.parent().show();
-			} else {
+				rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().show();
+			}else{
 				rtHRMAdmin.eleLevaeEndDate.val('');
-				rtHRMAdmin.eleLevaeEndDate.parent().hide();
+				rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().hide();
 			}
 			$(document).on('change','#'+rtHRMAdmin.eleLevaeDayType.attr('id'),function(){
 				if ( $(this).val()=='Other' || $(this).val()=='other' ) {
-					rtHRMAdmin.eleLevaeEndDate.parent().show();
-				} else {
+					rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().show();
+				}else{
 					rtHRMAdmin.eleLevaeEndDate.val('');
-					rtHRMAdmin.eleLevaeEndDate.parent().hide();
+					rtHRMAdmin.eleLevaeEndDate.parent().parent().parent().hide();
 				}
 			})
 		},

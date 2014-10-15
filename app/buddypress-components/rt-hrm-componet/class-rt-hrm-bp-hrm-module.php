@@ -913,8 +913,12 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 	                  <input id="leave-start-date" name="post[leave-start-date]"  class="rt-form-text datepicker" placeholder="Select Start Date" readonly="readonly" value="<?php if ( isset( $leave_start_date ) && !empty( $leave_start_date ) ) { echo $leave_start_date[0]; }  ?>" type="text">
 	            </div>
 	            <div class="large-6 columns">
-	            	  <label for="leave-end-date">End Date</label>
+	            	  <span>
+					  <span>
+					  <label for="leave-end-date">End Date</label>
 	            	  <input id="leave-end-date" name="post[leave-end-date]" class="rt-form-text datepicker" placeholder="Select End Date" readonly="readonly" value="<?php if ( isset( $leave_end_date ) && !empty( $leave_end_date ) ) { echo $leave_end_date[0]; }  ?>" type="text">
+					  </span>
+					  </span>
 	                
 	            </div>
 	        </div>
