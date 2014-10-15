@@ -16,7 +16,7 @@ if( isset( $_GET['action'] ) && $_GET['action'] == 'deletepost' && isset( $_GET[
         <h4><?php _e( 'Leave Approval', 'rt_hrm' ) ?></h4>
     </div>
     <div class="large-2 columns">
-      <a href="<?php echo esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'addnew' ) ) ); ?>"><input class="pull-right" type="button"  data-reveal-id="add-new-leave-modal" value="Add New" /></a> 
+       
     </div>
 </div>
 <?php
