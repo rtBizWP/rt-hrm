@@ -26,6 +26,10 @@
     top: 20%;
     z-index: 999;
 }
+.fc-grid .fc-day-number {
+    margin-right: -5px;
+    margin-top: -5px;
+}
 .ui-autocomplete  {
 	z-index: 9999;
 }
