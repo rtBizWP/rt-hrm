@@ -203,8 +203,8 @@ $totalPage = $max_num_pages =  $the_query->max_num_pages;
 					$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // todo:need to call in correct way
 				?>
 				<tr class="lists-data">
-					<td align="center" scope="row"><?php echo get_avatar( $rt_biz_contact_user_id, 24 ); ?> </td>
-					<td align="center" scope="row">
+					<td class="person-avatar"><?php echo get_avatar( $rt_biz_contact_user_id, 24 ); ?> </td>
+					<td>
 						<?php echo $leave_user_value;
 						if ( current_user_can('edit_posts') ) {
 							printf( __('<br /><span><a href="%s">Edit</a></span>&nbsp;&#124;'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ) ) ) );
@@ -220,7 +220,7 @@ $totalPage = $max_num_pages =  $the_query->max_num_pages;
 						?>
 						
 					</td>
-					<td class="person-avatar"><?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0]; ?></td>
+					<td><?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0]; ?></td>
 					<td><?php echo $leave_start_date_value;?></td>
 					<td><?php echo $leave_end_date_value;?></td>
 					<td class="<?php echo strtolower ( get_post_status() ); ?>"><?php echo get_post_status(); ?></td>
