@@ -869,12 +869,10 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
         	</div>
         	<div class="row">
                 <div class="large-6 columns">
-                      <label for="<?php echo $rt_hrm_attributes->leave_type_tax_label; ?>">
+                    <label for="<?php echo $rt_hrm_attributes->leave_type_tax_label; ?>">
 						<?php echo $rt_hrm_attributes->leave_type_tax_label; ?>
 					</label>
-                </div>
-                <div class="large-6 columns">
-                    <?php
+					<?php
 						$options = array();
 						$terms = get_terms( Rt_HRM_Attributes::$leave_type_tax, array( 'hide_empty' => false, 'order' => 'asc' ) );
 						$post_term = wp_get_post_terms( ( isset( $rt_leave_id ) ) ? $rt_leave_id : '', Rt_HRM_Attributes::$leave_type_tax, array( 'fields' => 'ids' ) );
@@ -899,44 +897,34 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 						echo $rt_form->get_radio( $args );
 					?>
                 </div>
-
-            </div>
-            <div class="row">
-	            <div class="large-6 columns">
-	                  <label for="leave-duration">Duration</label>
-	            </div>
-	            <div class="large-6 columns">
-	                <select id="leave-duration" name="post[leave-duration]" class="rt-form-select">
+                <div class="large-6 columns">
+                    <label for="leave-duration">Duration</label>
+                    <select id="leave-duration" name="post[leave-duration]" class="rt-form-select">
 						<option value="full-day" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'full-day' ) { echo 'selected'; } ?> >Full Day</option>
 						<option value="half-day" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'half-day' ) { echo 'selected'; } ?>>Half Day</option>
 						<option value="other" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] == 'other' ) { echo 'selected'; } ?>>Other</option>
 					</select>
-	            </div>
-	        </div>
-	        <div class="row">
-                <div class="large-6 columns">
-                      <label for="leave-start-date">Start Date</label>
-                </div>
-                <div class="large-6 columns">
-                    <input id="leave-start-date" name="post[leave-start-date]"  class="rt-form-text datepicker" placeholder="Select Start Date" readonly="readonly" value="<?php if ( isset( $leave_start_date ) && !empty( $leave_start_date ) ) { echo $leave_start_date[0]; }  ?>" type="text">
-                </div>
-
-            </div>
-	        <div class="row" <?php if ( isset( $leave_duration ) && !empty( $leave_duration ) &&  $leave_duration[0] != 'other' ) { echo "style='display:none'"; } ?>>
-                <div class="large-6 columns">
-                      <label for="leave-end-date">End Date</label>
-                </div>
-                <div class="large-6 columns">
-                    <input id="leave-end-date" name="post[leave-end-date]" class="rt-form-text datepicker" placeholder="Select End Date" readonly="readonly" value="<?php if ( isset( $leave_end_date ) && !empty( $leave_end_date ) ) { echo $leave_end_date[0]; }  ?>" type="text">
                 </div>
 
             </div>
             <div class="row">
-                <div class="large-6 columns">
+	            <div class="large-6 columns">
+	                  <label for="leave-start-date">Start Date</label>
+	                  <input id="leave-start-date" name="post[leave-start-date]"  class="rt-form-text datepicker" placeholder="Select Start Date" readonly="readonly" value="<?php if ( isset( $leave_start_date ) && !empty( $leave_start_date ) ) { echo $leave_start_date[0]; }  ?>" type="text">
+	            </div>
+	            <div class="large-6 columns">
+	            	  <label for="leave-end-date">End Date</label>
+	            	  <input id="leave-end-date" name="post[leave-end-date]" class="rt-form-text datepicker" placeholder="Select End Date" readonly="readonly" value="<?php if ( isset( $leave_end_date ) && !empty( $leave_end_date ) ) { echo $leave_end_date[0]; }  ?>" type="text">
+	                
+	            </div>
+	        </div>
+            <div class="row">
+                <div class="large-8 columns">
                       <label class="">Description </label>
+                      <textarea id="content" class="rt-form-text" name="content" aria-hidden="true"><?php echo $post->post_content ?></textarea>
                 </div>
-                <div class="large-6 columns">
-                    <textarea id="content" class="rt-form-text" name="content" aria-hidden="true"><?php echo $post->post_content ?></textarea>
+                <div class="large-4 columns">
+                    &nbsp;
                 </div>
 
             </div>
@@ -953,10 +941,10 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			?>
 			<div class="row" <?php echo ( ! $display_checkbox ) ? 'class="hide"' : ''; ?>>
                 <div class="large-6 columns">
-                      <label class="">Left Paid Leaves </label>
+                      &nbsp;
                 </div>
                 <div class="large-6 columns">
-                    <label><input type="checkbox" id="leave_quota_use" name="leave_quota_use" value="1" <?php checked( '1', $leave_quota_use ); ?> /> <?php _e( 'Use Paid Leaves that are left ?' ); ?></label>
+                	<label><input type="checkbox" id="leave_quota_use" name="leave_quota_use" value="1" <?php checked( '1', $leave_quota_use ); ?> /> <?php _e( 'Use Paid Leaves that are left ?' ); ?></label>
                 </div>
 
             </div>
@@ -965,7 +953,8 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
                       <label>Remaining leave</label>
                 </div>
                 <div class="large-6 columns">
-                    <label id="remaining-leave-quota"><?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
+                	<label id="remaining-leave-quota"><?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
+                    
                 </div>
 
             </div>
