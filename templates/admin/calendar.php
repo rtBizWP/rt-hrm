@@ -13,8 +13,13 @@
 			screen_icon();
 		} 
 	?>
-
-	<h4><?php $menu_label = Rt_HRM_Settings::$settings['menu_label']; echo $menu_label . __( ' Calendar' ); ?></h4>
+	<div class="row list-heading">
+        <div class="large-10 columns list-title">
+            <h4><?php $menu_label = Rt_HRM_Settings::$settings['menu_label']; echo $menu_label . __( ' Calendar' ); ?></h4>
+        </div>
+        <div class="large-2 columns">
+        </div>
+    </div>
 
 	<div id="poststuff">
 
