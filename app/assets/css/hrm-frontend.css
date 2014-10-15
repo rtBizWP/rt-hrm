@@ -42,7 +42,7 @@
 
 .leave-insert-dialog .title{
     padding: 10px;
-    border-bottom: 2px solid #888888;
+    /*border-bottom: 2px solid #888888;*/
 }
 
 .leave-insert-dialog .body{
