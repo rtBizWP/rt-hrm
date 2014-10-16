@@ -137,3 +137,10 @@ border: 0 !important;
 .cancel-button{
     margin-top: 2px;
 }
+
+/** Media Query **/
+@media screen and (max-width: 600px) {
+    .leave-insert-dialog {
+		left: inherit;
+	}
+}
