@@ -64,7 +64,7 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
 		 * @return void
 		 */
 		public function hooks() {
-			if ( current_user_can( 'edit_posts' ) ){
+			if ( current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) {
 				add_action(  'pending_to_approved',  array( $this, 'on_change_pending_post_status' ), 10, 1 );
 				add_action(  'rejected_to_approved', array( $this, 'on_change_pending_post_status' ), 10, 1 );
 				
