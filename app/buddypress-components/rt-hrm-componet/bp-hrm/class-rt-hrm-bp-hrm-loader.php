@@ -142,9 +142,11 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 				'screen_function' => 'bp_hrm_leave',
 				'position'        => 20,
 			);
+			
+			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
                         
 			// Add a few subnav items
-			if ( current_user_can('edit_posts') ) {
+			if ( current_user_can( $editor_cap ) ) {
 				$sub_nav[] = array(
 					'name'            =>  __( 'Requests' ),
 					'slug'            => 'requests',
@@ -169,27 +171,49 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 		
 					// Setup the logged in user variables
 					$user_domain   = bp_loggedin_user_domain();
-					$crm_link = trailingslashit( $user_domain . $this->slug );
+					$hrm_link = trailingslashit( $user_domain . $this->slug );
 					
-					$this->sub_nav_items = array(
-		                array(
-		                    'name' => __( 'Calender' ),
-		                    'slug'  => 'calender',
-		                    'screen_function' => 'bp_hrm_calender',
-		                ),
-		                array(
-		                    'name' =>  'Leave',
-		                    'slug'  => 'leave',
-		                    'screen_function' => 'bp_hrm_leave',
-		                )         
-		            );
+					$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+					
+					if ( current_user_can( $editor_cap ) ) {
+						$this->sub_nav_items = array(
+			                array(
+			                    'name' => __( 'Calender' ),
+			                    'slug'  => 'calender',
+			                    'screen_function' => 'bp_hrm_calender',
+			                ),
+			                array(
+			                    'name' =>  __( 'Leave' ),
+			                    'slug'  => 'leave',
+			                    'screen_function' => 'bp_hrm_leave',
+			                ),
+			                array(
+			                    'name' =>  __( 'Requests' ),
+			                    'slug'  => 'requests',
+			                    'screen_function' => 'bp_hrm_requests',
+			                )                
+			            );
+					} else {
+						$this->sub_nav_items = array(
+			                array(
+			                    'name' => __( 'Calender' ),
+			                    'slug'  => 'calender',
+			                    'screen_function' => 'bp_hrm_calender',
+			                ),
+			                array(
+			                     'name' =>  __( 'Leave' ),
+			                    'slug'  => 'leave',
+			                    'screen_function' => 'bp_hrm_leave',
+			                )         
+			            );	
+					}
 		
 					// Add main Settings menu
 					$wp_admin_nav[] = array(
 						'parent' => $bp->my_account_menu_id,
 						'id'     => 'my-account-' . $this->id,
 						'title'  => __( 'HRM', 'buddypress' ),
-						'href'   => trailingslashit( $crm_link )
+						'href'   => trailingslashit( $hrm_link )
 					);
 		
 					
@@ -199,7 +223,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 							'parent' => 'my-account-' . $this->id,
 							'id'     => 'my-account-' . $this->id . '-'.$item['slug'],
 							'title'  => __( $item['name'], 'buddypress' ),
-							'href'   => trailingslashit( $crm_link . $item['slug'] )
+							'href'   => trailingslashit( $hrm_link . $item['slug'] )
 						);
 					}
 		
