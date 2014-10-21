@@ -47,7 +47,7 @@ function load_leave_template() {
 }
 
 function bp_hrm_requests() {
-	if ( current_user_can('edit_posts') ) {
+	if ( current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) {
 		add_action('bp_template_content','load_requests_template');
 	}
 }
