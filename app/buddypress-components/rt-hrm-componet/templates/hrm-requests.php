@@ -130,42 +130,6 @@ $totalPage = $max_num_pages =  $the_query->max_num_pages;
                 </th>
         <?php  } ?>
         </tr>
-		<?php /*<!-- <tr class="lists-header">
-			<th align="center" scope="row"></th>
-			<th align="center" scope="row"><?php esc_html_e('Name', 'rt_hrm');?></th>
-			<th align="center" scope="row" data-sorting-type="ASC" data-attr-type="leavetype" class="order leavetype">
-				<?php esc_html_e('Leave Type', 'rt_hrm');?>
-				<span>
-					<i class="fa fa-caret-down"></i>
-				</span>
-				<!--<select name="leavetype" class="order leavetype">
-				  <option value="ASC">ASC</option>
-				  <option value="DESC">DESC</option>
-				</select>-->
-			</th>
-			<th align="center" scope="row" data-sorting-type="ASC" data-attr-type="startdate" class="order startdate">
-				<?php esc_html_e('Start Date', 'rt_hrm');?>
-				<span>
-					<i class="fa fa-caret-down"></i>
-				</span>
-				<!--<select name="startdate" class="order startdate">
-				  <option value="DESC">DESC</option>
-				  <option value="ASC">ASC</option>
-				</select>-->
-			</th>
-			<th align="center" scope="row" data-sorting-type="ASC" data-attr-type="enddate" class="order startdate">
-				<?php esc_html_e('End Date', 'rt_hrm');?>
-				<span>
-					<i class="fa fa-caret-down"></i>
-				</span>
-				<!--<select name="enddate" class="order enddate">
-				  <option value="DESC">DESC</option>
-				  <option value="ASC">ASC</option>
-				</select>-->
-			</th>
-			<th align="center" scope="row"><?php esc_html_e('Status', 'rt_hrm');?></th>
-			<th align="center" scope="row"><?php esc_html_e('Approver', 'rt_hrm');?></th>
-		</tr> */?>
 		<?php
 			if ( $the_query->have_posts() ) {
 				while ( $the_query->have_posts() ) { ?>
