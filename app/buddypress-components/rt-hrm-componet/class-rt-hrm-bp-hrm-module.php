@@ -800,7 +800,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 	                    $pstatus = "";
 	                $post_status = $this->get_custom_statuses();
 	                $custom_status_flag = true;
-					$user_edit = current_user_can('moderate_comments');
+					$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) );
 	                ?>
 	                <?php if( $user_edit ) { ?>
 	                    <select id="rtpm_post_status" class="right" name="post[post_status]">
@@ -842,7 +842,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 	                    $pstatus = "";
 	                $post_status = $this->get_custom_statuses();
 	                $custom_status_flag = true;
-					$user_edit = current_user_can('moderate_comments');
+					$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) );
 	                ?>
 	                <?php if( $user_edit ) { ?>
 	                    <select id="rtpm_post_status  class="right" name="post[post_status]">
