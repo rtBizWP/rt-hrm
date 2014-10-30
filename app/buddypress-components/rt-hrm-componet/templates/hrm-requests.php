@@ -195,7 +195,7 @@ $totalPage = $max_num_pages =  $the_query->max_num_pages;
 					<td><?php echo $leave_start_date_value;?></td>
 					<td><?php echo $leave_end_date_value;?></td>
 					<td class="<?php echo strtolower ( get_post_status() ); ?>"><?php echo get_post_status(); ?></td>
-					<th>
+					<td>
 						<?php
 							if ( ! empty( $user_nicename ) && get_post_status() != 'pending' ){
 								echo $user_nicename;
@@ -203,7 +203,7 @@ $totalPage = $max_num_pages =  $the_query->max_num_pages;
 								esc_html_e('Awaiting', 'rt_hrm');
 							}
 						?>
-					</th>
+					</td>
 				</tr>
 				<?php
 				}

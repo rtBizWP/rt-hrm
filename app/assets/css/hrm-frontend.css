@@ -62,13 +62,13 @@
 .leave-lists .approved {
 	background-image: url("images/correct-icon.png");
 	background-repeat: no-repeat;
-    background-position: 21% center;
+    background-position: 32% center;
 	text-indent: -9999px;  
 }
 .leave-lists .rejected  {
 	background-image: url("images/cross-icon.png");
 	background-repeat: no-repeat;
-    background-position: 21% center;
+    background-position: 32% center;
 	text-indent: -9999px;  
 }
 .deletepostlink {
@@ -95,8 +95,7 @@ table.requests-lists, table.leave-lists   {
 tr.lists-header th:nth-child(4) {
 	text-align: center;
 }
-.leave  #form-add-leave .rt-form-radio  li ,
-.requests  #form-add-leave .rt-form-radio  li {
+.hrm  #form-add-leave .rt-form-radio  li  {
     float: left;
     width: 50%;
 }
