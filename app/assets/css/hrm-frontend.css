@@ -37,6 +37,17 @@
 #calendar-container .fc-header-title h2 {
 	font-size: 16px !important;
 }
+#calendar-container  table.fc-header,
+#calendar-container  table.fc-header   td  {
+	border: none;
+}
+#calendar-container  table.fc-border-separate  th.fc-widget-header {
+	font-weight: normal;
+}
+#calendar-container  table.fc-border-separate  {
+	border: 1px;
+}
+
 .leave-insert-dialog .form-table td {
     padding: 5px;
 }
