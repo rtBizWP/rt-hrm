@@ -41,7 +41,8 @@
 #calendar-container  table.fc-header   td  {
 	border: none;
 }
-#calendar-container  table.fc-border-separate  th.fc-widget-header {
+#calendar-container  table.fc-border-separate  th.fc-widget-header,
+.fc-event-title   {
 	font-weight: normal;
 }
 #calendar-container  table.fc-border-separate  {
