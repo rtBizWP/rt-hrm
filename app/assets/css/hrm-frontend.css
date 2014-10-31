@@ -43,7 +43,7 @@
 }
 #calendar-container  table.fc-border-separate  th.fc-widget-header,
 .fc-event-title   {
-	font-weight: normal;
+	font-weight: normal !important;
 }
 #calendar-container  table.fc-border-separate  {
 	border: 1px;
