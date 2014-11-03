@@ -21,10 +21,14 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
          * @since BuddyPress (1.5)
          */
         public function __construct() {
-            
+                	
+				global $rt_biz_options;
+                $rt_hrm_options = maybe_unserialize( get_option( RT_HRM_TEXT_DOMAIN . '_options' ) );
+                $menu_label = $rt_hrm_options[ 'menu_label' ];
+                $this->hrm_label = $menu_label;
                 parent::start(
                         'hrm',
-                        __( 'HRM', 'buddypress' ),
+                        __( $this->hrm_label, 'buddypress' ),
                        RT_HRM_BP_HRM_PATH,
                         array(
                                 'adminbar_myaccount_order' => 10000
@@ -47,7 +51,10 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 				);
 
                
-                parent::includes( $includes );
+                foreach( $includes as $include ) {
+
+                    include( RT_HRM_BP_HRM_PATH."bp-hrm/bp-hrm-{$include}.php" );
+                }
         }
         
         /**
@@ -99,11 +106,11 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 				return;
 			}
 			
-            $nav_name = __( 'HRM', 'buddypress' );
+            $nav_name = __( $this->hrm_label, 'buddypress' );
 
 			// Add 'hrm' to the main navigation
 			$main_nav = array(
-				'name' 		      => __( 'HRM' ),
+				'name' 		      => __( $this->hrm_label ),
 				'slug' 		      => $this->id,
 				'position' 	      => 83,
 				'screen_function'     => 'bp_hrm_calender',
@@ -119,15 +126,15 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
                     return;
             }
 
-            // Link to user people
-            $people_link = trailingslashit( $user_domain . $this->slug );
+            // Link to user HRM
+            $hrm_link = trailingslashit( $user_domain . $this->slug );
 
 
 			// Add the subnav items
 			$sub_nav[] = array(
 				'name'            =>  __( 'Calender' ),
 				'slug'            => 'calender',
-				'parent_url'      => $people_link,
+				'parent_url'      => $hrm_link,
 				'parent_slug'     =>  $this->id,
 				'screen_function' => 'bp_hrm_calender',
 				'position'        => 10,
@@ -137,7 +144,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			$sub_nav[] = array(
 				'name'            =>  __( 'Leave' ),
 				'slug'            => 'leave',
-				'parent_url'      => $people_link,
+				'parent_url'      => $hrm_link,
 				'parent_slug'     =>  $this->id,
 				'screen_function' => 'bp_hrm_leave',
 				'position'        => 20,
@@ -150,7 +157,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 				$sub_nav[] = array(
 					'name'            =>  __( 'Requests' ),
 					'slug'            => 'requests',
-					'parent_url'      => $people_link,
+					'parent_url'      => $hrm_link,
 					'parent_slug'     =>  $this->id,
 					'screen_function' => 'bp_hrm_requests',
 					'position'        => 30,
@@ -212,7 +219,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					$wp_admin_nav[] = array(
 						'parent' => $bp->my_account_menu_id,
 						'id'     => 'my-account-' . $this->id,
-						'title'  => __( 'HRM', 'buddypress' ),
+						'title'  => __( $this->hrm_label, 'buddypress' ),
 						'href'   => trailingslashit( $hrm_link )
 					);
 		
