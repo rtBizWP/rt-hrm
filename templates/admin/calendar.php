@@ -50,7 +50,7 @@
 <form id="form-add-leave" method="POST" class="leave-insert-dialog" action="">
 	<?php /* translators: %1$s = post type name, %2$s = date */ ?>
 	<div class="title">
-		<h2 class="title-form-add-leave left"><?php echo __( 'Schedule a Leave', 'edit-flow' ); ?>
+		<h2 class="title-form-add-leave"><?php echo __( 'Schedule a Leave', 'edit-flow' ); ?>
             <a class="button right" id="close_popup"><?php _e( 'X' ) ?></a></h2>
 	</div>
 	<div class="body">
