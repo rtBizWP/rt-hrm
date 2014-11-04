@@ -154,5 +154,6 @@ h4 {
 @media screen and (max-width: 600px) {
     .leave-insert-dialog {
 		left: inherit;
+		position: unset;
 	}
 }
