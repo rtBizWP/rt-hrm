@@ -927,10 +927,6 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
                       <label class="">Description </label>
                       <textarea id="content" class="rt-form-text" name="content" aria-hidden="true"><?php echo $post->post_content ?></textarea>
                 </div>
-                <div class="large-4 columns">
-                    &nbsp;
-                </div>
-
             </div>
             <?php
 			$display_checkbox = false;
@@ -945,20 +941,10 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			?>
 			<div class="row" <?php echo ( ! $display_checkbox ) ? 'class="hide"' : ''; ?>>
                 <div class="large-6 columns">
-                      &nbsp;
-                </div>
-                <div class="large-6 columns">
                 	<label><input type="checkbox" id="leave_quota_use" name="leave_quota_use" value="1" <?php checked( '1', $leave_quota_use ); ?> /> <?php _e( 'Use Paid Leaves that are left ?' ); ?></label>
                 </div>
-
-            </div>
-            <div class="row">
-                <div class="large-6 columns">
-                      <label>Remaining leave</label>
-                </div>
-                <div class="large-6 columns">
-                	<label id="remaining-leave-quota"><?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
-                    
+				<div class="large-6 columns">
+					<label id="remaining-leave-quota">Remaining leave: &nbsp;&nbsp;<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
                 </div>
 
             </div>
