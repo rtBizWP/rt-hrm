@@ -154,7 +154,7 @@ h4 {
     font-weight: normal;
 }
 #calendar-widgets table tr.fc-first div.fc-day-number  {
-	margin-top: -25%;
+	margin-top: -35%;
 }
 #calendar-widgets table tr.fc-first div.fc-day-content  div {
 	height: unset ! important;
@@ -163,7 +163,7 @@ h4 {
 	margin-top: 0;
 }
 #calendar-widgets table td div.fc-day-number  {
-	margin-top: -40%;
+	margin-top: -50%;
 }
 #calendar-widgets table td  div.fc-day-content  div {
 	height: 0 ! important;
@@ -183,5 +183,11 @@ h4 {
 	}
 	#calendar-widgets table td div.fc-day-number  {
 		margin-top: unset;
+	}
+	#calendar-widgets table td  div.fc-day-content  div {
+		height: unset;
+	}
+	#calendar-widgets table tr.fc-first div.fc-day-content  div {
+		height: unset;
 	}
 }
