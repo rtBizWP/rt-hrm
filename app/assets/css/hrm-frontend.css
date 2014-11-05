@@ -153,11 +153,29 @@ h4 {
     font-size: 80%;
     font-weight: normal;
 }
+#calendar-widgets table tr.fc-first div.fc-day-number  {
+	margin-top: -25%;
+}
+#calendar-widgets table td.fc-first  div.fc-day-number  {
+	margin-top: 0;
+}
+#calendar-widgets table td div.fc-day-number  {
+	margin-top: -40%;
+}
 
 /** Media Query **/
 @media screen and (max-width: 600px) {
     .leave-insert-dialog {
 		left: inherit;
 		position: unset;
+	}
+	#calendar-widgets table tr.fc-first div.fc-day-number  {
+		margin-top: unset;
+	}
+	#calendar-widgets table td.fc-first  div.fc-day-number  {
+		margin-top: unset;
+	}
+	#calendar-widgets table td div.fc-day-number  {
+		margin-top: unset;
 	}
 }
