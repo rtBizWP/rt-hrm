@@ -156,14 +156,17 @@ h4 {
 #calendar-widgets table tr.fc-first div.fc-day-number  {
 	margin-top: -25%;
 }
+#calendar-widgets table tr.fc-first div.fc-day-content  div {
+	height: unset ! important;
+}
 #calendar-widgets table td.fc-first  div.fc-day-number  {
 	margin-top: 0;
 }
-#calendar-widgets table td  div.fc-day-content  div {
-	height:unset ! important;
-}
 #calendar-widgets table td div.fc-day-number  {
 	margin-top: -40%;
+}
+#calendar-widgets table td  div.fc-day-content  div {
+	height: 0 ! important;
 }
 
 /** Media Query **/
