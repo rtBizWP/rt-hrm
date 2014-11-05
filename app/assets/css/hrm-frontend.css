@@ -159,6 +159,9 @@ h4 {
 #calendar-widgets table td.fc-first  div.fc-day-number  {
 	margin-top: 0;
 }
+#calendar-widgets table td.fc-first  div.fc-day-content  {
+	height:unset ! important;
+}
 #calendar-widgets table td div.fc-day-number  {
 	margin-top: -40%;
 }
