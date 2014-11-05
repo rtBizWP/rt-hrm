@@ -168,7 +168,9 @@ h4 {
 #calendar-widgets table td  div.fc-day-content  div {
 	height: 0 ! important;
 }
-
+div.fc-content div.fc-event-container  {
+	top: -1% ! important;
+}
 /** Media Query **/
 @media screen and (max-width: 600px) {
     .leave-insert-dialog {
