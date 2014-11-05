@@ -160,7 +160,7 @@ h4 {
 	height: unset ! important;
 }
 #calendar-widgets table td.fc-first  div.fc-day-number  {
-	margin-top: 0;
+	margin-top: -10%;
 }
 #calendar-widgets table td div.fc-day-number  {
 	margin-top: -50%;
