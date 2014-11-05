@@ -172,7 +172,7 @@ div.fc-content div.fc-event-container  {
 	top: -1% ! important;
 }
 /** Media Query **/
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
     .leave-insert-dialog {
 		left: inherit;
 		position: unset;
