@@ -28,6 +28,11 @@ function bp_hrm_calender() {
 }
 
 function load_calender_template() {
+	$cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+     if ( ! current_user_can( $cap ) ) {
+      echo 'You do not have sufficient permissions to access this page';
+            return false;
+    }
     include  RT_HRM_BP_HRM_PATH.'/templates/hrm-calender.php';
 }
 
@@ -36,6 +41,12 @@ function bp_hrm_leave() {
 }
 
 function load_leave_template() {
+	$cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+     if ( ! current_user_can( $cap ) ) {
+      echo 'You do not have sufficient permissions to access this page';
+            return false;
+    }
+	 
 	if ( isset( $_GET['action'] ) && ($_GET['action'] == 'view' || $_GET['action'] == 'edit' || $_GET['action'] == 'update') ) {
           include  RT_HRM_BP_HRM_PATH.'/templates/hrm-leave-edit.php';
     } else if (isset( $_GET['action'] ) && ($_GET['action'] == 'addnew') ) {
@@ -53,6 +64,12 @@ function bp_hrm_requests() {
 }
 
 function load_requests_template() {
+	$cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+     if ( ! current_user_can( $cap ) ) {
+      echo 'You do not have sufficient permissions to access this page';
+            return false;
+    }
+	 
 	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'view' || $_GET['action'] == 'edit' || $_GET['action'] == 'update' || $_GET['action'] == 'deletepost' ) ) {
           include  RT_HRM_BP_HRM_PATH.'/templates/hrm-requests-edit.php';
     }else{
