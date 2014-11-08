@@ -26,7 +26,7 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
             $this->api = new Rt_Hrm_Bp_Hrm_Loader();
 			
 			// Init Hooks
-			$this->hooks();
+		//	$this->hooks();
         }
         
         function includes() {
