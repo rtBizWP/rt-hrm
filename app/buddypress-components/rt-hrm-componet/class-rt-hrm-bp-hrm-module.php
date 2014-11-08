@@ -825,7 +825,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 	                } ?>
 			</div>
 			<br /><br /> -->
-			
+			<input type="hidden" autocomplete="off" id="title" value="rt_leave" size="30" name="post_type" readonly="readonly">
 			<div class="row <?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { ?>  hide<?php } ?>">
 	          <div class="large-6 columns">
 	          	   <label>Employee Name <small class="required"> *</small></label>

@@ -26,7 +26,7 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
             $this->api = new Rt_Hrm_Bp_Hrm_Loader();
 			
 			// Init Hooks
-		//	$this->hooks();
+			add_action('plugins_loaded', array( $this, 'hooks' ), 45 );
         }
         
         function includes() {
@@ -78,8 +78,9 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
 		
 		function on_change_pending_post_status( $post ) {
 			
-			$post_id = $_POST['ID'] ;
+			$post_id = $_GET['rt_leave_id'];
 			$post_type = $_POST['post_type'];
+			
 			
 			// If this is just a revision, don't.
 			if ( wp_is_post_revision( $post_id ) || empty( $post_type ) ){
