@@ -1136,6 +1136,8 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
          */
         function save_leave( $post_id, $post ){
 			global $rt_hrm_module,$rt_hrm_attributes;
+			if ( empty( $_POST['content'] ) )
+				$_POST['content'] = '';
 			if ( ! empty( $_POST['post']['post_status'] ) ){
 				$save_leave_post = array(
 			      'ID'           => $post_id,
