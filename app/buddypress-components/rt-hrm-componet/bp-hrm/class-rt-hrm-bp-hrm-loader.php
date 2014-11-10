@@ -29,9 +29,10 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
                 $rt_hrm_options = maybe_unserialize( get_option( RT_HRM_TEXT_DOMAIN . '_options' ) );
                 $menu_label = $rt_hrm_options[ 'menu_label' ];
                 $this->hrm_label = $menu_label;
+                $this->hrm_component['slug'] =  sanitize_title( $menu_label );
 
                 parent::start(
-                        'hrm',
+                        $this->hrm_component['slug'],
                         __( $this->hrm_label, 'buddypress' ),
                        RT_HRM_BP_HRM_PATH,
                         array(

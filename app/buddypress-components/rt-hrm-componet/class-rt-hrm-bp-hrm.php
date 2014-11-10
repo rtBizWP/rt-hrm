@@ -37,12 +37,14 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
         }
         
         function define_constants() {
+        	$rt_hrm_options = maybe_unserialize( get_option( RT_HRM_TEXT_DOMAIN . '_options' ) );
+            $menu_label = $rt_hrm_options[ 'menu_label' ];
             
                 if ( ! defined( 'RT_HRM_BP_HRM_PATH' ) ) {
                         define( 'RT_HRM_BP_HRM_PATH', plugin_dir_path( __FILE__ ) );
                 }
 				if ( ! defined( 'RT_HRM_BP_HRM_SLUG' ) ){
-			        define( 'RT_HRM_BP_HRM_SLUG', 'hrm' );
+			        define( 'RT_HRM_BP_HRM_SLUG', sanitize_title( $menu_label ) );
 			}
         }
 		

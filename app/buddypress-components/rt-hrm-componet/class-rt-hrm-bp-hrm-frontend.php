@@ -36,8 +36,10 @@ if( !class_exists( 'Rt_Hrm_Bp_Hrm_Frontend' ) ) {
          */
         function load_styles_scripts() {
 			global $post, $rt_hrm_module, $rt_hrm_bp_hrm;
+			$rt_hrm_options = maybe_unserialize( get_option( RT_HRM_TEXT_DOMAIN . '_options' ) );
+            $menu_label = $rt_hrm_options[ 'menu_label' ];
 			
-			if ( bp_is_current_component( 'hrm' ) ){
+			if ( bp_is_current_component( sanitize_title( $menu_label ) ) ){
 				
 				wp_enqueue_script('jquery-ui-core', true );
 				
