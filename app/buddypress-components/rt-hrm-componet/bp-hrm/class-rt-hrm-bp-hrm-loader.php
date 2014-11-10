@@ -132,32 +132,31 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 
             // Link to user HRM
             $hrm_link = trailingslashit( $user_domain . $this->slug );
-
-
-			// Add the subnav items
-			$sub_nav[] = array(
-				'name'            =>  __( 'Calender' ),
-				'slug'            => 'calender',
-				'parent_url'      => $hrm_link,
-				'parent_slug'     =>  $this->id,
-				'screen_function' => 'bp_hrm_calender',
-				'position'        => 10,
-			);
-
-			// Add a few subnav items
-			$sub_nav[] = array(
-				'name'            =>  __( 'Leave' ),
-				'slug'            => 'leave',
-				'parent_url'      => $hrm_link,
-				'parent_slug'     =>  $this->id,
-				'screen_function' => 'bp_hrm_leave',
-				'position'        => 20,
-			);
-			
+			$author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
 			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+		    if ( current_user_can( $author_cap ) || current_user_can( $editor_cap ) ) {
+				// Add the subnav items
+				$sub_nav[] = array(
+					'name'            =>  __( 'Calender' ),
+					'slug'            => 'calender',
+					'parent_url'      => $hrm_link,
+					'parent_slug'     =>  $this->id,
+					'screen_function' => 'bp_hrm_calender',
+					'position'        => 10,
+				);
+			}
                         
 			// Add a few subnav items
 			if ( current_user_can( $editor_cap ) ) {
+				$sub_nav[] = array(
+					'name'            =>  __( 'Leave' ),
+					'slug'            => 'leave',
+					'parent_url'      => $hrm_link,
+					'parent_slug'     =>  $this->id,
+					'screen_function' => 'bp_hrm_leave',
+					'position'        => 20,
+				);
+				
 				$sub_nav[] = array(
 					'name'            =>  __( 'Requests' ),
 					'slug'            => 'requests',
