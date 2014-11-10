@@ -28,8 +28,9 @@ function bp_hrm_calender() {
 }
 
 function load_calender_template() {
-	$cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
-     if ( ! current_user_can( $cap ) ) {
+	$author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
+	$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+    if ( ! current_user_can( $author_cap ) && ! current_user_can( $editor_cap ) ) {
       echo 'You do not have sufficient permissions to access this page';
             return false;
     }
