@@ -20,18 +20,22 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
          *
          * @since BuddyPress (1.5)
          */
+
+        private $menu_order = 93;
+
         public function __construct() {
                 	
 				global $rt_biz_options;
                 $rt_hrm_options = maybe_unserialize( get_option( RT_HRM_TEXT_DOMAIN . '_options' ) );
                 $menu_label = $rt_hrm_options[ 'menu_label' ];
                 $this->hrm_label = $menu_label;
+
                 parent::start(
                         'hrm',
                         __( $this->hrm_label, 'buddypress' ),
                        RT_HRM_BP_HRM_PATH,
                         array(
-                                'adminbar_myaccount_order' => 10000
+                                'adminbar_myaccount_order' => $this->menu_order
                         )
                 );
                 $this->includes();
@@ -112,7 +116,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			$main_nav = array(
 				'name' 		      => __( $this->hrm_label ),
 				'slug' 		      => $this->id,
-				'position' 	      => 93,
+				'position' 	      =>  $this->menu_order,
 				'screen_function'     => 'bp_hrm_calender',
 				'default_subnav_slug' => 'calender',
 			);
