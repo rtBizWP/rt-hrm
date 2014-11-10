@@ -1,14 +1,14 @@
 <?php
 
 /*
-  Plugin Name: Voxxi HRM
-  Plugin URI: http://voxxi.me
-  Description: Part of the Voxxi Business Suite
-  Version: 0.0.1
-  Author: Voxxi
-  Author URI: http://voxxi.me
-  License: GPL
-  Text Domain: rt_hrm
+  	Plugin Name: Voxxi Plus HRM
+	Plugin URI: http://voxxi.me
+	Description: Human Resource Management for the Voxxi
+	Version: 0.0.1
+	Author: Voxxi
+	Author URI: http://voxxi.me
+	License: No License
+	Text Domain: rt_hrm
  */
 
 if ( !defined( 'RT_HRM_VERSION' ) ) {
