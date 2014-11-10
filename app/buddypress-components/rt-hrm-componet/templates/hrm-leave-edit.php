@@ -6,7 +6,7 @@ $is_user_change_allowed = 1;
 ?>
 <div class="row list-heading">
     <div class="large-10 columns list-title">
-        <h4><?php _e( 'Leave', 'rt_hrm' ) ?></h4>
+        <h4><?php _e( 'Leave', RT_HRM_TEXT_DOMAIN ) ?></h4>
     </div>
     <div class="large-2 columns">
        

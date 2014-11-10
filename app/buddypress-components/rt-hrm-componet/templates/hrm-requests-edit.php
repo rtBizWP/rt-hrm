@@ -13,7 +13,7 @@ if( isset( $_GET['action'] ) && $_GET['action'] == 'deletepost' && isset( $_GET[
 ?>
 <div class="row list-heading">
     <div class="large-10 columns list-title">
-        <h4><?php _e( 'Leave Approval', 'rt_hrm' ) ?></h4>
+        <h4><?php _e( 'Leave Approval', RT_HRM_TEXT_DOMAIN ) ?></h4>
     </div>
     <div class="large-2 columns">
        
