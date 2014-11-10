@@ -184,6 +184,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					$hrm_link = trailingslashit( $user_domain . $this->slug );
 					
 					$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+					$author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
 					
 					if ( current_user_can( $editor_cap ) ) {
 						$this->sub_nav_items = array(
@@ -203,19 +204,16 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			                    'screen_function' => 'bp_hrm_requests',
 			                )                
 			            );
-					} else {
+					} else if ( current_user_can( $author_cap ) ) {
 						$this->sub_nav_items = array(
 			                array(
 			                    'name' => __( 'Calender' ),
 			                    'slug'  => 'calender',
 			                    'screen_function' => 'bp_hrm_calender',
-			                ),
-			                array(
-			                     'name' =>  __( 'Leave' ),
-			                    'slug'  => 'leave',
-			                    'screen_function' => 'bp_hrm_leave',
-			                )         
+			                )    
 			            );	
+					} else {
+						$this->sub_nav_items = array();
 					}
 		
 					// Add main Settings menu
@@ -228,6 +226,10 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 		
 					
 					foreach ($this->sub_nav_items as $item) {
+						$author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
+						$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+					    if ( ! current_user_can( $author_cap ) && ! current_user_can( $editor_cap ) )
+							continue;
 						// Add a few subnav items
 						$wp_admin_nav[] = array(
 							'parent' => 'my-account-' . $this->id,
