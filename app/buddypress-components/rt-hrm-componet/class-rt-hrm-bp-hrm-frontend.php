@@ -49,6 +49,7 @@ if( !class_exists( 'Rt_Hrm_Bp_Hrm_Frontend' ) ) {
 				}
 				//wp_enqueue_style( 'foundation-css', RT_HRM_URL . 'app/assets/css/foundation.min.css' , array('buddyboss-wp-frontend') );
 				wp_enqueue_style('rthrm-frontend-css', RT_HRM_URL . 'app/assets/css/hrm-frontend.css', false, RT_HRM_VERSION, 'all');
+                wp_enqueue_style( 'rt-bp-person-css', RT_BP_PEOPLE_URL . 'assets/css/style.css', false );
 
                 if( ! wp_script_is('jquery-ui-datepicker') ) {
                     wp_enqueue_script( 'jquery-ui-datepicker' );
