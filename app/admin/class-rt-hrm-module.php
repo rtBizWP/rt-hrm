@@ -84,6 +84,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * Apply hook for leave CPT
          */
         function hooks() {
+
+            add_action( 'lead_add_bp_activity', array( $this, 'lead_add_bp_activity' ), 10 ,1 );
+
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
             add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
@@ -114,6 +117,50 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             add_filter( "manage_edit-{$this->post_type}_columns", array( $this,'leave_columns' ) );
             add_action( "manage_{$this->post_type}_posts_custom_column" ,  array( $this,'manage_leave_columns' ), 10, 2 );
 		}
+
+        function lead_add_bp_activity( $post_id ) {
+
+            $query = new WP_Query( array(
+                'p' => $post_id,
+                'post_type' => $this->post_type,
+                'no_found_rows' => true,
+            ));
+
+            $post = $query->posts[0];
+
+
+            $activity_users = array();
+
+            $employee_id =  get_post_meta( $post->ID, "leave-user-id", true );
+
+            $activity_users[] = rt_biz_get_wp_user_for_person( $employee_id );
+
+
+
+            $mentioned_user = '';
+            foreach ( $activity_users as $activity_user ) {
+
+                if( get_current_user_id() != intval( $activity_user ) ){
+
+                    $mentioned_user .=  '@' . bp_core_get_username( $activity_user ).' ';
+                }
+
+            }
+
+
+
+            $args = array(
+                'action'=> 'Leave Request',
+                'content' =>  !empty( $post->post_content ) ? $post->post_content.$mentioned_user : $post->post_title.$mentioned_user,
+                'component' => $this->post_type,
+                'item_id' => $post->ID,
+                'type' => 'rt_biz',
+            );
+            $activity_id = bp_activity_add( $args );
+
+            bp_activity_add_meta( $activity_id ,'activity_users', $activity_users );
+
+        }
                 
                 function leave_columns( $columns ) {
                     $columns['status'] = __( 'Status' );
@@ -941,6 +988,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			}else {
 				delete_post_meta( $post_id, 'leave-end-date' );
 			}
+
+            do_action( 'lead_add_bp_activity', $post_id );
                        
 		}
 

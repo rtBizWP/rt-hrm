@@ -127,6 +127,9 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 				}else {
 					delete_post_meta( $newLeaveID, 'leave-end-date' );
 				}
+
+                do_action( 'lead_add_bp_activity', $newLeaveID );
+
                 wp_redirect( admin_url( 'edit.php?post_type=rt_leave&page=rthrm-rt_leave-calendar' ) );
 				die();
 			}
@@ -178,8 +181,9 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
                 $leaveStartDate = get_post_meta( get_the_id(), 'leave-start-date', false );
                 if ( isset ( $leaveStartDate ) && !empty( $leaveStartDate ) ){
                     $leaveStartDate = DateTime::createFromFormat( 'd/m/Y', $leaveStartDate[0] );
+                    $leaveStartDate = $leaveStartDate->format('Y-m-d');
                 }
-                $leaveStartDate = $leaveStartDate->format('Y-m-d');
+
                 $leaveEndDate = get_post_meta( get_the_id(), 'leave-end-date', false);
                 if ( isset ( $leaveEndDate ) && !empty( $leaveEndDate ) ){
                     $leaveEndDate = $leaveEndDate[0];
