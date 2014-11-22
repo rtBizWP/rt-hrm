@@ -1200,6 +1200,8 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			} else {
 				delete_post_meta( $post_id, 'leave-end-date' );
 			}
+
+            do_action( 'lead_add_bp_activity', $post_id );
                        
 		}
 
