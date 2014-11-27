@@ -27,22 +27,32 @@
 		$meta_key = 'leave-start-date';
 		$orderby = 'rt-leave-type';
 	}
-	$post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = 'rt_biz_contact_user_id' and meta_value = {$bp->displayed_user->id} ");
+
 	$args = array(
-		'meta_query' => array(
-			array(
-				'key' => 'leave-user-id',
-				'value' => $post_meta->post_id
-			)
-		),
+
+        'post_status' =>array('pending','rejected','approved'),
 		'post_type' => $rt_hrm_module->post_type,
-		'meta_key'   => $meta_key,
-		'orderby' => $orderby,
-		'order'      => $order,
-		'post_status' => array( 'approved', 'rejected' ),
 		'posts_per_page' => $posts_per_page,
 		'offset' => $offset
 	);
+
+     $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+
+    if (  !current_user_can( $editor_cap ) ) {
+
+
+        $post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = 'rt_biz_contact_user_id' and meta_value = {$bp->displayed_user->id} ");
+        $args['meta_query'] = array(
+            array(
+            'key' => 'leave-user-id',
+            'value' => $post_meta->post_id
+            ),
+        );
+
+
+    }
+
+
 	
 	/*echo "<pre>";
 	print_r($args);
@@ -76,7 +86,7 @@
 	
 	// The Query
 	$the_query = new WP_Query( $args );
-	
+
 	$totalPage = $max_num_pages =  $the_query->max_num_pages;
 	
 	?>
@@ -85,7 +95,7 @@
             <h4><?php _e( 'Leave', RT_HRM_TEXT_DOMAIN ) ?></h4>
         </div>
         <div class="large-2 columns">
-          <a href="<?php echo esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'addnew' ) ) ); ?>"><input class="pull-right" type="button"  data-reveal-id="add-new-leave-modal" value="Add New" /></a> 
+          <a href="<?php echo esc_url( add_query_arg( array( 'action'=>'addnew' ) ) ); ?>"><input class="pull-right" type="button"  data-reveal-id="add-new-leave-modal" value="Add New" /></a>
         </div>
     </div>
 	<table cellspacing="0" class="leave-lists">

@@ -145,18 +145,19 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					'screen_function' => 'bp_hrm_calender',
 					'position'        => 10,
 				);
+                $sub_nav[] = array(
+                    'name'            =>  __( 'Leave' ),
+                    'slug'            => 'leave',
+                    'parent_url'      => $hrm_link,
+                    'parent_slug'     =>  $this->id,
+                    'screen_function' => 'bp_hrm_leave',
+                    'position'        => 20,
+                );
 			}
                         
 			// Add a few subnav items
 			if ( current_user_can( $editor_cap ) ) {
-				$sub_nav[] = array(
-					'name'            =>  __( 'Leave' ),
-					'slug'            => 'leave',
-					'parent_url'      => $hrm_link,
-					'parent_slug'     =>  $this->id,
-					'screen_function' => 'bp_hrm_leave',
-					'position'        => 20,
-				);
+
 				
 				$sub_nav[] = array(
 					'name'            =>  __( 'Requests' ),

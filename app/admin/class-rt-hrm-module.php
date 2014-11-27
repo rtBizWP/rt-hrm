@@ -92,9 +92,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
 			add_action( 'save_post', array( $this, 'save_leave_meta' ), 1, 2);
 			add_action( 'wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
-			add_filter( 'posts_orderby', array( $this, 'hrm_leave_type_orderby' ), 10, 2 );
-			add_filter( 'posts_orderby', array( $this, 'hrm_leave_start_date_orderby' ), 10, 2 );
-			add_filter( 'posts_orderby', array( $this, 'hrm_leave_end_date_orderby' ), 10, 2 );
+			//add_filter( 'posts_orderby', array( $this, 'hrm_leave_type_orderby' ), 10, 2 );
+			//add_filter( 'posts_orderby', array( $this, 'hrm_leave_start_date_orderby' ), 10, 2 );
+			//add_filter( 'posts_orderby', array( $this, 'hrm_leave_end_date_orderby' ), 10, 2 );
 
             add_action( 'wp_ajax_seach_employees_name', array( $this, 'employees_autocomplete_ajax' ) );
 			
@@ -658,7 +658,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 				register_post_status($status['slug'], array(
 					'label' => $status['slug']
-					, 'protected' => true
+					, 'public' => true
 					, '_builtin' => false
 					, 'label_count' => _n_noop("{$status['name']} <span class='count'>(%s)</span>", "{$status['name']} <span class='count'>(%s)</span>"),
 				));
