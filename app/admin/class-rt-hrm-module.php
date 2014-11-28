@@ -93,7 +93,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			add_action( 'save_post', array( $this, 'save_leave_meta' ), 1, 2);
 			add_action( 'wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
 			//add_filter( 'posts_orderby', array( $this, 'hrm_leave_type_orderby' ), 10, 2 );
-			//add_filter( 'posts_orderby', array( $this, 'hrm_leave_start_date_orderby' ), 10, 2 );
+			add_filter( 'posts_orderby', array( $this, 'hrm_leave_start_date_orderby' ), 10, 2 );
 			//add_filter( 'posts_orderby', array( $this, 'hrm_leave_end_date_orderby' ), 10, 2 );
 
             add_action( 'wp_ajax_seach_employees_name', array( $this, 'employees_autocomplete_ajax' ) );

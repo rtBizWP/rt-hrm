@@ -4,29 +4,13 @@
 	$paged = $page = max( 1, get_query_var('paged') );
 	
 	$posts_per_page = get_option( 'posts_per_page' );
-	
-	$order = 'DESC';
-	$attr = 'startdate';
-	$orderby = 'meta_value_num';
-	$meta_key = 'leave-start-date';
-	if ( $attr == "startdate" ){
-		$meta_key = 'leave-start-date';
-	} else if( $attr == "enddate" ) {
-		$meta_key = 'leave-end-date';
-	}
+
 
 	$offset = ( $paged - 1 ) * $posts_per_page;
 	if ($offset <=0) {
 		$offset = 0;
 	}
-	if( isset( $_GET['orderby'] ) ) {
-            $meta_key = $args['orderby'] = $_GET['orderby'];
-            $order = $args['order'] =  $_GET['order'];
-    }
-	if( $meta_key == "rt-leave-type" ) {
-		$meta_key = 'leave-start-date';
-		$orderby = 'rt-leave-type';
-	}
+
 
 	$args = array(
 
@@ -48,8 +32,20 @@
             'value' => $post_meta->post_id
             ),
         );
+    }
 
+    if( isset( $_GET['orderby'] ) ) {
 
+        $orderby = $_GET['orderby'];
+        $args['orderby'] = $orderby;
+        $args['order'] =  $_GET['order'];
+
+        $meta_orderby = array( 'leave-start-date' );
+
+        if( in_array( $orderby, $meta_orderby ) ){
+
+            $args['meta_key'] = $orderby;
+        }
     }
 
 
@@ -60,9 +56,9 @@
 	
 	$columns = array(
         array(
-                'column_label' => __( 'Leave Type', RT_HRM_TEXT_DOMAIN ) ,
+                'column_label' => __( 'Leave Title', RT_HRM_TEXT_DOMAIN ) ,
                 'sortable' => true,
-                'orderby' => 'rt-leave-type',
+                'orderby' => 'title',
                 'order' => 'asc'
         ),
         array(
@@ -73,7 +69,7 @@
         ),
         array(
                 'column_label' => __( 'End Date', RT_HRM_TEXT_DOMAIN ) ,
-                'sortable' => true,
+                'sortable' => false,
                 'orderby' => 'leave-end-date',
                 'order' => 'asc'
         ),
@@ -206,7 +202,7 @@
 					?>
 					<tr class="lists-data">
 						<td>
-							<?php if ( ! empty( $rt_leave_type_list ) ) echo $rt_leave_type_list[0];
+							<?php the_title();;
 							// edit_post_link('Edit', '<br /><span>', '</span>&nbsp;&#124;');
 							printf( __('<br /><span><a href="%s">Edit</a></span>&nbsp;&#124;'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ) ) ) );
 							printf( __('<span><a href="%s">View</a></span>'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ) ) ) );

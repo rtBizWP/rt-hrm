@@ -212,7 +212,12 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			                    'name' => __( 'Calender' ),
 			                    'slug'  => 'calender',
 			                    'screen_function' => 'bp_hrm_calender',
-			                )    
+			                )  ,
+                            array(
+                                'name' =>  __( 'Leave' ),
+                                'slug'  => 'leave',
+                                'screen_function' => 'bp_hrm_leave',
+                            ),
 			            );	
 					} else {
 						$this->sub_nav_items = array();
