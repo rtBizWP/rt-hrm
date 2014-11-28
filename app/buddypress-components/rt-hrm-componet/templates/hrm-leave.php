@@ -1,5 +1,5 @@
 <?php
-	global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb,  $wp_query;
+	global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb,  $wp_query, $rt_person;
 	$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 	$paged = $page = max( 1, get_query_var('paged') );
 	
@@ -24,8 +24,9 @@
 
     if (  !current_user_can( $editor_cap ) ) {
 
+        $contact_key =  Rt_Person::$meta_key_prefix . $rt_person->user_id_key;
 
-        $post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = 'rt_biz_contact_user_id' and meta_value = {$bp->displayed_user->id} ");
+        $post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = '{$contact_key}' and meta_value = {$bp->displayed_user->id} ");
         $args['meta_query'] = array(
             array(
             'key' => 'leave-user-id',

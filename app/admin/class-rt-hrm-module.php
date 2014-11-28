@@ -116,7 +116,42 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                         
             add_filter( "manage_edit-{$this->post_type}_columns", array( $this,'leave_columns' ) );
             add_action( "manage_{$this->post_type}_posts_custom_column" ,  array( $this,'manage_leave_columns' ), 10, 2 );
+
+            add_action( 'pre_get_posts', array( $this, 'pre_get_leave_list' ), 10, 1 );
 		}
+
+        function pre_get_leave_list( $query ) {
+
+            if( isset( $_GET['post_type'] ) &&  $_GET['post_type'] == $this->post_type ) {
+
+                global $wpdb, $rt_person;
+
+                $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+
+                if (  !current_user_can( $editor_cap ) ) {
+
+                    $contact_key =  Rt_Person::$meta_key_prefix . $rt_person->user_id_key;
+
+                    $post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = '{$contact_key}' and meta_value = ". get_current_user_id());
+
+                    $query->set('meta_query',  array(
+                            'relation' => 'OR',
+                            array(
+                                'key'     => 'leave-user-id',
+                                'value'    => '',
+                                'compare' => 'NOT EXISTS',
+                            ),
+                            array(
+                                'key' => 'leave-user-id',
+                                'value' => $post_meta->post_id,
+                                'compare' => '==',
+                            ),
+                        )
+                    );
+
+                }
+            }
+        }
 
         function lead_add_bp_activity( $post_id ) {
 
