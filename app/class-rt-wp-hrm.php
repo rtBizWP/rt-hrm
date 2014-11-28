@@ -44,18 +44,29 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 			add_action( 'init', array( $this, 'init' ), 6 );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'loadScripts' ) );
-            add_action( 'plugins_loaded', array( $this, 'init_hrm_bp_component' ), 40 );
+            add_action( 'after_setup_theme', array( $this, 'init_hrm_bp_component' ) );
 		}
 
         function init_hrm_bp_component() {
-            global $rt_hrm_bp_hrm, $rt_hrm_bp_hrm_calendar,
-                   $rt_hrm_bp_hrm_frontend, $rt_hrm_bp_hrm_module;
 
-            $rt_hrm_bp_hrm = new Rt_Hrm_Bp_Hrm();
-            $rt_hrm_bp_hrm_calendar = new Rt_Hrm_Bp_Hrm_Calendar();
-            $rt_hrm_bp_hrm_frontend = new Rt_Hrm_Bp_Hrm_Frontend();
-            if ( ! is_admin() )
-                $rt_hrm_bp_hrm_module = new Rt_HRM_Bp_Hrm_Module();
+            if( function_exists('bp_is_active') ) {
+
+                $author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
+
+                if (  current_user_can( $author_cap ) ) {
+
+                    global $rt_hrm_bp_hrm, $rt_hrm_bp_hrm_calendar,
+                           $rt_hrm_bp_hrm_frontend, $rt_hrm_bp_hrm_module;
+
+                    $rt_hrm_bp_hrm = new Rt_Hrm_Bp_Hrm();
+                    $rt_hrm_bp_hrm_calendar = new Rt_Hrm_Bp_Hrm_Calendar();
+                    $rt_hrm_bp_hrm_frontend = new Rt_Hrm_Bp_Hrm_Frontend();
+                    if ( ! is_admin() )
+                        $rt_hrm_bp_hrm_module = new Rt_HRM_Bp_Hrm_Module();
+                }
+
+            }
+
         }
 
         /**
