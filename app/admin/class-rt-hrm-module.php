@@ -189,6 +189,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                 'content' =>  !empty( $post->post_content ) ? $post->post_content.$mentioned_user : $post->post_title.$mentioned_user,
                 'component' => $this->post_type,
                 'item_id' => $post->ID,
+                'secondary_item_id' => get_current_blog_id(),
                 'type' => 'rt_biz',
             );
             $activity_id = bp_activity_add( $args );
