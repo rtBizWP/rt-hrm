@@ -1167,8 +1167,11 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
          */
         function save_leave_meta( $post_id, $post ){
             global $rt_hrm_module,$rt_hrm_attributes;
-            
-			
+
+
+            if( $post->post_type != $rt_hrm_module->post_type)
+                return;
+
 			if ( $post->post_type == 'revision' ) return;
 			if ( ! isset( $_POST['post'] ) ) return;
 
@@ -1201,7 +1204,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 				delete_post_meta( $post_id, 'leave-end-date' );
 			}
 
-            do_action( 'lead_add_bp_activity', $post_id );
+            do_action( 'save_leave', $post_id );
                        
 		}
 

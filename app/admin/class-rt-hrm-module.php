@@ -85,7 +85,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          */
         function hooks() {
 
-            add_action( 'lead_add_bp_activity', array( $this, 'lead_add_bp_activity' ), 10 ,1 );
+            add_action( 'save_leave', array( $this, 'leave_add_bp_activity' ), 10 ,1 );
 
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
             add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
@@ -153,7 +153,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             }
         }
 
-        function lead_add_bp_activity( $post_id ) {
+        function leave_add_bp_activity( $post_id ) {
 
             $query = new WP_Query( array(
                 'p' => $post_id,
@@ -1025,7 +1025,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				delete_post_meta( $post_id, 'leave-end-date' );
 			}
 
-            do_action( 'lead_add_bp_activity', $post_id );
+            do_action( 'save_leave', $post_id );
                        
 		}
 

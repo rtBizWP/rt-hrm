@@ -128,7 +128,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 					delete_post_meta( $newLeaveID, 'leave-end-date' );
 				}
 
-                do_action( 'lead_add_bp_activity', $newLeaveID );
+                do_action( 'save_leave', $newLeaveID );
 
                 wp_redirect( admin_url( 'edit.php?post_type=rt_leave&page=rthrm-rt_leave-calendar' ) );
 				die();

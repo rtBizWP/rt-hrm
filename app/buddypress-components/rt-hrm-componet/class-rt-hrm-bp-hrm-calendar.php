@@ -91,7 +91,7 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm_Calendar' ) ) {
 					delete_post_meta( $newLeaveID, 'leave-end-date' );
 				}
 
-                do_action( 'lead_add_bp_activity', $newLeaveID );
+                do_action( 'save_leave', $newLeaveID );
 			}
 		}
 		
