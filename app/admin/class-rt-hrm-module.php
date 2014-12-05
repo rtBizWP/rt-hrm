@@ -122,7 +122,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
         function pre_get_leave_list( $query ) {
 
-            if( isset( $_GET['post_type'] ) &&  $_GET['post_type'] == $this->post_type ) {
+            if( isset( $_GET['post_type'] ) &&  $_GET['post_type'] == $this->post_type && !isset( $_GET['author'] )  && !isset( $_GET['page'] ) ) {
 
                 global $wpdb, $rt_person;
 
@@ -682,6 +682,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'menu_position' => $menu_position,
 				'supports' => array('title','comments','author'),
 				'capability_type' => $this->post_type,
+                'map_meta_cap' => true,
 			);
 			register_post_type( $this->post_type, $args );
 		}
