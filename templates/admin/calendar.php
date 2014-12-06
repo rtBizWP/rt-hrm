@@ -13,11 +13,11 @@
 			screen_icon();
 		}
 
-    $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
-    $is_hrm_manager = true;
-    if (  !current_user_can( $editor_cap ) ) {
-        $is_hrm_manager = false;
-    }
+//    $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+//    $is_hrm_manager = true;
+//    if (  !current_user_can( $editor_cap ) ) {
+//        $is_hrm_manager = false;
+//    }
 
 	?>
 	<div class="row list-heading">

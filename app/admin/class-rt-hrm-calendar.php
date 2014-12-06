@@ -148,7 +148,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
             }
 			$arg = array(
 				'post_type' => $post_type,
-				'is_hrm_manager' => current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' ) ),
+				'is_hrm_manager' => current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ),
                 'current_employee' => $current_employee
 			);
 			rthrm_get_template( 'admin/calendar.php', $arg );
@@ -161,16 +161,13 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
         function render_calendar() {
 			global $rt_calendar, $rt_hrm_module;
             $args = array('post_type' => $rt_hrm_module->post_type,'post_status' => 'pending,approved,rejected');
-            $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+
             $the_query = new WP_Query( $args );
             $event= array();
             while ( $the_query->have_posts() ) : $the_query->the_post();
 
                 $leave_user_id = get_post_meta( get_the_id(), 'leave-user-id', true );
 
-                if( !current_user_can( $editor_cap )  && ( get_current_user_id() != intval( get_the_author_meta('ID') ) ||  intval( $leave_user_id ) == get_current_user_id() ) ) {
-                    continue;
-                }
 
 
                 // Leave Status

@@ -776,6 +776,13 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			$post = get_post( $rt_leave_id );
 			// print_r($post);
 
+
+            $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+            if (  !current_user_can( $editor_cap ) && get_current_user_id() != intval( $post->post_author )) {
+
+                return;
+            }
+
             $leave_user = get_post_meta( $rt_leave_id, 'leave-user', false);
             $leave_user_id = get_post_meta( $rt_leave_id, 'leave-user-id', false);
             $leave_duration = get_post_meta( $rt_leave_id, 'leave-duration', false);

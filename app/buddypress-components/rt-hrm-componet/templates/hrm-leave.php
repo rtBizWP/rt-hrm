@@ -20,21 +20,6 @@
 		'offset' => $offset
 	);
 
-     $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
-
-    if (  !current_user_can( $editor_cap ) ) {
-
-        $contact_key =  Rt_Person::$meta_key_prefix . $rt_person->user_id_key;
-
-        $post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = '{$contact_key}' and meta_value = {$bp->displayed_user->id} ");
-        $args['meta_query'] = array(
-            array(
-            'key' => 'leave-user-id',
-            'value' => $post_meta->post_id
-            ),
-        );
-    }
-
     if( isset( $_GET['orderby'] ) ) {
 
         $orderby = $_GET['orderby'];
@@ -85,7 +70,7 @@
 	$the_query = new WP_Query( $args );
 
 	$totalPage = $max_num_pages =  $the_query->max_num_pages;
-	
+    $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
 	?>
 	<div class="row list-heading">
         <div class="large-10 columns list-title">
@@ -205,9 +190,13 @@
 						<td>
 							<?php the_title();;
 							// edit_post_link('Edit', '<br /><span>', '</span>&nbsp;&#124;');
-							printf( __('<br /><span><a href="%s">Edit</a></span>&nbsp;&#124;'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ) ) ) );
-							printf( __('<span><a href="%s">View</a></span>'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ) ) ) );
-							?>
+
+                            if (  current_user_can( $editor_cap ) || get_current_user_id() != intval( get_the_author_meta('ID') )) {
+
+                                printf( __('<br /><span><a href="%s">Edit</a></span>&nbsp;&#124;'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ) ) ) );
+                                printf( __('<span><a href="%s">View</a></span>'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ) ) ) );
+                            }
+                            ?>
 						</td>
 						<td><?php echo $leave_start_date_value;?></td>
 						<td><?php echo $leave_end_date_value;?></td>
