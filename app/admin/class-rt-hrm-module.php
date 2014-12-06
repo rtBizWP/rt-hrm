@@ -32,7 +32,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * menu position for HRM
          * @var string
          */
-        var $menu_position = 33;
+        var $menu_position = 35;
 
         /**
          * Module Name
@@ -117,7 +117,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             add_filter( "manage_edit-{$this->post_type}_columns", array( $this,'leave_columns' ) );
             add_action( "manage_{$this->post_type}_posts_custom_column" ,  array( $this,'manage_leave_columns' ), 10, 2 );
 
-            add_action( 'pre_get_posts', array( $this, 'pre_get_leave_list' ), 10, 1 );
+          //  add_action( 'pre_get_posts', array( $this, 'pre_get_leave_list' ), 10, 1 );
 		}
 
         function pre_get_leave_list( $query ) {

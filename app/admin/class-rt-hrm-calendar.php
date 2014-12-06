@@ -172,8 +172,6 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
                     continue;
                 }
 
-                var_dump( $leave_user_id );
-
 
                 // Leave Status
                 $color='';
@@ -218,7 +216,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 			$rt_calendar->setDomElement("#calendar-container");
 			$rt_calendar->setPopupElement(".leave-insert-dialog");
 			$rt_calendar->setEvent($event);
-			$is_editor = current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' ) );
+			$is_editor = current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) );
 			$rt_calendar->render_calendar( $is_editor );
 		}
 
