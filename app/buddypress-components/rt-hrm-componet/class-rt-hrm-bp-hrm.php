@@ -27,6 +27,7 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
 			
 			// Init Hooks
 			add_action('plugins_loaded', array( $this, 'hooks' ), 45 );
+            add_action( 'wp_ajax_render_leave_slide_panel', array( $this, 'render_leave_slide_panel' ), 10 );
         }
         
         function includes() {
@@ -98,8 +99,37 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
 			$current_user_id = $current_user->ID;
 			update_post_meta( $post_id, 'leave-user-approver', $current_user_id );
 		}
-		
-    
+
+        function render_leave_slide_panel(){
+
+            $data = array();
+
+            if ( isset( $_GET['template'] ) ) {
+
+                ob_start();
+                $template = $_GET['template'];
+
+                switch( $template ){
+                    case 'approve_leave':
+                    case 'denny_leave':
+                        require( RT_HRM_BP_HRM_PATH.'templates/wall-leave-status.php' );
+                        break;
+
+                }
+
+                $output = ob_get_contents();
+                ob_end_clean();
+                $data['html'] = $output;
+            }
+
+
+            restore_current_blog();
+            wp_send_json( $data );
+
+        }
+
+
+
     }
     
 }

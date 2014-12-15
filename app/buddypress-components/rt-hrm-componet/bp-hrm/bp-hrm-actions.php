@@ -53,5 +53,69 @@ function calender_pre_get_post_filter(){
 
 add_action( 'bp_actions', 'calender_pre_get_post_filter' );
 
+function leave_status_update() {
+
+global $rt_hrm_module;
+
+    $allowed_component = array( BP_ACTIVITY_SLUG );
+
+
+    if( !in_array( bp_current_component(), $allowed_component ) )
+        return;
+
+
+    if ( !isset( $_POST['post'] ) )
+        return;
+
+
+    $leave = $_POST['post'];
+
+    if(  !isset( $leave['post_type'] ) )
+        return;
+
+
+
+    if( $leave['post_type'] != $rt_hrm_module->post_type )
+        return;
+
+
+    if( isset( $leave['rt_voxxi_blog_id'] ) )
+        switch_to_blog( $leave['rt_voxxi_blog_id'] );
+
+
+    $template = $leave['template'];
+
+    switch( $template ){
+        case 'approve_leave':
+            $updated_status = 'approved';
+            break;
+
+        case 'denny_leave':
+            $updated_status = 'rejected';
+            break;
+
+
+    }
+
+    $arg = array(
+        'ID' => $leave['post_id'],
+        'post_status' => $updated_status,
+    );
+
+
+    wp_update_post( $arg );
+
+    $arg = array(
+        'comment_post_ID' => $leave['post_id'],
+        'comment_content' => $leave['leave_comment_content'],
+    );
+
+    wp_insert_comment( $arg );
+
+    bp_core_add_message('Leave updated successfully');
+
+}
+add_action( 'bp_actions', 'leave_status_update' );
+
 
 
