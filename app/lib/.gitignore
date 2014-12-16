@@ -4,3 +4,5 @@
 *.idea
 *nbproject*
 */.sass-cache/
+app/buddypress-components/rt-hrm-component/.sass-cache/
+app/buddypress-components/rt-hrm-component/node_modules/

@@ -44,6 +44,9 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
                 if ( ! defined( 'RT_HRM_BP_HRM_PATH' ) ) {
                         define( 'RT_HRM_BP_HRM_PATH', plugin_dir_path( __FILE__ ) );
                 }
+            if ( ! defined( 'RT_HRM_BP_HRM_URL' ) ) {
+                define( 'RT_HRM_BP_HRM_URL', plugin_dir_url( __FILE__ ) );
+            }
 				if ( ! defined( 'RT_HRM_BP_HRM_SLUG' ) ){
 			        define( 'RT_HRM_BP_HRM_SLUG', sanitize_title( $menu_label ) );
 			}
