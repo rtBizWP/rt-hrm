@@ -41,6 +41,8 @@ if ( ! class_exists( 'RT_Calendar' ) ) {
 				'defaultView' => 'month',
 				'editable' => false,
 				'events' => '',
+                'eventLimit' => true, // If you set a number it will hide the itens
+                //'eventLimitText' => "Something" // Default is `more` (or "more" in the lang you pick in the option)
 			);
 		}
 
