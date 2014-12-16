@@ -112,10 +112,98 @@ global $rt_hrm_module;
 
     wp_insert_comment( $arg );
 
+    if( isset( $leave['rt_voxxi_blog_id'] ) ){
+        restore_current_blog();
+    }
+
     bp_core_add_message('Leave updated successfully');
 
 }
 add_action( 'bp_actions', 'leave_status_update' );
+
+function calender_leave_add(){
+
+    global $rt_hrm_module, $rt_hrm_attributes;
+
+    if ( isset( $_REQUEST['form-add-leave'] ) && !empty( $_REQUEST['form-add-leave'] ) && ! is_admin() ) {
+
+        $leave_meta = $_REQUEST['post'];
+
+        if( isset( $leave_meta['rt_voxxi_blog_id'] ) )
+            switch_to_blog( $newLead['rt_voxxi_blog_id'] );
+
+
+        $author = rt_biz_get_wp_user_for_person( $leave_meta['leave-user-id'] );
+
+        $args = array(
+            'meta_query' => array(
+                array(
+                    'key' => 'leave-user-id',
+                    'value' => $leave_meta['leave-user-id']
+                ),
+                array(
+                    'key' => 'leave-start-date',
+                    'value' => $leave_meta['leave-start-date']
+                )
+            ),
+            'post_type' => $rt_hrm_module->post_type,
+            'post_status' => 'any',
+            'nopaging' => true
+        );
+
+        $posts = get_posts($args);
+
+        if ( count($posts) > 0 ) {
+            // echo '<div class="error"><p>'.__( 'You can not apply for leave twice on the same day.' ).'</p></div>';
+            // todo: write in php instead of js
+            ?>
+            <script> alert('You can not apply for leave twice on the same day.') </script>
+            <?php return false;
+        }
+
+        $newLeave = array(
+            'comment_status' =>  'closed',
+            'post_author' => $author,
+            'post_date' => date('Y-m-d H:i:s'),
+            'post_content' => $leave_meta['leave_description'],
+            'post_status' => 'pending',
+            'post_title' => ' Leave: ' . $leave_meta['leave-user'],
+            'post_type' => $rt_hrm_module->post_type,
+        );
+
+        $newLeaveID = wp_insert_post($newLeave);
+
+        if ( isset( $leave_meta[  Rt_HRM_Attributes::$leave_type_tax] ) ) {
+            wp_set_post_terms( $newLeaveID, implode( ',', array_map( 'intval', $leave_meta[Rt_HRM_Attributes::$leave_type_tax] ) ), Rt_HRM_Attributes::$leave_type_tax );
+        }
+
+        if ( isset( $_POST['leave_quota_use'] ) ) {
+            update_post_meta( $newLeaveID, '_rt_hrm_leave_quota_use', $_POST['leave_quota_use'] );
+        }
+
+        update_post_meta( $newLeaveID, 'leave-user', $leave_meta['leave-user'] );
+        update_post_meta( $newLeaveID, 'leave-user-id', $leave_meta['leave-user-id'] );
+        update_post_meta( $newLeaveID, 'leave-duration', $leave_meta['leave-duration'] );
+        update_post_meta( $newLeaveID, 'leave-start-date', $leave_meta['leave-start-date'] );
+
+        if ( $leave_meta['leave-duration'] == 'other' ){
+            update_post_meta( $newLeaveID, 'leave-end-date', $leave_meta['leave-end-date'] );
+        }else {
+            delete_post_meta( $newLeaveID, 'leave-end-date' );
+        }
+
+        if( isset( $leave_meta['rt_voxxi_blog_id'] ) ){
+            restore_current_blog();
+            add_action ( 'wp_head', 'rt_voxxi_js_variables' );
+        }
+        do_action( 'save_leave', $newLeaveID );
+
+        bp_core_add_message('Leave scheduled successfully');
+    }
+
+
+}
+add_action( 'bp_actions', 'calender_leave_add' );
 
 
 

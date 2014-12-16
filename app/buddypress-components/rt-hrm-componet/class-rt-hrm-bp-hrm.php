@@ -112,7 +112,12 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
                 switch( $template ){
                     case 'approve_leave':
                     case 'denny_leave':
+
                         require( RT_HRM_BP_HRM_PATH.'templates/wall-leave-status.php' );
+                        break;
+                    case 'calender':
+
+                        require( RT_HRM_BP_HRM_PATH.'/templates/hrm-calender.php' );
                         break;
 
                 }

@@ -25,6 +25,9 @@
             <h4><?php $menu_label = Rt_HRM_Settings::$settings['menu_label']; echo $menu_label . __( ' Calendar' ); ?></h4>
         </div>
         <div class="large-2 columns">
+            <?php if( isset( $_GET['rt_voxxi_blog_id']) ){ ?>
+                <a title="Close" class="right close-sidepanel"><i class="fa fa-caret-square-o-right fa-2x"></i></a>
+            <?php } ?>
         </div>
     </div>
 
@@ -60,6 +63,15 @@
 		<h2 class="title-form-add-leave <?php if ( is_admin() ){ echo "left"; }?>"><?php echo __( 'Schedule a Leave', 'edit-flow' ); ?>
             <a class="button right" id="close_popup"><?php _e( 'X' ) ?></a></h2>
 	</div>
+    <?php if( isset( $_GET['rt_voxxi_blog_id']) ){
+        $post_id = $_GET['id'];
+        global $rt_hrm_module;
+        ?>
+        <input type="hidden" name="post[rt_voxxi_blog_id]" value="<?php echo $_GET['rt_voxxi_blog_id'] ?>" />
+        <input type="hidden" name="post[template]" value="<?php echo $_GET['template'] ?>" />
+        <input type="hidden" name="post[actvity_element_id]" value="<?php echo $_GET['actvity_element_id'] ?>" />
+        <input type="hidden" name="post[post_id]" value="<?php echo $post_id ?>" />
+    <?php } ?>
 	<div class="body">
 		<table class="form-table rthrm-container">
 			<tbody>
