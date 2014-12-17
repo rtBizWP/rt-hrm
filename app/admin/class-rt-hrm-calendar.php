@@ -160,7 +160,12 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
          */
         function render_calendar() {
 			global $rt_calendar, $rt_hrm_module;
-            $args = array('post_type' => $rt_hrm_module->post_type,'post_status' => 'pending,approved,rejected');
+            $args = array(
+                'no_found_rows' => true,
+                'post_type' => $rt_hrm_module->post_type,
+                'post_status' => 'pending,approved,rejected',
+                'nopaging' => true,
+            );
 
             $the_query = new WP_Query( $args );
             $event= array();
