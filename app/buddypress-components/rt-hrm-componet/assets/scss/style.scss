@@ -2,6 +2,11 @@
 #item-body, .reveal-modal{
   @import "rtp-foundation";
   @import "hrm-custom";
+
+  .columns {
+    padding-left: 0 !important;
+  }
+
 }
 @import "rtp-reveal";
 .media-modal{
