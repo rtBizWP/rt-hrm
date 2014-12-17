@@ -2,9 +2,53 @@
 #rt-action-panel, #item-body{
 
   @import "rtp-calender-foundation";
-  @import "hrm-custom";
+ // @import "hrm-custom";
   @import "rtp-fullcalendar";
 
+
+  /* popup form css
+  ------------------------------------------------------------------------*/
+  .leave-insert-dialog{
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    -moz-box-shadow:5px 5px 5px #888;
+    -webkit-box-shadow:5px 5px 5px #888;
+    box-shadow:5px 5px 5px #888;
+    left: 32%;
+    position: fixed;
+    top: 20%;
+    z-index: 999;
+  }
+  .fc-grid .fc-day-number {
+    margin-right: -5px;
+    margin-top: -5px;
+  }
+  .ui-autocomplete  {
+    z-index: 9999;
+  }
+
+
+  .leave-insert-dialog .form-table td {
+    padding: 5px;
+  }
+
+  .leave-insert-dialog .title{
+    padding: 10px;
+    /*border-bottom: 2px solid #888888;*/
+  }
+
+  .leave-insert-dialog .body{
+    padding: 10px;
+  }
+
+  .leave-insert-dialog .controls{
+    padding: 10px;
+    border-top: 1px solid #888888;
+  }
+
+  .hide{
+    display: none;
+  }
 }
 
 .ui-autocomplete{

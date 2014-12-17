@@ -11,6 +11,23 @@
     margin-top: 0.688em;
     padding: 0.375em 0.25em;
 }
+.columns {
+  padding-left: 0 !important;
+}
+
+.person-avatar {
+  width: 55px !important;
+}
+
+.person-avatar img, img.avatar, img.wp-post-image {
+  max-width: none !important;
+  padding: 4px !important;
+  border: 1px solid #ddd !important;
+  -moz-border-radius: 2px !important;
+  -webkit-border-radius: 20px !important;
+  -moz-box-shadow: 0px 0px 0px #dddddd !important;
+  -webkit-box-shadow: 0px 0px 0px #dddddd !important;
+}
 
 /* popup form css
 ------------------------------------------------------------------------*/
