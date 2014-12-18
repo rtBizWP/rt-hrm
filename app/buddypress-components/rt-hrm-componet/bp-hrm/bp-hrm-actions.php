@@ -63,6 +63,9 @@ global $rt_hrm_module;
     if( !in_array( bp_current_component(), $allowed_component ) )
         return;
 
+    if ( ! isset( $_POST['rt_hrm_wall_leave_status_update'] ) || ! wp_verify_nonce( $_POST['rt_hrm_wall_leave_status_update'], 'rt_hrm_wall_leave_status_update' ) )
+        return;
+
 
     if ( !isset( $_POST['post'] ) )
         return;
@@ -70,13 +73,6 @@ global $rt_hrm_module;
 
     $leave = $_POST['post'];
 
-    if(  !isset( $leave['post_type'] ) )
-        return;
-
-
-
-    if( $leave['post_type'] != $rt_hrm_module->post_type )
-        return;
 
 
     if( isset( $leave['rt_voxxi_blog_id'] ) )
@@ -93,7 +89,6 @@ global $rt_hrm_module;
         case 'denny_leave':
             $updated_status = 'rejected';
             break;
-
 
     }
 
@@ -130,7 +125,7 @@ function calender_leave_add(){
         $leave_meta = $_REQUEST['post'];
 
         if( isset( $leave_meta['rt_voxxi_blog_id'] ) )
-            switch_to_blog( $newLead['rt_voxxi_blog_id'] );
+            switch_to_blog( $leave_meta['rt_voxxi_blog_id'] );
 
 
         $author = rt_biz_get_wp_user_for_person( $leave_meta['leave-user-id'] );
@@ -204,6 +199,49 @@ function calender_leave_add(){
 
 }
 add_action( 'bp_actions', 'calender_leave_add' );
+
+function rt_bp_hrm_ask_for_more(){
+    $allowed_component = array( BP_ACTIVITY_SLUG );
+
+
+    if( !in_array( bp_current_component(), $allowed_component ) )
+        return;
+
+    if ( ! isset( $_POST['rt_hrm_wall_leave_ask_more'] ) || ! wp_verify_nonce( $_POST['rt_hrm_wall_leave_ask_more'], 'rt_hrm_wall_leave_ask_more' ) )
+        return;
+
+
+    if ( !isset( $_POST['post'] ) )
+        return;
+
+    $leave = $_POST['post'];
+
+    $from_user_name = bp_core_get_user_displayname( get_current_user_id() );
+
+
+    $subject  = bp_get_email_subject( array( 'text' => sprintf( __( '%1$s: "%2$s"', 'buddypress' ), $leave['subject'],   $from_user_name ) ) );
+
+    $message = sprintf( __(
+        '
+
+        %1$s
+
+        ---------------------
+        ', RT_HRM_TEXT_DOMAIN ), $leave['mail_content'] );
+
+
+    /* Send the message */
+    $to      = apply_filters( 'rt_hrm_leave_to', $leave['to'] );
+    $subject = apply_filters_ref_array( 'rt_hrm_leave_subject', array( $subject, &$from_user_name ) );
+    $message = apply_filters_ref_array( 'rt_hrm_leave_message', array(  $leave['mail_content']) );
+
+    wp_mail( $to, $subject, $message );
+
+    bp_core_add_message('Your message was sent successfully.');
+
+
+}
+add_action('bp_actions', 'rt_bp_hrm_ask_for_more' );
 
 
 

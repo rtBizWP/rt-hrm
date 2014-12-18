@@ -123,6 +123,11 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
                         require( RT_HRM_BP_HRM_PATH.'/templates/hrm-calender.php' );
                         break;
 
+                    case 'more_info':
+
+                        require( RT_HRM_BP_HRM_PATH.'/templates/wall-ask-info.php' );
+                        break;
+
                 }
 
                 $output = ob_get_contents();

@@ -13,8 +13,8 @@ $post_id = $_GET['id'];
 <form action="" method="post">
 
     <input type="hidden" name="post[template]" value="<?php echo $_GET['template'] ?>" />
-    <input type="hidden" name="post[post_type]" value="<?php echo $rt_hrm_module->post_type ?>" />
     <input type="hidden" name="post[post_id]" value="<?php echo $post_id ?>" />
+    <?php wp_nonce_field('rt_hrm_wall_leave_status_update','rt_hrm_wall_leave_status_update') ?>
 
     <?php if( isset( $_GET['rt_voxxi_blog_id'] ) ) { ?>
         <input type="hidden" name="post[rt_voxxi_blog_id]" value="<?php echo $_GET['rt_voxxi_blog_id'] ?>" />
