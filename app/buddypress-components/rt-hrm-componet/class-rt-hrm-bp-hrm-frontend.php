@@ -52,10 +52,12 @@ if( !class_exists( 'Rt_Hrm_Bp_Hrm_Frontend' ) ) {
 
                 if( bp_is_current_action('calender') ){
                     wp_enqueue_style( 'rt-bp-hrm-calender-css', RT_HRM_BP_HRM_URL . 'assets/css/calender.css', false );
-                    wp_enqueue_style( 'rt-bp-harm-custom-css', RT_HRM_BP_HRM_URL . 'assets/css/hrm-custom.css', array('rt-bp-hrm-calender-css'), false );
+
                 }else{
                     wp_enqueue_style( 'rt-bp-hrm-css', RT_HRM_BP_HRM_URL . 'assets/css/style.css', false );
                 }
+
+                wp_enqueue_style( 'rt-bp-harm-custom-css', RT_HRM_BP_HRM_URL . 'assets/css/hrm-custom.css', false );
 
                 if( ! wp_script_is('jquery-ui-datepicker') ) {
                     wp_enqueue_script( 'jquery-ui-datepicker' );

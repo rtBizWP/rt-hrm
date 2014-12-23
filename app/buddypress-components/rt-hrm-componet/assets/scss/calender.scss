@@ -22,9 +22,6 @@
     margin-right: -5px;
     margin-top: -5px;
   }
-  .ui-autocomplete  {
-    z-index: 9999;
-  }
 
 
   .leave-insert-dialog .form-table td {
@@ -51,7 +48,7 @@
 }
 
 .ui-autocomplete{
-  z-index: 9999;
+  z-index: 99999;
 
   img.avatar, img.wp-post-image{
     max-width: none !important;
