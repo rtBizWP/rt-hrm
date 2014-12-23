@@ -107,10 +107,6 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
 
             $data = array();
 
-            var_dump('dummy test');
-
-            die();
-
             if ( isset( $_GET['template'] ) ) {
 
                 ob_start();
