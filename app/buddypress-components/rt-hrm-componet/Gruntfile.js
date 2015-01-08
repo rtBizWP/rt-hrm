@@ -45,7 +45,7 @@ module.exports = function(grunt) {
             },
 
             uglify: {
-                files: ['<%= uglify.frontend.src %>', '<%= uglify.profilefrontend.src %>' ],
+                files: ['<%= uglify.frontend.src %>' ],
                 tasks: ['uglify']
             },
 

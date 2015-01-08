@@ -72,7 +72,7 @@
 	$totalPage = $max_num_pages =  $the_query->max_num_pages;
     $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
 	?>
-	<div class="row list-heading">
+	<div class="list-heading">
         <div class="large-10 columns list-title">
             <h4><?php _e( 'Leave', RT_HRM_TEXT_DOMAIN ) ?></h4>
         </div>

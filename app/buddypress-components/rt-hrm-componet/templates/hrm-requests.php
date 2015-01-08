@@ -93,7 +93,7 @@ $the_query = new WP_Query( $args );
 $totalPage = $max_num_pages =  $the_query->max_num_pages;
 
 ?>
-<div class="row list-heading">
+<div class="list-heading">
     <div class="large-10 columns list-title">
         <h4><?php _e( 'Leave Approval', RT_HRM_TEXT_DOMAIN ) ?></h4>
     </div>

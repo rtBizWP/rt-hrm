@@ -21,7 +21,8 @@
 }
 
 .person-avatar img, img.avatar, img.wp-post-image {
-  max-width: none !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
   padding: 4px !important;
   border: 1px solid #ddd !important;
   -moz-border-radius: 2px !important;
@@ -115,7 +116,8 @@ tr.lists-header th:nth-child(4) {
 }
 
 .list-heading{
-    margin-bottom: 10px;
+
+    padding-bottom: 40px;
 }
 
 .list-title{
@@ -137,10 +139,6 @@ required {
 }
 .entry-content h1,  h2,  h3,  h4,  h6 {
   margin: 0px !important;
-}
-
-.list-heading {
-  margin-bottom: 10px;
 }
 .list-title {
   padding-left: 0px !important;
