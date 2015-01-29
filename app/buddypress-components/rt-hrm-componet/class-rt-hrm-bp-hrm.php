@@ -28,6 +28,9 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
 			// Init Hooks
 			add_action('plugins_loaded', array( $this, 'hooks' ), 45 );
             add_action( 'wp_ajax_render_leave_slide_panel', array( $this, 'render_leave_slide_panel' ), 10 );
+
+            add_action( 'bp_activity_filter_options', array( $this, 'rt_hrm_activity_filter_options' ), 10 );
+            add_action( 'bp_member_activity_filter_options', array( $this, 'rt_hrm_activity_filter_options' ), 10 );
         }
         
         function includes() {
@@ -79,6 +82,8 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
 				
 				add_action(  'approved_to_pending',  array( $this, 'on_change_pending_post_status' ), 10, 1 );
 				add_action(  'rejected_to_pending',  array( $this, 'on_change_pending_post_status' ), 10, 1 );
+
+
 			//}
 		}
 		
@@ -140,6 +145,21 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm' ) ) {
             wp_send_json( $data );
 
         }
+
+        /**
+         * Add filters for crm activity types to Show dropdowns.
+         *
+         * @since BuddyPress (2.0.0)
+         */
+        function rt_hrm_activity_filter_options() {
+            global $rt_hrm_module;
+            ?>
+
+            <option value="<?php echo $rt_hrm_module->post_type ?>"><?php _e( 'Leave', RT_PM_TEXT_DOMAIN ) ?></option>
+
+        <?php
+        }
+
 
 
 
