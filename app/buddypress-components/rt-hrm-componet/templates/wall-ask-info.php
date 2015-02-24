@@ -25,7 +25,7 @@ $leave_user_id = get_post_meta( $post_id, 'leave-user-id', true );
 
 //HR department email id
 
-$hr_department = get_term_by( 'slug', KWS_User_Groups::$hr_department['slug'], 'user-group' );
+$hr_department = get_term_by( 'slug', KWS_User_Groups::$default_categories['hr']['slug'], 'user-group' );
 
 
     $to_id = KWS_User_Groups::get_meta( 'email_address', $hr_department->term_id );
