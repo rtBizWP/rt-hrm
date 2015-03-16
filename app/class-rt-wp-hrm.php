@@ -45,8 +45,25 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'loadScripts' ) );
             add_action( 'after_setup_theme', array( $this, 'init_hrm_bp_component' ) );
+			add_action( 'delete_post', array( $this, 'lead_remove_bp_activity' ), 10 );
+			add_action( "remove_lead", array( $this, 'lead_remove_bp_activity' ), 10, 2 );
 		}
-
+		
+		function lead_remove_bp_activity( $post_id ){
+			global $wpdb;
+			$bp  = buddypress();
+			$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->activity->table_name} WHERE item_id = %d", $post_id ) );
+			if($row != NULL){
+				$activity_id = (int) $row->id;
+				$activity_userid = (int) $row->user_id;
+				do_action( 'bp_activity_before_action_delete_activity', $activity_id, $activity_userid );
+				if( !bp_activity_delete( array( 'id' => $activity_id, 'user_id' => $activity_userid ) ) ){
+					return;
+				}
+			}
+			return;
+		}
+		
         function init_hrm_bp_component() {
 
             if( function_exists('bp_is_active') ) {
