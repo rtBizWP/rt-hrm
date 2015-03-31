@@ -6,6 +6,7 @@ $is_user_change_allowed = 1;
 //Trash action
 if( isset( $_GET['action'] ) && $_GET['action'] == 'deletepost' && isset( $_GET['rt_leave_id'] ) ) {
     wp_delete_post( $_GET['rt_leave_id'] );
+	do_action('remove_lead',$_GET['rt_leave_id']);
 	echo '<script> window.location="' . $rt_hrm_bp_hrm->get_component_root_url() . '/requests"; </script> ';
     die();
 }
