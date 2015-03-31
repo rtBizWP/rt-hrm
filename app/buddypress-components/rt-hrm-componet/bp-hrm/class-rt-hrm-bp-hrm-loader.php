@@ -106,12 +106,15 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 		 * @global obj $bp
 		 */
 		function setup_nav( $nav = array(), $sub_nav = array() ) {
-            	
-			// Determine user to use -- only
-			if ( bp_loggedin_user_id() !== bp_displayed_user_id() ) {
+
+			if( is_main_site() )
 				return;
-			}
-			
+
+//			// Determine user to use -- only
+//			if ( bp_loggedin_user_id() !== bp_displayed_user_id() ) {
+//				return;
+//			}
+//
             $nav_name = __( $this->hrm_label, 'buddypress' );
 
 			// Add 'hrm' to the main navigation
@@ -175,8 +178,11 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 		}
 
 		public function setup_admin_bar( $wp_admin_nav = array() ) {
-                   
-				// The instance
+
+			if( is_main_site() )
+				return;
+
+			// The instance
 				$bp = buddypress();
 		
 				// Menus for logged in user
