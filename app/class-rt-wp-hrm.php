@@ -49,7 +49,11 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 			add_action( "remove_lead", array( $this, 'lead_remove_bp_activity' ), 10, 2 );
 		}
 		
-		function lead_remove_bp_activity( $post_id ){
+		function lead_remove_bp_activity( $post_id ) {
+
+			if( ! function_exists( 'bp_is_active') )
+				return false;
+
 			global $wpdb;
 			$bp  = buddypress();
 			$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->activity->table_name} WHERE item_id = %d", $post_id ) );
