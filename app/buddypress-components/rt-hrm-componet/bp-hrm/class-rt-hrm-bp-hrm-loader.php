@@ -107,7 +107,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 		 */
 		function setup_nav( $nav = array(), $sub_nav = array() ) {
 
-			if( is_main_site() )
+			if( is_multisite() && is_main_site() )
 				return;
 
 //			// Determine user to use -- only
@@ -179,7 +179,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 
 		public function setup_admin_bar( $wp_admin_nav = array() ) {
 
-			if( is_main_site() )
+			if( is_multisite() && is_main_site() )
 				return;
 
 			// The instance
