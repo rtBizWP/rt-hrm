@@ -123,6 +123,7 @@ function calender_leave_add(){
     if ( isset( $_REQUEST['form-add-leave'] ) && !empty( $_REQUEST['form-add-leave'] ) && ! is_admin() ) {
 
         $leave_meta = $_REQUEST['post'];
+		$form_type = $_REQUEST['form-add-leave'];
 
         if( isset( $leave_meta['rt_voxxi_blog_id'] ) )
             switch_to_blog( $leave_meta['rt_voxxi_blog_id'] );
@@ -147,26 +148,32 @@ function calender_leave_add(){
         );
 
         $posts = get_posts($args);
+		
+		if( $form_type == "Update Leave" ){
+			$newLeaveID = $posts[0]->ID;
+		} else {
+		
+			if ( count($posts) > 0 ) {
+				// echo '<div class="error"><p>'.__( 'You can not apply for leave twice on the same day.' ).'</p></div>';
+				// todo: write in php instead of js
+				?>
+				<script> alert('You can not apply for leave twice on the same day.') </script>
+				<?php return false;
+			}
 
-        if ( count($posts) > 0 ) {
-            // echo '<div class="error"><p>'.__( 'You can not apply for leave twice on the same day.' ).'</p></div>';
-            // todo: write in php instead of js
-            ?>
-            <script> alert('You can not apply for leave twice on the same day.') </script>
-            <?php return false;
-        }
+			$newLeave = array(
+				'comment_status' =>  'closed',
+				'post_author' => $author,
+				'post_date' => date('Y-m-d H:i:s'),
+				'post_content' => $leave_meta['leave_description'],
+				'post_status' => 'pending',
+				'post_title' => ' Leave: ' . $leave_meta['leave-user'],
+				'post_type' => $rt_hrm_module->post_type,
+			);
 
-        $newLeave = array(
-            'comment_status' =>  'closed',
-            'post_author' => $author,
-            'post_date' => date('Y-m-d H:i:s'),
-            'post_content' => $leave_meta['leave_description'],
-            'post_status' => 'pending',
-            'post_title' => ' Leave: ' . $leave_meta['leave-user'],
-            'post_type' => $rt_hrm_module->post_type,
-        );
-
-        $newLeaveID = wp_insert_post($newLeave);
+			$newLeaveID = wp_insert_post($newLeave);
+			
+		}
 
         if ( isset( $leave_meta[  Rt_HRM_Attributes::$leave_type_tax] ) ) {
             wp_set_post_terms( $newLeaveID, implode( ',', array_map( 'intval', $leave_meta[Rt_HRM_Attributes::$leave_type_tax] ) ), Rt_HRM_Attributes::$leave_type_tax );
