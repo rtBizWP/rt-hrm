@@ -684,6 +684,10 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'capability_type' => $this->post_type,
                 'map_meta_cap' => true,
 			);
+
+			if( is_multisite() && is_main_site() )
+				$args['show_ui'] = false;
+
 			register_post_type( $this->post_type, $args );
 		}
 
