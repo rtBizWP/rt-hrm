@@ -64,6 +64,7 @@ class Rt_HRM_Leave {
 				continue;
 			}
 
+			$leave_date = substr( $leave_date, 0, 10 );
 
 			$start_date_obj = date_create_from_format( 'd/m/Y', $start_date_meta );
 			$leave_date_obj = date_create_from_format( 'Y-m-d', $leave_date );
