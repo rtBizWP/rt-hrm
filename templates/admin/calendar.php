@@ -13,11 +13,15 @@
 			screen_icon();
 		}
 
-//    $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
-//    $is_hrm_manager = true;
-//    if (  !current_user_can( $editor_cap ) ) {
-//        $is_hrm_manager = false;
-//    }
+    $author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
+
+    if (  current_user_can( $author_cap ) ) {
+        $user_id = get_current_user_id();
+	    $employees = rt_biz_get_person_for_wp_user( $user_id );
+	    $employee_id = $employees[0]->ID;
+	    $employee_name = $employees[0]->post_title;
+    }
+
 
 	?>
 	<div class="list-heading">
@@ -80,8 +84,8 @@
 						<label class="">Employee Name</label>
 					</td>
 					<td class="tblval">
-                        <input type="text" id="leave-user" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php  if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; } ?>">
-                        <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->ID; } ?>">
+                        <input type="text" id="leave-user" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php echo ( $employee_name ) ? $employee_name : ''; ?>">
+                        <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php  echo isset( $employee_id) ? $employee_id : '';  ?>">
 					</td>
 				</tr>
 				<tr>

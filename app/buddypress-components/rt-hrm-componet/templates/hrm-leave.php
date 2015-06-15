@@ -1,5 +1,5 @@
 <?php
-	global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb,  $wp_query, $rt_person;
+	global $rt_hrm_module, $rt_hrm_attributes, $bp, $wpdb,  $wp_query, $rt_person, $rt_hrm_leave;
 	$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 	$paged = $page = max( 1, get_query_var('paged') );
 	
@@ -33,6 +33,12 @@
             $args['meta_key'] = $orderby;
         }
     }
+
+
+	$meta_query = $rt_hrm_leave->rthrm_get_leave_for_author();
+
+	if( ! empty( $meta_query ) )
+		$args['meta_query'] = $meta_query;
 
 
 	

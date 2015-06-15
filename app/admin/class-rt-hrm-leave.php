@@ -109,4 +109,37 @@ class Rt_HRM_Leave {
 
 		return $result;
 	}
+
+	/**
+	 * Return meta_query for hide other user leave from list or query
+	 * @return array
+	 */
+	public function rthrm_get_leave_for_author() {
+
+		global $wpdb, $rt_person;
+
+		$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+
+		if (  !current_user_can( $editor_cap ) ) {
+
+			$contact_key =  Rt_Person::$meta_key_prefix . $rt_person->user_id_key;
+
+			$post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = '{$contact_key}' and meta_value = ". get_current_user_id());
+
+			return array(
+					'relation' => 'OR',
+					array(
+						'key'     => 'leave-user-id',
+						'value'    => '',
+						'compare' => 'NOT EXISTS',
+					),
+					array(
+						'key' => 'leave-user-id',
+						'value' => $post_meta->post_id,
+						'compare' => '==',
+					),
+			);
+
+		}
+	}
 }

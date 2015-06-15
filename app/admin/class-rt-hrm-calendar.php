@@ -159,7 +159,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
          * call on rthrm_after_calendar hook in template -> admin -> calendar.php
          */
         function render_calendar() {
-			global $rt_calendar, $rt_hrm_module;
+			global $rt_calendar, $rt_hrm_module, $rt_hrm_leave;
             $args = array(
                 'no_found_rows' => true,
                 'post_type' => $rt_hrm_module->post_type,
@@ -167,13 +167,14 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
                 'nopaging' => true,
             );
 
+			$meta_query = $rt_hrm_leave->rthrm_get_leave_for_author();
+
+	        if( ! empty( $meta_query ) )
+		        $args['meta_query'] = $meta_query;
+
             $the_query = new WP_Query( $args );
             $event= array();
             while ( $the_query->have_posts() ) : $the_query->the_post();
-
-                $leave_user_id = get_post_meta( get_the_id(), 'leave-user-id', true );
-
-
 
                 // Leave Status
                 $color='';

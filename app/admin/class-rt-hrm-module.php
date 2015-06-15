@@ -121,35 +121,14 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
 
         function pre_get_leave_list( $query ) {
-            global $pagenow;
-            if( $pagenow == 'edit.php' && isset( $_GET['post_type'] ) &&  $_GET['post_type'] == $this->post_type ) {
+            global $pagenow, $rt_hrm_leave;
 
-                global $wpdb, $rt_person;
+            if( $pagenow == 'edit.php' && isset( $_GET['post_type'] ) &&  $_GET['post_type'] == $this->post_type && ! isset( $_REQUEST['page'] ) ) {
 
-                $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+	            $meta_query = $rt_hrm_leave->rthrm_get_leave_for_author();
 
-                if (  !current_user_can( $editor_cap ) ) {
-
-                    $contact_key =  Rt_Person::$meta_key_prefix . $rt_person->user_id_key;
-
-                    $post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = '{$contact_key}' and meta_value = ". get_current_user_id());
-
-                    $query->set('meta_query',  array(
-                            'relation' => 'OR',
-                            array(
-                                'key'     => 'leave-user-id',
-                                'value'    => '',
-                                'compare' => 'NOT EXISTS',
-                            ),
-                            array(
-                                'key' => 'leave-user-id',
-                                'value' => $post_meta->post_id,
-                                'compare' => '==',
-                            ),
-                        )
-                    );
-
-                }
+	            if( ! empty( $meta_query ) )
+		            $query->set('meta_query', $meta_query );
             }
         }
 
