@@ -120,10 +120,6 @@ class Rt_HRM_Leave {
 
 		if (  !current_user_can( $editor_cap ) ) {
 
-			//$contact_key =  Rt_Person::$meta_key_prefix . $rt_person->user_id_key;
-
-			//$post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = '{$contact_key}' and meta_value = ". get_current_user_id());
-
 			return array(
 					'relation' => 'OR',
 					array(
