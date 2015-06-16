@@ -99,11 +99,9 @@ class Rt_HRM_Leave {
 	public function rthrm_get_users_approved_leaves_post_ids( $wp_user_id ) {
 		global $wpdb;
 
-		$employee_post = rt_biz_get_person_for_wp_user( $wp_user_id );
-
 		$query = "SELECT postmeta.post_id FROM {$wpdb->postmeta} postmeta INNER JOIN {$wpdb->posts} posts ON" .
 		         " posts.ID = postmeta.post_id WHERE posts.post_status = 'approved' AND" .
-		         " postmeta.meta_key = 'leave-user-id' AND postmeta.meta_value = '{$employee_post[0]->ID}'";
+		         " postmeta.meta_key = 'leave-user-id' AND postmeta.meta_value = '{$wp_user_id}'";
 
 		$result = $wpdb->get_col( $query );
 
@@ -122,9 +120,9 @@ class Rt_HRM_Leave {
 
 		if (  !current_user_can( $editor_cap ) ) {
 
-			$contact_key =  Rt_Person::$meta_key_prefix . $rt_person->user_id_key;
+			//$contact_key =  Rt_Person::$meta_key_prefix . $rt_person->user_id_key;
 
-			$post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = '{$contact_key}' and meta_value = ". get_current_user_id());
+			//$post_meta = $wpdb->get_row( "SELECT * from {$wpdb->postmeta} WHERE meta_key = '{$contact_key}' and meta_value = ". get_current_user_id());
 
 			return array(
 					'relation' => 'OR',
@@ -135,7 +133,7 @@ class Rt_HRM_Leave {
 					),
 					array(
 						'key' => 'leave-user-id',
-						'value' => $post_meta->post_id,
+						'value' => get_current_user_id(),
 						'compare' => '==',
 					),
 			);

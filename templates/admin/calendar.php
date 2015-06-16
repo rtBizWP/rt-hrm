@@ -15,12 +15,8 @@
 
     $author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
 
-    if (  current_user_can( $author_cap ) ) {
-        $user_id = get_current_user_id();
-	    $employees = rt_biz_get_person_for_wp_user( $user_id );
-	    $employee_id = $employees[0]->ID;
-	    $employee_name = $employees[0]->post_title;
-    }
+	$employee_id = get_current_user_id();
+	$employee_name = rtbiz_get_user_displayname( $user_id );
 
 
 	?>

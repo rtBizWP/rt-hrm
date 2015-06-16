@@ -156,7 +156,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			}
 
 			$employee_id = intval( $_POST['employee_id'] );
-			$user_id = rt_biz_get_wp_user_for_person( $employee_id );
+			$user_id = ( $employee_id );
 			$leave_quota = $this->get_user_remaining_leaves( $user_id );
 			if ( $leave_quota > 0 ) {
 				echo json_encode( array( 'status' => 'success', 'leave_quota' => $leave_quota ) );
@@ -712,11 +712,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
             global $menu;
             if ( isset( $submenu['edit.php?post_type='.$this->post_type] ) && !empty( $submenu['edit.php?post_type='.$this->post_type] ) ) {
                 $module_menu = $submenu['edit.php?post_type='.$this->post_type];
-                $is_employee = false;
-                $current_employee = rt_biz_get_person_for_wp_user( get_current_user_id( ) );
-                if ( isset( $current_employee ) && !empty( $current_employee ) ){
-                    $is_employee = true;
-                }
+
                 unset($submenu['edit.php?post_type='.$this->post_type]);
                 if ( ! $is_employee && ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ){
                     unset($menu[$this->menu_position]);
@@ -790,10 +786,6 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			$leave_end_date = get_post_meta( $rt_leave_id, 'leave-end-date', false);
 			$leave_quota_use = get_post_meta( $rt_leave_id, '_rt_hrm_leave_quota_use', true );
 
-            $current_employee = rt_biz_get_person_for_wp_user( get_current_user_id() );
-            if ( isset( $current_employee ) && !empty( $current_employee ) ){
-                $current_employee=$current_employee[0];
-            }
 			?>
 			<form action="<?php //echo esc_url( add_query_arg( array( 'rt_leave_id'=> $rt_leave_id, 'action'=>'update' ) )); ?>" class="" method="POST" id="form-add-leave" style="display: block;">
 			<!--<div id="titlewrap">

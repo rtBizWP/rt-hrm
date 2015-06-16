@@ -72,7 +72,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthrm-'.$rt_hrm_module->post_type.'-calendar' && isset( $_REQUEST['form-add-leave'] ) && !empty( $_REQUEST['form-add-leave'] ) ) {
 
 				$leave_meta = $_REQUEST['post'];
-				$author = rt_biz_get_wp_user_for_person( $leave_meta['leave-user-id'] );
+				$author =  $leave_meta['leave-user-id'];
 
 				$args = array(
 					'meta_query' => array(
@@ -141,15 +141,10 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
          * @param $post_type
          */
         function ui( $post_type ) {
-			global $current_user;
-            $current_employee = rt_biz_get_person_for_wp_user( get_current_user_id( ) );
-            if ( isset( $current_employee ) && !empty( $current_employee ) ){
-                $current_employee=$current_employee[0];
-            }
+
 			$arg = array(
 				'post_type' => $post_type,
 				'is_hrm_manager' => current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ),
-                'current_employee' => $current_employee
 			);
 			rthrm_get_template( 'admin/calendar.php', $arg );
 		}

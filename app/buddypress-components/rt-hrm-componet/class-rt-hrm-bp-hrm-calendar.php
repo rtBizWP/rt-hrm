@@ -32,7 +32,7 @@ if ( ! class_exists( 'Rt_Hrm_Bp_Hrm_Calendar' ) ) {
 			if ( isset( $_REQUEST['form-add-leave'] ) && !empty( $_REQUEST['form-add-leave'] ) && ! is_admin() ) {
 
 				$leave_meta = $_REQUEST['post'];
-				$author = rt_biz_get_wp_user_for_person( $leave_meta['leave-user-id'] );
+				$author = $leave_meta['leave-user-id'];
 
 				$args = array(
 					'meta_query' => array(

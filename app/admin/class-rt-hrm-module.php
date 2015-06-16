@@ -147,7 +147,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
             $employee_id =  get_post_meta( $post->ID, "leave-user-id", true );
 
-            $activity_users[] = rt_biz_get_wp_user_for_person( $employee_id );
+            $activity_users[] =  $employee_id;
 
 
 
@@ -220,7 +220,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			}
 
 			$employee_id = intval( $_POST['employee_id'] );
-			$user_id = rt_biz_get_wp_user_for_person( $employee_id );
+			$user_id = ( $employee_id );
 			$leave_quota = $this->get_user_remaining_leaves( $user_id );
 			if ( $leave_quota > 0 ) {
 				echo json_encode( array( 'status' => 'success', 'leave_quota' => $leave_quota ) );
@@ -782,7 +782,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             if ( isset( $submenu['edit.php?post_type='.$this->post_type] ) && !empty( $submenu['edit.php?post_type='.$this->post_type] ) ) {
                 $module_menu = $submenu['edit.php?post_type='.$this->post_type];
                 $is_employee = false;
-                $current_employee = rt_biz_get_person_for_wp_user( get_current_user_id( ) );
+                $current_employee = ( get_current_user_id( ) );
                 if ( isset( $current_employee ) && !empty( $current_employee ) ){
                     $is_employee = true;
                 }
@@ -849,10 +849,6 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$leave_end_date = get_post_meta( $post->ID, 'leave-end-date', false);
 			$leave_quota_use = get_post_meta( $post->ID, '_rt_hrm_leave_quota_use', true );
 
-            $current_employee = rt_biz_get_person_for_wp_user( get_current_user_id() );
-            if ( isset( $current_employee ) && !empty( $current_employee ) ){
-                $current_employee=$current_employee[0];
-            }
 			?>
 			<table class="form-table rthrm-container">
 				<tbody>
@@ -1072,6 +1068,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
 
         function employees_autocomplete_ajax(){
+	        global $rt_person;
             if ( ! isset($_POST['query'] ) ) {
                 wp_die( 'Invalid request Data' );
             }
@@ -1080,7 +1077,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             $results = rt_biz_search_employees($query);
             $arrReturn = array();
             foreach ($results as $author) {
-                $arrReturn[] = array("id" => $author->ID, "label" => $author->post_title);
+	            $contact_wp_user_id = $rt_person->get_wp_user_for_person( $author->ID );
+                $arrReturn[] = array("id" => $contact_wp_user_id, "label" => rtbiz_get_user_displayname( $contact_wp_user_id ) );
             }
             header('Content-Type: application/json');
             echo json_encode($arrReturn);

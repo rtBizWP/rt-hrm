@@ -81,7 +81,7 @@ function calender_leave_add(){
             switch_to_blog( $leave_meta['rt_voxxi_blog_id'] );
 
 
-        $author = rt_biz_get_wp_user_for_person( $leave_meta['leave-user-id'] );
+        $author =  $leave_meta['leave-user-id'];
 
         $args = array(
             'meta_query' => array(
