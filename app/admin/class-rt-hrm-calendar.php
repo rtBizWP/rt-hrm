@@ -158,7 +158,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
             $args = array(
                 'no_found_rows' => true,
                 'post_type' => $rt_hrm_module->post_type,
-                'post_status' => 'pending,approved,rejected',
+                'post_status' => array( 'pending', 'approved', 'rejected' ),
                 'nopaging' => true,
             );
 
@@ -169,46 +169,49 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 
             $the_query = new WP_Query( $args );
             $event= array();
-            while ( $the_query->have_posts() ) : $the_query->the_post();
+            while ( $the_query->have_posts() ) {
+	            $the_query->the_post();
 
-                // Leave Status
-                $color='';
-                if ( get_post_status() == 'approved'){
-                    $color=  Rt_HRM_Settings::$settings['approved_leaves_color'];
-                }elseif (get_post_status() == 'rejected' ){
-                    $color=  Rt_HRM_Settings::$settings['rejected_leaves_color'];
-                } elseif (get_post_status() == 'pending' ){
-                    $color=  Rt_HRM_Settings::$settings['pending_leaves_color'];
-                }
+	            // Leave Status
+	            $color = '';
+	            if ( get_post_status() == 'approved' ) {
+		            $color = Rt_HRM_Settings::$settings['approved_leaves_color'];
+	            } elseif ( get_post_status() == 'rejected' ) {
+		            $color = Rt_HRM_Settings::$settings['rejected_leaves_color'];
+	            } elseif ( get_post_status() == 'pending' ) {
+		            $color = Rt_HRM_Settings::$settings['pending_leaves_color'];
+	            }
 
-                $leaveStartDate = get_post_meta( get_the_id(), 'leave-start-date', false );
-                if ( isset ( $leaveStartDate ) && !empty( $leaveStartDate ) ){
-                    $leaveStartDate = DateTime::createFromFormat( 'd/m/Y', $leaveStartDate[0] );
-                    $leaveStartDate = $leaveStartDate->format('Y-m-d');
-                }
+	            $leaveStartDate = get_post_meta( get_the_id(), 'leave-start-date', true );
+	            if ( isset ( $leaveStartDate ) && ! empty( $leaveStartDate ) ) {
+		            $leaveStartDate = DateTime::createFromFormat( 'd/m/Y', $leaveStartDate );
+		            $leaveStartDate = $leaveStartDate->format( 'Y-m-d' );
+	            }
 
-                $leaveEndDate = get_post_meta( get_the_id(), 'leave-end-date', false);
-                if ( isset ( $leaveEndDate ) && !empty( $leaveEndDate ) ){
-                    $leaveEndDate = $leaveEndDate[0];
-                }
-                if ( isset( $leaveEndDate) && !empty ( $leaveEndDate )  ){
-                    $leaveEndDate = DateTime::createFromFormat( 'd/m/Y', $leaveEndDate );
-                    $leaveEndDate = $leaveEndDate->format('Y-m-d');
-                }else{
-                    $leaveEndDate = $leaveStartDate;
-                }
+	            $leaveEndDate = get_post_meta( get_the_id(), 'leave-end-date', true );
 
-                //Leave
-                $temp=array(
-                    'title'=> get_the_title(),
-                    'start'=> $leaveStartDate,
-                    'end'=> $leaveEndDate,
-                    'color'=> $color,
-                    'textColor'=> Rt_HRM_Settings::$settings['leaves_text_color'],
-                    'leave_id' => get_the_id(),
-                );
-                $event[]=$temp;
-            endwhile;
+	            if ( isset( $leaveEndDate ) && ! empty ( $leaveEndDate ) ) {
+		            $leaveEndDate = DateTime::createFromFormat( 'd/m/Y', $leaveEndDate );
+
+		            //Add P1D( period of 1 day ) date to make it inclusive. date in fullcalender.js@v2 is exclusive
+		            $leaveEndDate->add(new DateInterval('P1D'));
+
+		            $leaveEndDate = $leaveEndDate->format( 'Y-m-d' );
+	            } else {
+		            $leaveEndDate = $leaveStartDate;
+	            }
+
+	            //Leave
+	            $leave_data = array(
+		            'title'     => get_the_title(),
+		            'start'     => $leaveStartDate,
+		            'end'       => $leaveEndDate,
+		            'color'     => $color,
+		            'textColor' => Rt_HRM_Settings::$settings['leaves_text_color'],
+		            'leave_id'  => get_the_id(),
+	            );
+	            $event[]    = $leave_data;
+            }
             wp_reset_postdata();
 
 			$rt_calendar->setDomElement("#calendar-container");
