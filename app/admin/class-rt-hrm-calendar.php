@@ -31,108 +31,108 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
         /**
          * Object initialization
          */
-        public function __construct() {
+        private function __construct() {
 			$this->screen_id = '';
+
+	        $this->setup();
 		}
 
-        /**
+	    /**
+	     * Get a singleton instance of the class
+	     *
+	     * @return Rt_HRM_Calendar
+	     */
+	    public static function factory() {
+		    static $instance = false;
+		    if ( ! $instance ) {
+			    $instance = new self();
+		    }
+		    return $instance;
+	    }
+
+
+	    /**
          *  Add hooks for calendar page like page action or render calendar
          */
-        function setup_calendar() {
-			/* Add callbacks for this screen only */
-			add_action( 'load-'.$this->screen_id, array( $this, 'page_actions' ), 9 );
-			add_action( 'admin_footer-'.$this->screen_id, array( $this, 'footer_scripts' ) );
+        function setup() {
 
-			/* render data into calendar */
+			add_action( 'init', array( $this, 'save_leave_data' ) );
 			add_action( 'rthrm_after_calendar', array( $this, 'render_calendar' ) );
 		}
 
-		/**
-		 * Setter method for screen id
-		 */
-		function add_screen_id( $screen_id ) {
-			$this->screen_id = $screen_id;
-		}
+	    /**
+	     *  Save leave data
+	     */
+        function save_leave_data() {
+			global $rt_hrm_module, $rt_hrm_leave;
 
-		/**
-		 * Prints the jQuery script to initiliase the metaboxes
-		 * Called on admin_footer-*
-		 */
-		function footer_scripts() { ?>
-
-		<?php }
-
-        /**
-         * Actions to be taken prior to page loading. This is after headers have been set.
-         * Handle calendar page event
-         * call on load-$hook
-         */
-        function page_actions() {
-			global $rt_hrm_module, $rt_hrm_attributes;
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthrm-'.$rt_hrm_module->post_type.'-calendar' && isset( $_REQUEST['form-add-leave'] ) && !empty( $_REQUEST['form-add-leave'] ) ) {
-
+	        if( ! isset( $_REQUEST['rthrm_save_leave_nonce'] ) || ! wp_verify_nonce( $_REQUEST['rthrm_save_leave_nonce'], 'rthrm_save_leave' ) )
+		        return;
 				$leave_meta = $_REQUEST['post'];
 				$author =  $leave_meta['leave-user-id'];
 
-				$args = array(
-					'meta_query' => array(
-						array(
-							'key' => 'leave-user-id',
-							'value' => $leave_meta['leave-user-id']
-						),
-						array(
-							'key' => 'leave-start-date',
-							'value' => $leave_meta['leave-start-date']
-						)
-					),
-					'post_type' => $rt_hrm_module->post_type,
-					'post_status' => 'any',
-					'nopaging' => true
-				);
+	        /**
+	         * Check user is not on leave
+	         */
+	        $leave_start_date = date_create_from_format( 'd/m/Y', $leave_meta['leave-start-date'] );
+            $leave_ids = $rt_hrm_leave->rthrm_check_user_on_leave( $leave_meta['leave-user-id'], $leave_start_date->format('Y-m-d') );
+            if( empty( $leave_ids ) && isset( $leave_meta['leave-end-date'] ) ) {
+	            $leave_end_date = date_create_from_format( 'd/m/Y', $leave_meta['leave-end-date'] );
+	            $leave_ids = $rt_hrm_leave->rthrm_check_user_on_leave( $leave_meta['leave-user-id'], $leave_end_date->format('Y-m-d') );
+            }
 
-				$posts = get_posts($args);
+            if( ! empty( $leave_ids ) ) {
 
-				if ( count($posts) > 0 ) {
-					wp_redirect( admin_url( 'edit.php?post_type=rt_leave&page=rthrm-rt_leave-calendar&message_id=1' ) );
-					die();
-				}
+	            $message = 'Leave for the day(Period) has been already applied';
 
-				$newLeave = array(
-					'comment_status' =>  'closed',
-					'post_author' => $author,
-					'post_date' => date('Y-m-d H:i:s'),
-					'post_content' => $leave_meta['leave_description'],
-					'post_status' => 'pending',
-					'post_title' => ' Leave: ' . $leave_meta['leave-user'],
-					'post_type' => $rt_hrm_module->post_type,
-				);
+	            if( is_admin() ) {
+		            echo '<div id="message" class="error notice is-dismissible"><p>' .  $message  . '</p></div>';
+	            } else {
+					bp_core_add_message( $message, 'error' );
+	            }
+	            return;
+            }
 
-				$newLeaveID = wp_insert_post($newLeave);
+			$newLeave = array(
+				'comment_status' =>  'closed',
+				'post_author' => $author,
+				'post_date' => date('Y-m-d H:i:s'),
+				'post_content' => $leave_meta['leave_description'],
+				'post_status' => 'pending',
+				'post_title' => ' Leave: ' . $leave_meta['leave-user'],
+				'post_type' => $rt_hrm_module->post_type,
+			);
 
-				if ( isset( $leave_meta[  Rt_HRM_Attributes::$leave_type_tax] ) ) {
-					wp_set_post_terms( $newLeaveID, implode( ',', array_map( 'intval', $leave_meta[Rt_HRM_Attributes::$leave_type_tax] ) ), Rt_HRM_Attributes::$leave_type_tax );
-				}
+			$newLeaveID = wp_insert_post($newLeave);
 
-				if ( isset( $_POST['leave_quota_use'] ) ) {
-					update_post_meta( $newLeaveID, '_rt_hrm_leave_quota_use', $_POST['leave_quota_use'] );
-				}
-
-                update_post_meta( $newLeaveID, 'leave-user', $leave_meta['leave-user'] );
-                update_post_meta( $newLeaveID, 'leave-user-id', $leave_meta['leave-user-id'] );
-                update_post_meta( $newLeaveID, 'leave-duration', $leave_meta['leave-duration'] );
-				update_post_meta( $newLeaveID, 'leave-start-date', $leave_meta['leave-start-date'] );
-
-				if ( $leave_meta['leave-duration'] == 'other' ){
-					update_post_meta( $newLeaveID, 'leave-end-date', $leave_meta['leave-end-date'] );
-				}else {
-					delete_post_meta( $newLeaveID, 'leave-end-date' );
-				}
-
-                do_action( 'save_leave', $newLeaveID );
-
-                wp_redirect( admin_url( 'edit.php?post_type=rt_leave&page=rthrm-rt_leave-calendar' ) );
-				die();
+			if ( isset( $leave_meta[  Rt_HRM_Attributes::$leave_type_tax] ) ) {
+				wp_set_post_terms( $newLeaveID, implode( ',', array_map( 'intval', $leave_meta[Rt_HRM_Attributes::$leave_type_tax] ) ), Rt_HRM_Attributes::$leave_type_tax );
 			}
+
+			if ( isset( $_POST['leave_quota_use'] ) ) {
+				update_post_meta( $newLeaveID, '_rt_hrm_leave_quota_use', $_POST['leave_quota_use'] );
+			}
+
+            update_post_meta( $newLeaveID, 'leave-user', $leave_meta['leave-user'] );
+            update_post_meta( $newLeaveID, 'leave-user-id', $leave_meta['leave-user-id'] );
+            update_post_meta( $newLeaveID, 'leave-duration', $leave_meta['leave-duration'] );
+			update_post_meta( $newLeaveID, 'leave-start-date', $leave_meta['leave-start-date'] );
+
+			if ( $leave_meta['leave-duration'] == 'other' ){
+				update_post_meta( $newLeaveID, 'leave-end-date', $leave_meta['leave-end-date'] );
+			}else {
+				delete_post_meta( $newLeaveID, 'leave-end-date' );
+			}
+
+            do_action( 'save_leave', $newLeaveID );
+
+	        $message = __( 'Leave has been scheduled', RT_HRM_TEXT_DOMAIN );
+	        if( !is_admin() ) {
+		        bp_core_add_message( $message );
+	        } else {
+		        echo '<div id="message" class="updated notice is-dismissible"><p>' .  $message  . '</p></div>';
+	        }
+
 		}
 
 

@@ -1,5 +1,5 @@
 <?php 
-global $rt_calendar, $rt_hrm_module, $rt_hrm_bp_hrm_calendar, $rt_hrm_bp_hrm_module, $post;
+global $rt_calendar, $rt_hrm_module, $rt_hrm_bp_hrm_module, $post;
 $rt_leave_id = $_GET['rt_leave_id'];
 $is_user_change_allowed = 1;
 

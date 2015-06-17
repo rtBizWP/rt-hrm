@@ -639,9 +639,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			/* Metaboxes for dashboard widgets */
 			add_action( 'add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
 
-			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Calendar' ), __( 'Calendar' ), $author_cap, 'rthrm-'.$this->post_type.'-calendar', array( $this, 'calendar_view' ) );
-			$rt_hrm_calendar->add_screen_id( $screen_id );
-			$rt_hrm_calendar->setup_calendar();
+			 add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Calendar' ), __( 'Calendar' ), $author_cap, 'rthrm-'.$this->post_type.'-calendar', array( $this, 'calendar_view' ) );
+		//	$rt_hrm_calendar->add_screen_id( $screen_id );
+			//$rt_hrm_calendar->setup_calendar();
 		}
 
         /**

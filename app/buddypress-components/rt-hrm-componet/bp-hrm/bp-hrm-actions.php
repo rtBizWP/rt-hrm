@@ -157,7 +157,7 @@ function calender_leave_add(){
 
 
 }
-add_action( 'bp_actions', 'calender_leave_add' );
+//add_action( 'bp_actions', 'calender_leave_add' );
 
 function rt_bp_hrm_ask_for_more(){
     $allowed_component = array( BP_ACTIVITY_SLUG );

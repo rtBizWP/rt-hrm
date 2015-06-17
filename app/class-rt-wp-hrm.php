@@ -76,11 +76,10 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 
                 if (  current_user_can( $author_cap ) ) {
 
-                    global $rt_hrm_bp_hrm, $rt_hrm_bp_hrm_calendar,
+                    global $rt_hrm_bp_hrm,
                            $rt_hrm_bp_hrm_frontend, $rt_hrm_bp_hrm_module;
 
                     $rt_hrm_bp_hrm = new Rt_Hrm_Bp_Hrm();
-                    $rt_hrm_bp_hrm_calendar = new Rt_Hrm_Bp_Hrm_Calendar();
                     $rt_hrm_bp_hrm_frontend = new Rt_Hrm_Bp_Hrm_Frontend();
                     if ( ! is_admin() )
                         $rt_hrm_bp_hrm_module = new Rt_HRM_Bp_Hrm_Module();
@@ -152,7 +151,7 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
             $rt_hrm_acl = new Rt_HRM_ACL();
 			$rt_hrm_settings = new Rt_HRM_Settings();
 			$rt_hrm_dashboard = new Rt_HRM_Dashboard();
-			$rt_hrm_calendar = new Rt_HRM_Calendar();
+			$rt_hrm_calendar = Rt_HRM_Calendar::factory();
 			$rt_calendar = new RT_Calendar();
 			$rt_hrm_help = new Rt_Hrm_Help();
 

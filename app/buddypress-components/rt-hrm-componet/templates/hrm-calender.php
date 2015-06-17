@@ -1,7 +1,6 @@
 <?php
-global $rt_calendar, $rt_hrm_module, $rt_hrm_bp_hrm_calendar;
+global $rt_calendar, $rt_hrm_module, $rt_hrm_calendar;
 
 /* render data into calendar */
-$rt_hrm_bp_hrm_calendar->setup_calendar();
-$rt_hrm_bp_hrm_calendar->ui( $rt_hrm_bp_hrm_calendar->post_type );
+$rt_hrm_calendar->ui( $rt_hrm_bp_hrm_calendar->post_type );
 ?>

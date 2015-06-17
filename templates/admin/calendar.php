@@ -9,9 +9,6 @@
 <div class="wrap">
 
 	<?php 
-		if ( is_admin() ){
-			screen_icon();
-		}
 
     $author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
 
@@ -20,6 +17,8 @@
 
 
 	?>
+
+	<?php if( ! is_admin() ): ?>
 	<div class="list-heading">
         <div class="large-10 columns list-title">
             <h4><?php $menu_label = Rt_HRM_Settings::$settings['menu_label']; echo $menu_label . __( ' Calendar' ); ?></h4>
@@ -30,35 +29,20 @@
             <?php } ?>
         </div>
     </div>
+	<?php else: ?>
+		<h2><?php  _e( ' Calendar', RT_HRM_TEXT_DOMAIN ) ?></h2>
+	<?php endif; ?>
 
-	<div id="poststuff">
+		<div id="calendar-widgets">
+			<div id="calendar-container"></div>
+		</div>
 
-		<?php
-			if ( isset( $_REQUEST[ 'message_id' ] ) ) {
-				switch ( $_REQUEST['message_id'] ) {
-					case 1:
-						echo '<div class="error"><p>'.__( 'You can not apply for leave twice on the same day.' ).'</p></div>';
-						break;
-				}
-			}
-		?>
-
-		<div id="calendar-widgets" class="metabox-holder">
-
-
-			<div id="calendar-container" class="postbox-container">
-
-			</div>
-
-		</div> <!-- #post-body -->
 		<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 		<?php do_action( 'rthrm_after_calendar' ); ?>
 
-	</div> <!-- #poststuff -->
-
 </div><!-- .wrap -->
 <form id="form-add-leave" method="POST" class="leave-insert-dialog" action="">
-	<?php /* translators: %1$s = post type name, %2$s = date */ ?>
+	<?php wp_nonce_field( 'rthrm_save_leave', 'rthrm_save_leave_nonce' ); ?>
 	<div class="title">
 		<h2 class="title-form-add-leave <?php if ( is_admin() ){ echo "left"; }?>"><?php echo __( 'Schedule a Leave', 'edit-flow' ); ?>
             <a class="button right" id="close_popup"><?php _e( 'X' ) ?></a></h2>

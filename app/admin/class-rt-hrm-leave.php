@@ -100,7 +100,7 @@ class Rt_HRM_Leave {
 		global $wpdb;
 
 		$query = "SELECT postmeta.post_id FROM {$wpdb->postmeta} postmeta INNER JOIN {$wpdb->posts} posts ON" .
-		         " posts.ID = postmeta.post_id WHERE posts.post_status = 'approved' AND" .
+		         " posts.ID = postmeta.post_id WHERE" .
 		         " postmeta.meta_key = 'leave-user-id' AND postmeta.meta_value = '{$wp_user_id}'";
 
 		$result = $wpdb->get_col( $query );
