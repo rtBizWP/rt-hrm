@@ -116,9 +116,7 @@ class Rt_HRM_Leave {
 
 		global $wpdb, $rt_person;
 
-		$editor_cap = rt_biz_get_access_role_cap( 'edit_rt_leaves' );
-
-		if (  !current_user_can( $editor_cap ) ) {
+		if (  !current_user_can( 'edit_rt_leaves' ) ) {
 
 			return array(
 					'relation' => 'OR',

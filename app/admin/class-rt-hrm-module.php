@@ -334,7 +334,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 		}
 
 		function render_paid_leave_quota( $post ) {
-			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+
 			$leave_quota = $this->get_user_leave_quota( $post->ID );
 			?>
 			<script>

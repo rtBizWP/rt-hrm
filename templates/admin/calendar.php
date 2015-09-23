@@ -10,8 +10,6 @@
 
 	<?php 
 
-    $author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
-
 	$employee_id = get_current_user_id();
 	$employee_name = rtbiz_get_user_displayname( $employee_id );
 

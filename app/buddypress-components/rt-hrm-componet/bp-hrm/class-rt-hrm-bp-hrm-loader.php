@@ -137,8 +137,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 
             // Link to user HRM
             $hrm_link = trailingslashit( $user_domain . $this->slug );
-			$author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
-			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+
 		    if ( current_user_can( 'edit_rt_leave' ) || current_user_can( 'edit_rt_leaves' ) ) {
 				// Add the subnav items
 				$sub_nav[] = array(
@@ -192,9 +191,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					$user_domain   = bp_loggedin_user_domain();
 					$hrm_link = trailingslashit( $user_domain . $this->slug );
 					
-					$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
-					$author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
-					
+
 					if ( current_user_can( 'edit_rt_leaves' ) ) {
 						$this->sub_nav_items = array(
 			                array(
@@ -240,8 +237,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 		
 					
 					foreach ($this->sub_nav_items as $item) {
-						$author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
-						$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+
 					    if ( ! current_user_can( 'edit_rt_leave' ) && ! current_user_can( 'edit_rt_leaves' ) )
 							continue;
 						// Add a few subnav items

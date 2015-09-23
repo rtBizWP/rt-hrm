@@ -151,8 +151,6 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			$post = get_post( $rt_leave_id );
 			// print_r($post);
 
-
-			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
 			if (  !current_user_can( 'edit_rt_leaves' ) && get_current_user_id() != intval( $post->post_author )) {
 
 				return;
@@ -308,7 +306,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 				</div>
 				<?php
 				$display_checkbox = false;
-				if ( current_user_can( 'edit_rt_leaves' ) {
+				if ( current_user_can( 'edit_rt_leaves' ) ) {
 					$display_checkbox = true;
 				} else {
 					$leave_quota = $this->get_user_remaining_leaves( get_current_user_id() );

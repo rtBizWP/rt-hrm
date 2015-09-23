@@ -106,9 +106,7 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
             $flag = true;
             $used_function = array(
                 'rt_biz_sanitize_module_key',
-                'rt_biz_get_access_role_cap',
                 'rt_biz_get_person_for_wp_user',
-                'rt_biz_get_access_role_cap',
                 'rt_biz_get_wp_user_for_person',
                 'rt_biz_search_employees'
             );

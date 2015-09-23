@@ -81,14 +81,13 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				return;
 			}
 
-			$admin_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'admin' );
 
 			$settings_page = self::$titan_obj->createAdminPanel( array(
 				'name' => __( 'Settings' ), // Name of the menu item
 				'title' => __( 'Settings' ), // Title displayed on the top of the admin panel
 				'parent' => 'edit.php?post_type='.$rt_hrm_module->post_type, // id of parent, if blank, then this is a top level menu
 				'id' => RT_WP_HRM::$settings_page_slug, // Unique ID of the menu item
-				'capability' => $admin_cap, // User role
+				'capability' => 'manage_hrm_settings', // User role
 				'position' => 10, // Menu position. Can be used for both top and sub level menus
 				'use_form' => true, // If false, options will not be wrapped in a form
 			) );

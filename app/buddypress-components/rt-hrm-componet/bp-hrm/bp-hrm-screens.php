@@ -60,7 +60,6 @@ function bp_hrm_requests() {
 }
 
 function load_requests_template() {
-	$cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
      if ( ! current_user_can( 'edit_rt_leaves' ) ) {
       echo 'You do not have sufficient permissions to access this page';
             return false;
