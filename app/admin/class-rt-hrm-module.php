@@ -65,7 +65,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          */
         public function __construct() {
 			$this->get_custom_statuses();
-            $this->get_custom_menu_order();
+
 			add_action( 'init', array( $this, 'init_hrm' ) );
 			$this->hooks();
 		}
@@ -77,7 +77,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			$this->get_custom_labels();
 			$this->register_custom_post( $this->menu_position );
 			$this->register_custom_statuses();
-                         
+			$this->get_custom_menu_order();
 		}
 
         /**
@@ -88,7 +88,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
             add_action( 'save_leave', array( $this, 'leave_add_bp_activity' ), 10 ,1 );
 
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
-            add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
+            add_filter( 'custom_menu_order', array($this, 'custom_pages_order'), 10 );
 			add_action( 'add_meta_boxes', array( $this, 'add_custom_metabox' ) );
 			add_action( 'save_post', array( $this, 'save_leave_meta' ), 1, 2);
 			add_action( 'wp_before_admin_bar_render', array( $this, 'add_leave_custom_status' ), 11);
@@ -344,7 +344,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			</script>
 			<div class="form-field">
 				<label><strong><?php _e( 'Paid Leaves Quota : ' ); ?></strong></label>
-				<?php if ( current_user_can( $editor_cap ) ) { ?>
+				<?php if ( current_user_can( 'edit_rt_leaves' ) ) { ?>
 				<input name="rt_hrm_leave_quota" type="number" step="1" min="0" value="<?php echo $leave_quota; ?>" />
 				<?php } else { ?>
 				<span><?php echo $leave_quota; ?></span>
@@ -628,20 +628,11 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          * Register custom pages for HRM module [ Dashboard | Calendar ]
          */
         function register_custom_pages() {
-			global $rt_hrm_dashboard, $rt_hrm_calendar;
-
-            $author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
-
-//			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Dashboard' ), __( 'Dashboard' ), $author_cap, 'rthrm-'.$this->post_type.'-dashboard', array( $this, 'dashboard' ) );
-//			$rt_hrm_dashboard->add_screen_id( $screen_id );
-//			$rt_hrm_dashboard->setup_dashboard();
 
 			/* Metaboxes for dashboard widgets */
 			add_action( 'add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
 
-			 add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Calendar' ), __( 'Calendar' ), $author_cap, 'rthrm-'.$this->post_type.'-calendar', array( $this, 'calendar_view' ) );
-		//	$rt_hrm_calendar->add_screen_id( $screen_id );
-			//$rt_hrm_calendar->setup_calendar();
+			add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Calendar' ), __( 'Calendar' ), 'access_hrm_calender', 'rthrm-'.$this->post_type.'-calendar', array( $this, 'calendar_view' ) );
 		}
 
         /**
@@ -654,8 +645,8 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 
 			$args = array(
 				'labels' => $this->labels,
-				'public' => true, // Made true to check on front-end
-				'publicly_queryable' => true, // Made true to check on front-end
+				'public' => false, // Made true to check on front-end
+				'publicly_queryable' => false, // Made true to check on front-end
 				'show_ui' => true, // Show the UI in admin panel
 				'menu_icon' => $logo_url,
 				'menu_position' => $menu_position,
@@ -740,15 +731,39 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
          */
         function get_custom_menu_order(){
             global $rt_hrm_attributes;
-            $this->custom_menu_order = array(
-                'rthrm-'.$this->post_type.'-dashboard',
-                'rthrm-'.$this->post_type.'-calendar',
-                'edit.php?post_type='.$this->post_type,
-                'post-new.php?post_type='.$this->post_type,
-				'edit-tags.php?taxonomy='.Rt_HRM_Attributes::$leave_type_tax.'&amp;post_type='.$this->post_type,
-				RT_WP_HRM::$settings_page_slug,
-                $rt_hrm_attributes->attributes_page_slug,
-            );
+
+			if( current_user_can( 'manage_hrm' ) ) {
+				$this->custom_menu_order[] = 'rthrm-'.$this->post_type.'-dashboard';
+			}
+
+			if( current_user_can('access_hrm_calender') ) {
+				$this->custom_menu_order[] = 'rthrm-'.$this->post_type.'-calendar';
+			}
+
+			if( current_user_can('edit_rt_leaves') ) {
+				$this->custom_menu_order[] = 'edit.php?post_type='.$this->post_type;
+				$this->custom_menu_order[] = 'post-new.php?post_type='.$this->post_type;
+			}
+
+			if( current_user_can('manage_leave_type') ) {
+				$this->custom_menu_order[] = 'edit-tags.php?taxonomy='.Rt_HRM_Attributes::$leave_type_tax.'&amp;post_type='.$this->post_type;
+			}
+
+			if( current_user_can('manage_hrm_settings') ) {
+				$this->custom_menu_order[] = RT_WP_HRM::$settings_page_slug;
+			}
+
+
+
+//			$this->custom_menu_order = array(
+//                'rthrm-'.$this->post_type.'-dashboard',
+//                'rthrm-'.$this->post_type.'-calendar',
+//                'edit.php?post_type='.$this->post_type,
+//                'post-new.php?post_type='.$this->post_type,
+//				'edit-tags.php?taxonomy='.Rt_HRM_Attributes::$leave_type_tax.'&amp;post_type='.$this->post_type,
+//				RT_WP_HRM::$settings_page_slug,
+//                $rt_hrm_attributes->attributes_page_slug,
+//            );
         }
 
         /**
@@ -779,7 +794,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
         function custom_pages_order( $menu_order ) {
             global $submenu;
             global $menu;
-            if ( isset( $submenu['edit.php?post_type='.$this->post_type] ) && !empty( $submenu['edit.php?post_type='.$this->post_type] ) ) {
+
+			if ( isset( $submenu['edit.php?post_type='.$this->post_type] ) && !empty( $submenu['edit.php?post_type='.$this->post_type] ) ) {
+
                 $module_menu = $submenu['edit.php?post_type='.$this->post_type];
                 $is_employee = false;
                 $current_employee = ( get_current_user_id( ) );
@@ -787,9 +804,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                     $is_employee = true;
                 }
                 unset($submenu['edit.php?post_type='.$this->post_type]);
-                if ( ! $is_employee && ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ){
+                if ( ! $is_employee && ! current_user_can( 'edit_rt_leaves' ) ){
                     unset($menu[$this->menu_position]);
-                }elseif ( $is_employee || current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ){
+                }elseif ( $is_employee || current_user_can( 'edit_rt_leaves' ) ){
                     $new_index=5;
                     foreach( $this->custom_menu_order as $item ){
                         foreach ( $module_menu as $p_key => $menu_item ){
@@ -853,13 +870,13 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			<table class="form-table rthrm-container">
 				<tbody>
 
-                    <tr  <?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { ?>  class="hide" <?php } ?>>
+                    <tr  <?php if ( ! current_user_can( 'edit_rt_leaves' ) ) { ?>  class="hide" <?php } ?>>
                         <td class="tblkey">
                             <label class="label">Employee Name</label>
                         </td>
                         <td class="tblval">
-                            <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; }  ?>">
-                            <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->ID; }  ?>">
+                            <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( 'edit_rt_leaves' ) ) { echo $current_employee->post_title; }  ?>">
+                            <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( 'edit_rt_leaves' ) ) { echo $current_employee->ID; }  ?>">
                         </td>
                     </tr>
 					<tr>
@@ -940,7 +957,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					</tr>
 				<?php
 				$display_checkbox = false;
-				if ( current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) {
+				if ( current_user_can( 'edit_rt_leaves' ) ) {
 					$display_checkbox = true;
 				} else {
 					$leave_quota = $this->get_user_remaining_leaves( get_current_user_id() );
@@ -960,7 +977,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 							<label>Remaining leave</label>
 						</td>
                                     <td>
-                                        <label id="remaining-leave-quota"><?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
+                                        <label id="remaining-leave-quota"><?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( 'edit_rt_leaves' ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
 					</td>
 				</tr>
 				</tbody>
@@ -1018,7 +1035,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			if( isset( $post) && !empty( $post ) && $post->post_type == $this->post_type){
 				$option='';
                 $custom_statuses = $this->get_custom_statuses();
-                if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) {
+                if ( ! current_user_can( 'edit_rt_leaves' ) ) {
                     unset($custom_statuses['approved']);
                     unset($custom_statuses['rejected']);
                 }

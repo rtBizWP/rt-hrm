@@ -53,12 +53,12 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 		}
 
 		function init_leave_type() {
-            $editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
+
             $caps = array(
-				'manage_terms' => $editor_cap,
-				'edit_terms'   => $editor_cap,
-				'delete_terms' => $editor_cap,
-				'assign_terms' => $editor_cap,
+				'manage_terms' => 'manage_leave_type',
+				'edit_terms'   => 'edit_leave_type',
+				'delete_terms' => 'delete_leave_type',
+				'assign_terms' => 'assign_leave_type',
             );
 
 			global $rt_hrm_module;

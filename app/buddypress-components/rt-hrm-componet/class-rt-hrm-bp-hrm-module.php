@@ -153,7 +153,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 
 
 			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
-			if (  !current_user_can( $editor_cap ) && get_current_user_id() != intval( $post->post_author )) {
+			if (  !current_user_can( 'edit_rt_leaves' ) && get_current_user_id() != intval( $post->post_author )) {
 
 				return;
 			}
@@ -178,7 +178,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 					$pstatus = "";
 				$post_status = $this->get_custom_statuses();
 				$custom_status_flag = true;
-				$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) );
+				$user_edit = current_user_can( 'edit_rt_leaves' );
 				?>
 	                <?php if( $user_edit ) { ?>
 	                    <select id="rtpm_post_status" class="right" name="post[post_status]">
@@ -204,11 +204,11 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 			</div>
 			<br /><br /> -->
 				<input type="hidden" autocomplete="off" id="title" value="rt_leave" size="30" name="post_type" readonly="readonly">
-				<div class="row <?php if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { ?>  hide<?php } ?>">
+				<div class="row <?php if ( ! current_user_can( 'edit_rt_leaves' ) ) { ?>  hide<?php } ?>">
 					<div class="large-6 columns">
 						<label>Employee Name <small class="required"> *</small></label>
-						<input type="text" id="leave-user" size="" name="post[leave-user]" required="required" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->post_title; }  ?>">
-						<input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $current_employee->ID; }  ?>">
+						<input type="text" id="leave-user" size="" name="post[leave-user]" required="required" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( 'edit_rt_leaves' ) ) { echo $current_employee->post_title; }  ?>">
+						<input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( 'edit_rt_leaves' ) ) { echo $current_employee->ID; }  ?>">
 
 					</div>
 					<div class="large-6 columns">
@@ -220,7 +220,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 							$pstatus = "";
 						$post_status = $this->get_custom_statuses();
 						$custom_status_flag = true;
-						$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) );
+						$user_edit = current_user_can( 'edit_rt_leaves' );
 						?>
 						<?php if( $user_edit ) { ?>
 	                    <select id="rtpm_post_status  class="right" name="post[post_status]">
@@ -308,7 +308,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 				</div>
 				<?php
 				$display_checkbox = false;
-				if ( current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) {
+				if ( current_user_can( 'edit_rt_leaves' ) {
 					$display_checkbox = true;
 				} else {
 					$leave_quota = $this->get_user_remaining_leaves( get_current_user_id() );
@@ -322,7 +322,7 @@ if( !class_exists( 'Rt_HRM_Bp_Hrm_Module' ) ) {
 						<label><input type="checkbox" id="leave_quota_use" name="leave_quota_use" value="1" <?php checked( '1', $leave_quota_use ); ?> /> <?php _e( 'Use Paid Leaves that are left ?' ); ?></label>
 					</div>
 					<div class="large-6 columns">
-						<label id="remaining-leave-quota">Remaining leave: &nbsp;&nbsp;<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' ) ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
+						<label id="remaining-leave-quota">Remaining leave: &nbsp;&nbsp;<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( 'edit_rt_leaves' ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
 					</div>
 
 				</div>

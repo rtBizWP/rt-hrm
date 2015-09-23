@@ -139,7 +139,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
             $hrm_link = trailingslashit( $user_domain . $this->slug );
 			$author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
 			$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
-		    if ( current_user_can( $author_cap ) || current_user_can( $editor_cap ) ) {
+		    if ( current_user_can( 'edit_rt_leave' ) || current_user_can( 'edit_rt_leaves' ) ) {
 				// Add the subnav items
 				$sub_nav[] = array(
 					'name'            =>  __( 'Calender' ),
@@ -160,7 +160,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			}
                         
 			// Add a few subnav items
-			if ( current_user_can( $editor_cap ) ) {
+			if ( current_user_can( 'edit_rt_leaves' ) ) {
 
 				
 				$sub_nav[] = array(
@@ -195,7 +195,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
 					$author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
 					
-					if ( current_user_can( $editor_cap ) ) {
+					if ( current_user_can( 'edit_rt_leaves' ) ) {
 						$this->sub_nav_items = array(
 			                array(
 			                    'name' => __( 'Calender' ),
@@ -213,7 +213,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			                    'screen_function' => 'bp_hrm_requests',
 			                )                
 			            );
-					} else if ( current_user_can( $author_cap ) ) {
+					} else if ( current_user_can( 'edit_rt_leave' ) ) {
 						$this->sub_nav_items = array(
 			                array(
 			                    'name' => __( 'Calender' ),
@@ -242,7 +242,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					foreach ($this->sub_nav_items as $item) {
 						$author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
 						$editor_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'editor' );
-					    if ( ! current_user_can( $author_cap ) && ! current_user_can( $editor_cap ) )
+					    if ( ! current_user_can( 'edit_rt_leave' ) && ! current_user_can( 'edit_rt_leaves' ) )
 							continue;
 						// Add a few subnav items
 						$wp_admin_nav[] = array(

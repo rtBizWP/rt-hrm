@@ -197,7 +197,7 @@
 							<?php the_title();;
 							// edit_post_link('Edit', '<br /><span>', '</span>&nbsp;&#124;');
 
-                            if (  current_user_can( $editor_cap ) || get_current_user_id() != intval( get_the_author_meta('ID') )) {
+                            if (  current_user_can( 'edit_rt_leaves' ) || get_current_user_id() != intval( get_the_author_meta('ID') )) {
 
                                 printf( __('<br /><span><a href="%s">Edit</a></span>&nbsp;&#124;'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ) ) ) );
                                 printf( __('<span><a href="%s">View</a></span>'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ) ) ) );

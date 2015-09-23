@@ -72,9 +72,8 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
 
             if( function_exists('bp_is_active') ) {
 
-                $author_cap = rt_biz_get_access_role_cap( RT_HRM_TEXT_DOMAIN, 'author' );
 
-                if (  current_user_can( $author_cap ) ) {
+                if (  current_user_can( 'manage_hrm' ) ) {
 
                     global $rt_hrm_bp_hrm,
                            $rt_hrm_bp_hrm_frontend, $rt_hrm_bp_hrm_module;

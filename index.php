@@ -4,7 +4,7 @@
   	Plugin Name: Voxxi Plus HRM
 	Plugin URI: http://voxxi.me
 	Description: Human Resource Management for the Voxxi
-	Version: 0.0.1
+	Version: 2.0
 	Author: Voxxi
 	Author URI: http://voxxi.me
 	License: No License
@@ -15,7 +15,7 @@ if ( !defined( 'RT_HRM_VERSION' ) ) {
     /**
      * define HRM version
      */
-    define( 'RT_HRM_VERSION', '0.0.1' );
+    define( 'RT_HRM_VERSION', '2.0' );
 }
 if ( !defined( 'RT_HRM_TEXT_DOMAIN' ) ) {
     /**
@@ -119,3 +119,8 @@ function rt_hrm_check_dependency() {
 	}
 }
 add_action( 'init', 'rt_hrm_check_dependency' );
+
+function rt_hrm_plugins_loaded() {
+	include_once('app/class-rt-hrm-install.php');
+}
+add_action( 'plugins_loaded', 'rt_hrm_plugins_loaded' );
