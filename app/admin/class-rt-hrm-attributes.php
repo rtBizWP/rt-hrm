@@ -54,13 +54,6 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 
 		function init_leave_type() {
 
-            $caps = array(
-				'manage_terms' => 'manage_leave_type',
-				'edit_terms'   => 'edit_leave_type',
-				'delete_terms' => 'delete_leave_type',
-				'assign_terms' => 'assign_leave_type',
-            );
-
 			global $rt_hrm_module;
 			$name = self::$leave_type_tax;
 			$label = $this->leave_type_tax_label = __( 'Leave Type' );
@@ -88,10 +81,14 @@ if( !class_exists( 'Rt_HRM_Attributes' ) ) {
 					'show_ui' 					=> true,
 					'show_admin_column'			=> false,
 					'query_var' 				=> true,
-					'capabilities'				=> $caps,
 					'show_in_nav_menus' 		=> true,
-					//'rewrite' 					=> array( 'slug' => $product_attribute_base . sanitize_title( $tax->attribute_name ), 'with_front' => false, 'hierarchical' => $hierarchical ),
 					'rewrite'					=> true,
+					'capabilities'          => array(
+						'manage_terms' => 'hrm_manage_leave_types',
+						'edit_terms'   => 'hrm_edit_leave_types',
+						'delete_terms'  => 'hrm_delete_leave_types',
+						'assign_terms' => 'hrm_assign_leave_types',
+					),
 				)
 			);
 		}

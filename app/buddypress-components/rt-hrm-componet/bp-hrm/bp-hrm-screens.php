@@ -54,13 +54,13 @@ function load_leave_template() {
 }
 
 function bp_hrm_requests() {
-	if ( current_user_can( 'edit_rt_leaves' ) ) {
+	if ( current_user_can( 'hrm_edit_leaves' ) ) {
 		add_action('bp_template_content','load_requests_template');
 	}
 }
 
 function load_requests_template() {
-     if ( ! current_user_can( 'edit_rt_leaves' ) ) {
+     if ( ! current_user_can( 'hrm_edit_leaves' ) ) {
       echo 'You do not have sufficient permissions to access this page';
             return false;
     }

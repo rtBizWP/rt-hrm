@@ -344,7 +344,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			</script>
 			<div class="form-field">
 				<label><strong><?php _e( 'Paid Leaves Quota : ' ); ?></strong></label>
-				<?php if ( current_user_can( 'edit_rt_leaves' ) ) { ?>
+				<?php if ( current_user_can( 'hrm_edit_leaves' ) ) { ?>
 				<input name="rt_hrm_leave_quota" type="number" step="1" min="0" value="<?php echo $leave_quota; ?>" />
 				<?php } else { ?>
 				<span><?php echo $leave_quota; ?></span>
@@ -391,7 +391,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				<?php $extn_array = explode('.', $doc->guid); $extn = $extn_array[count($extn_array) - 1]; ?>
 				<div class="doc-item" data-doc-id="<?php echo $doc->ID; ?>">
 					<img class="rthrm_doc_img" height="20px" width="20px" src="<?php echo RT_HRM_URL . "app/assets/file-type/" . $extn . ".png"; ?>" />
-					<a target="_blank" href="<?php echo get_edit_post_link( $doc->ID ); ?>" title="<?php echo $doc->post_content; ?>" class="rt_hrm_doc_title"><?php echo $doc->post_title; ?></a>
+					<a target="_blank" href="<?php echo get_hrm_edit_rt_leave_link( $doc->ID ); ?>" title="<?php echo $doc->post_content; ?>" class="rt_hrm_doc_title"><?php echo $doc->post_title; ?></a>
 					<a target="_blank" href="<?php echo wp_get_attachment_url($doc->ID); ?>" class="rthrm_download_doc"><?php _e( 'Download' );?></a>
 					<?php if ( $is_user_change_allowed ) { ?>
 					<a href="#" class="rthrm_delete_doc">x</a>
@@ -632,7 +632,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			/* Metaboxes for dashboard widgets */
 			add_action( 'add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
 
-			add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Calendar' ), __( 'Calendar' ), 'access_hrm_calender', 'rthrm-'.$this->post_type.'-calendar', array( $this, 'calendar_view' ) );
+			add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Calendar' ), __( 'Calendar' ), 'hrm_calender', 'rthrm-'.$this->post_type.'-calendar', array( $this, 'calendar_view' ) );
 		}
 
         /**
@@ -648,11 +648,28 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 				'public' => false, // Made true to check on front-end
 				'publicly_queryable' => false, // Made true to check on front-end
 				'show_ui' => true, // Show the UI in admin panel
+				'show_in_menu' => true, // Show the UI in admin panel
 				'menu_icon' => $logo_url,
 				'menu_position' => $menu_position,
 				'supports' => array('title','comments','author'),
-				'capability_type' => $this->post_type,
                 'map_meta_cap' => true,
+				'capabilities' => array(
+					'edit_post'              => "hrm_edit_leave",
+					'read_post'              => "hrm_read_leave",
+					'delete_post'            => "hrm_delete_leave",
+					'edit_posts'             => "hrm_edit_leaves",
+					'edit_others_posts'      => "hrm_edit_others_leaves",
+					'publish_posts'          => "hrm_publish_leaves",
+					'read_private_posts'     => "hrm_read_private_leaves",
+					'read'                   => "hrm_read_leaves",
+					'delete_posts'           => "hrm_delete_leaves",
+					'delete_private_posts'   => "hrm_delete_private_leaves",
+					'delete_published_posts' => "hrm_delete_published_leaves",
+					'delete_others_posts'    => "hrm_delete_others_leaves",
+					'edit_private_posts'     => "hrm_edit_private_leaves",
+					'edit_published_posts'   => "hrm_edit_published_leaves",
+					'create_posts'           => "hrm_create_leaves"
+				)
 			);
 
 			if( is_multisite() && is_main_site() )
@@ -732,38 +749,26 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
         function get_custom_menu_order(){
             global $rt_hrm_attributes;
 
-			if( current_user_can( 'manage_hrm' ) ) {
+			if( current_user_can( 'voxxi_hrm' ) ) {
 				$this->custom_menu_order[] = 'rthrm-'.$this->post_type.'-dashboard';
 			}
 
-			if( current_user_can('access_hrm_calender') ) {
+			if( current_user_can('hrm_calender') ) {
 				$this->custom_menu_order[] = 'rthrm-'.$this->post_type.'-calendar';
 			}
 
-			if( current_user_can('edit_rt_leaves') ) {
+			if( current_user_can('hrm_edit_leaves') ) {
 				$this->custom_menu_order[] = 'edit.php?post_type='.$this->post_type;
 				$this->custom_menu_order[] = 'post-new.php?post_type='.$this->post_type;
 			}
 
-			if( current_user_can('manage_leave_type') ) {
+			if( current_user_can('hrm_manage_leave_types') ) {
 				$this->custom_menu_order[] = 'edit-tags.php?taxonomy='.Rt_HRM_Attributes::$leave_type_tax.'&amp;post_type='.$this->post_type;
 			}
 
-			if( current_user_can('manage_hrm_settings') ) {
+			if( current_user_can('hrm_settings') ) {
 				$this->custom_menu_order[] = RT_WP_HRM::$settings_page_slug;
 			}
-
-
-
-//			$this->custom_menu_order = array(
-//                'rthrm-'.$this->post_type.'-dashboard',
-//                'rthrm-'.$this->post_type.'-calendar',
-//                'edit.php?post_type='.$this->post_type,
-//                'post-new.php?post_type='.$this->post_type,
-//				'edit-tags.php?taxonomy='.Rt_HRM_Attributes::$leave_type_tax.'&amp;post_type='.$this->post_type,
-//				RT_WP_HRM::$settings_page_slug,
-//                $rt_hrm_attributes->attributes_page_slug,
-//            );
         }
 
         /**
@@ -804,9 +809,9 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
                     $is_employee = true;
                 }
                 unset($submenu['edit.php?post_type='.$this->post_type]);
-                if ( ! $is_employee && ! current_user_can( 'edit_rt_leaves' ) ){
+                if ( ! $is_employee && ! current_user_can( 'hrm_edit_leaves' ) ){
                     unset($menu[$this->menu_position]);
-                }elseif ( $is_employee || current_user_can( 'edit_rt_leaves' ) ){
+                }elseif ( $is_employee || current_user_can( 'hrm_edit_leaves' ) ){
                     $new_index=5;
                     foreach( $this->custom_menu_order as $item ){
                         foreach ( $module_menu as $p_key => $menu_item ){
@@ -870,13 +875,13 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			<table class="form-table rthrm-container">
 				<tbody>
 
-                    <tr  <?php if ( ! current_user_can( 'edit_rt_leaves' ) ) { ?>  class="hide" <?php } ?>>
+                    <tr  <?php if ( ! current_user_can( 'hrm_edit_leaves' ) ) { ?>  class="hide" <?php } ?>>
                         <td class="tblkey">
                             <label class="label">Employee Name</label>
                         </td>
                         <td class="tblval">
-                            <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( 'edit_rt_leaves' ) ) { echo $current_employee->post_title; }  ?>">
-                            <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( 'edit_rt_leaves' ) ) { echo $current_employee->ID; }  ?>">
+                            <input type="text" id="leave-user" size="30" name="post[leave-user]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" autocomplete="off" class="rt-form-text user-autocomplete" value="<?php if ( isset( $leave_user ) && !empty( $leave_user ) ) { echo $leave_user[0]; } elseif ( ! current_user_can( 'hrm_edit_leaves' ) ) { echo $current_employee->post_title; }  ?>">
+                            <input type="hidden" id="leave-user-id" name="post[leave-user-id]" placeholder="<?php echo esc_attr( _x( 'Employee Name', 'User Name') ); ?>" class="rt-form-text" value="<?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $leave_user_id[0]; } elseif ( ! current_user_can( 'hrm_edit_leaves' ) ) { echo $current_employee->ID; }  ?>">
                         </td>
                     </tr>
 					<tr>
@@ -957,7 +962,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					</tr>
 				<?php
 				$display_checkbox = false;
-				if ( current_user_can( 'edit_rt_leaves' ) ) {
+				if ( current_user_can( 'hrm_edit_leaves' ) ) {
 					$display_checkbox = true;
 				} else {
 					$leave_quota = $this->get_user_remaining_leaves( get_current_user_id() );
@@ -977,7 +982,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 							<label>Remaining leave</label>
 						</td>
                                     <td>
-                                        <label id="remaining-leave-quota"><?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( 'edit_rt_leaves' ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
+                                        <label id="remaining-leave-quota"><?php if ( isset( $leave_user_id ) && !empty( $leave_user_id ) ) { echo $this->get_user_remaining_leaves( $leave_user_id[0] ) ; } elseif ( ! current_user_can( 'hrm_edit_leaves' ) ) { echo $this->get_user_remaining_leaves( $current_employee->ID ); }  ?></label>
 					</td>
 				</tr>
 				</tbody>
@@ -1035,7 +1040,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 			if( isset( $post) && !empty( $post ) && $post->post_type == $this->post_type){
 				$option='';
                 $custom_statuses = $this->get_custom_statuses();
-                if ( ! current_user_can( 'edit_rt_leaves' ) ) {
+                if ( ! current_user_can( 'hrm_edit_leaves' ) ) {
                     unset($custom_statuses['approved']);
                     unset($custom_statuses['rejected']);
                 }
@@ -1187,7 +1192,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // tod0:need to call in correct way
 					
 					$get_post_status = get_post_status();
-					$get_edit_post_link = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ), $rt_hrm_bp_hrm->get_component_root_url(). 'leave/' ) );
+					$get_hrm_edit_rt_leave_link = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ), $rt_hrm_bp_hrm->get_component_root_url(). 'leave/' ) );
 					$get_permalink = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ), $rt_hrm_bp_hrm->get_component_root_url(). 'leave/' ) );
 					
 					
@@ -1196,7 +1201,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 						"leavestartdate" => $leave_start_date_value, 
 						"leaveenddate" => $leave_end_date_value, 
 						"poststatus" => $get_post_status,
-						"editpostlink" => $get_edit_post_link,
+						"editpostlink" => $get_hrm_edit_rt_leave_link,
 						"permalink" => $get_permalink,
 						"max_num_pages" => $max_num_pages,
 						"order" => $order,
@@ -1303,7 +1308,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 					$rt_leave_type_list = wp_get_post_terms( $get_the_id, 'rt-leave-type', array("fields" => "names")); // todo:need to call in correct way
 					
 					$get_post_status = get_post_status();
-					$get_edit_post_link = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ), $rt_hrm_bp_hrm->get_component_root_url(). 'requests/' ) );
+					$get_hrm_edit_rt_leave_link = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ), $rt_hrm_bp_hrm->get_component_root_url(). 'requests/' ) );
 					$get_permalink = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ), $rt_hrm_bp_hrm->get_component_root_url(). 'requests/' ) );
 					$get_delete_post_link = esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'deletepost' ), $rt_hrm_bp_hrm->get_component_root_url(). 'requests/' ) );
 					
@@ -1315,7 +1320,7 @@ if( !class_exists( 'Rt_HRM_Module' ) ) {
 						"leaveenddate" => $leave_end_date_value, 
 						"poststatus" => $get_post_status,
 						"approver"  => $approver,
-						"editpostlink" => $get_edit_post_link,
+						"editpostlink" => $get_hrm_edit_rt_leave_link,
 						"permalink" => $get_permalink,
 						"deletepostlink" => $get_delete_post_link,
 						"max_num_pages" => $max_num_pages,

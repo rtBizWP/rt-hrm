@@ -138,7 +138,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
             // Link to user HRM
             $hrm_link = trailingslashit( $user_domain . $this->slug );
 
-		    if ( current_user_can( 'edit_rt_leave' ) || current_user_can( 'edit_rt_leaves' ) ) {
+		    if ( current_user_can( 'hrm_edit_leave' ) || current_user_can( 'hrm_edit_leaves' ) ) {
 				// Add the subnav items
 				$sub_nav[] = array(
 					'name'            =>  __( 'Calender' ),
@@ -159,7 +159,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			}
                         
 			// Add a few subnav items
-			if ( current_user_can( 'edit_rt_leaves' ) ) {
+			if ( current_user_can( 'hrm_edit_leaves' ) ) {
 
 				
 				$sub_nav[] = array(
@@ -192,7 +192,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					$hrm_link = trailingslashit( $user_domain . $this->slug );
 					
 
-					if ( current_user_can( 'edit_rt_leaves' ) ) {
+					if ( current_user_can( 'hrm_edit_leaves' ) ) {
 						$this->sub_nav_items = array(
 			                array(
 			                    'name' => __( 'Calender' ),
@@ -210,7 +210,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			                    'screen_function' => 'bp_hrm_requests',
 			                )                
 			            );
-					} else if ( current_user_can( 'edit_rt_leave' ) ) {
+					} else if ( current_user_can( 'hrm_edit_leave' ) ) {
 						$this->sub_nav_items = array(
 			                array(
 			                    'name' => __( 'Calender' ),
@@ -238,7 +238,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					
 					foreach ($this->sub_nav_items as $item) {
 
-					    if ( ! current_user_can( 'edit_rt_leave' ) && ! current_user_can( 'edit_rt_leaves' ) )
+					    if ( ! current_user_can( 'hrm_edit_leave' ) && ! current_user_can( 'hrm_edit_leaves' ) )
 							continue;
 						// Add a few subnav items
 						$wp_admin_nav[] = array(

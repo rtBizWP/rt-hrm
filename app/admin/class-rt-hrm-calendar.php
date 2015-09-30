@@ -144,7 +144,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 
 			$arg = array(
 				'post_type' => $post_type,
-				'is_hrm_manager' => current_user_can( 'edit_rt_leaves' ),
+				'is_hrm_manager' => current_user_can( 'hrm_edit_leaves' ),
 			);
 			rthrm_get_template( 'admin/calendar.php', $arg );
 		}
@@ -217,7 +217,7 @@ if ( !class_exists( 'Rt_HRM_Calendar' ) ) {
 			$rt_calendar->setDomElement("#calendar-container");
 			$rt_calendar->setPopupElement(".leave-insert-dialog");
 			$rt_calendar->setEvent($event);
-			$is_editor = current_user_can( 'edit_rt_leaves' );
+			$is_editor = current_user_can( 'hrm_edit_leaves' );
 			$rt_calendar->render_calendar( $is_editor );
 		}
 

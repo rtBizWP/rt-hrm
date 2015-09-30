@@ -73,7 +73,7 @@ if ( ! class_exists( 'RT_WP_HRM' ) ) {
             if( function_exists('bp_is_active') ) {
 
 
-                if (  current_user_can( 'manage_hrm' ) ) {
+                if (  current_user_can( 'voxxi_hrm' ) ) {
 
                     global $rt_hrm_bp_hrm,
                            $rt_hrm_bp_hrm_frontend, $rt_hrm_bp_hrm_module;

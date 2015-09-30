@@ -87,7 +87,7 @@ if ( ! class_exists( 'Rt_HRM_Settings' ) ) {
 				'title' => __( 'Settings' ), // Title displayed on the top of the admin panel
 				'parent' => 'edit.php?post_type='.$rt_hrm_module->post_type, // id of parent, if blank, then this is a top level menu
 				'id' => RT_WP_HRM::$settings_page_slug, // Unique ID of the menu item
-				'capability' => 'manage_hrm_settings', // User role
+				'capability' => 'hrm_settings', // User role
 				'position' => 10, // Menu position. Can be used for both top and sub level menus
 				'use_form' => true, // If false, options will not be wrapped in a form
 			) );

@@ -177,13 +177,13 @@ $totalPage = $max_num_pages =  $the_query->max_num_pages;
 					<td class="person-avatar"><?php echo get_avatar( $rt_biz_contact_user_id, 32 ); ?> </td>
 					<td>
 						<?php echo $leave_user_value;
-						if ( current_user_can( 'edit_rt_leaves' ) ) {
+						if ( current_user_can( 'hrm_edit_leaves' ) ) {
 							printf( __('<br /><span><a href="%s">Edit</a></span>&nbsp;&#124;'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'edit' ) ) ) );
 						}
 						printf( __('<span><a href="%s">View</a></span>'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'view' ) ) ) );
 						?>
 						<?php
-						if ( current_user_can( 'edit_rt_leaves' ) ) {
+						if ( current_user_can( 'hrm_edit_leaves' ) ) {
 						?>
 						&#124;&nbsp;<?php printf( __('<span><a class="deletepostlink" href="%s">Delete</a></span>'), esc_url( add_query_arg( array( 'rt_leave_id'=> $get_the_id, 'action'=>'deletepost' ) ) ) );?>
 						<?php

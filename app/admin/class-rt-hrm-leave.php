@@ -116,7 +116,7 @@ class Rt_HRM_Leave {
 
 		global $wpdb, $rt_person;
 
-		if (  !current_user_can( 'edit_rt_leaves' ) ) {
+		if (  !current_user_can( 'hrm_edit_leaves' ) ) {
 
 			return array(
 					'relation' => 'OR',

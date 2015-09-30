@@ -108,79 +108,88 @@ class Rt_HRM_Install {
             $wp_roles = new WP_Roles();
         }
 
-        $capabilities = self::get_core_capabilities();
+        // Customer role
+        add_role( 'voxxi_hrm_no_roles', __( 'Voxxi HRM No Roles', 'rtbiz' ), array(
+            'read' 						=> true,
+        ) );
 
-        foreach ( $capabilities as $cap_group ) {
-            foreach ( $cap_group as $cap ) {
-                $wp_roles->add_cap( 'administrator', $cap );
-            }
-        }
-    }
+        add_role( 'voxxi_hrm_author', __( 'Voxxi HRM Author', 'rtbiz' ), array(
 
-    /**
-     * Get capabilities for rthrm - these are assigned to admin/shop manager during installation or reset
-     *
-     * @return array
-     */
-    private static function get_core_capabilities() {
-        $capabilities = array();
+            'hrm_calender' => true,
 
-        $capabilities['core'] = array(
-            'manage_hrm',
-            'access_hrm_calender',
-            'manage_hrm_settings',
-            'manage_hrm_attributes'
+            //leave caps
+            'hrm_delete_leaves'  => true,
+            'hrm_delete_published_leaves'  => true,
+            'hrm_edit_leaves' => true,
+            'hrm_edit_leaves' => true,
+            'hrm_edit_published_leaves' => true,
+            'hrm_publish_leaves' => true,
+            'hrm_read_leave' => true,
+            'hrm_upload_files' => true,
+            'hrm_create_leaves' => true,
+            'voxxi_hrm' => true,
+        ) );
+
+        add_role( 'voxxi_hrm_editor', __( 'Voxxi HRM Editor', 'rtbiz' ), array(
+
+            'hrm_calender' => true,
+
+            'hrm_delete_others_leaves' => true,
+            'hrm_delete_private_leaves' => true,
+            'hrm_delete_published_leaves' => true,
+            'hrm_edit_others_leaves' => true,
+            'hrm_edit_leaves' => true,
+            'hrm_edit_leave' => true,
+            'hrm_edit_private_leaves' => true,
+            'hrm_edit_published_leaves' => true,
+            'hrm_publish_leaves' => true,
+            'hrm_read_leaves' => true,
+            'hrm_read_private_leaves' => true,
+            'hrm_unfiltered_html' => true,
+            'hrm_upload_files' => true,
+            'hrm_create_leaves' => true,
+            'voxxi_hrm' => true,
+
+        ) );
+
+        $capabilities = array(
+
+            'hrm_calender' => true,
+
+            'hrm_delete_others_leaves' => true,
+            'hrm_delete_private_leaves' => true,
+            'hrm_delete_published_leaves' => true,
+            'hrm_edit_others_leaves' => true,
+            'hrm_edit_leaves' => true,
+            'hrm_edit_leave' => true,
+            'hrm_edit_private_leaves' => true,
+            'hrm_edit_published_leaves' => true,
+            'hrm_publish_leaves' => true,
+            'hrm_read_leaves' => true,
+            'hrm_read_private_leaves' => true,
+            'hrm_unfiltered_html' => true,
+            'hrm_upload_files' => true,
+            'hrm_create_leaves' => true,
+
+            'hrm_manage_leave_types' => true,
+            'hrm_edit_leave_types' => true,
+            'hrm_delete_leave_types' => true,
+            'hrm_assign_leave_types' => true,
+
+
+            'hrm_settings' => true,
+            'voxxi_hrm' => true,
+            'hrm_attributes' => true,
         );
 
-        $capability_types = array( 'rt_leave' );
+        // Shop manager role
+        add_role( 'voxxi_hrm_administrator', __( 'Voxxi HRM Administrator', 'rtbiz' ), $capabilities );
 
-        foreach ( $capability_types as $capability_type ) {
 
-            $capabilities[ $capability_type ] = array(
-                // Post type
-                "edit_{$capability_type}",
-                "read_{$capability_type}",
-                "delete_{$capability_type}",
-                "edit_{$capability_type}s",
-                "edit_others_{$capability_type}s",
-                "publish_{$capability_type}s",
-                "read_private_{$capability_type}s",
-                "delete_{$capability_type}s",
-                "delete_private_{$capability_type}s",
-                "delete_published_{$capability_type}s",
-                "delete_others_{$capability_type}s",
-                "edit_private_{$capability_type}s",
-                "edit_published_{$capability_type}s",
-            );
+        foreach ( $capabilities as $cap ) {
+            $wp_roles->add_cap( 'administrator', $cap );
         }
-
-        return $capabilities;
     }
-
-    /**
-     * rthrm_remove_roles function.
-     */
-    public static function remove_roles() {
-        global $wp_roles;
-
-        if ( ! class_exists( 'WP_Roles' ) ) {
-            return;
-        }
-
-        if ( ! isset( $wp_roles ) ) {
-            $wp_roles = new WP_Roles();
-        }
-
-        $capabilities = self::get_core_capabilities();
-
-        foreach ( $capabilities as $cap_group ) {
-            foreach ( $cap_group as $cap ) {
-                $wp_roles->remove_cap( 'administrator', $cap );
-            }
-        }
-
-    }
-
 }
 
 Rt_HRM_Install::init();
