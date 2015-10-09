@@ -159,7 +159,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 			}
                         
 			// Add a few subnav items
-			if ( current_user_can( 'hrm_edit_leaves' ) ) {
+			if ( current_user_can( 'hrm_leave_approve' ) ) {
 
 				
 				$sub_nav[] = array(

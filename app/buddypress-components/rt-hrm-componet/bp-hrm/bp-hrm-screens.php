@@ -60,10 +60,10 @@ function bp_hrm_requests() {
 }
 
 function load_requests_template() {
-     if ( ! current_user_can( 'hrm_edit_leaves' ) ) {
-      echo 'You do not have sufficient permissions to access this page';
-            return false;
-    }
+//     if ( ! current_user_can( 'hrm_edit_leaves' ) ) {
+//      echo 'You do not have sufficient permissions to access this page';
+//            return false;
+//    }
 	 
 	if ( isset( $_GET['action'] ) && ( $_GET['action'] == 'view' || $_GET['action'] == 'edit' || $_GET['action'] == 'update' || $_GET['action'] == 'deletepost' ) ) {
           include  RT_HRM_BP_HRM_PATH.'/templates/hrm-requests-edit.php';

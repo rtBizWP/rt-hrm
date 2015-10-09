@@ -133,6 +133,7 @@ class Rt_HRM_Install {
         add_role( 'voxxi_hrm_editor', __( 'Voxxi HRM Editor', 'rtbiz' ), array(
 
             'hrm_calender' => true,
+            'hrm_leave_approve' => true,
 
             'hrm_delete_others_leaves' => true,
             'hrm_delete_private_leaves' => true,
@@ -155,6 +156,7 @@ class Rt_HRM_Install {
         $capabilities = array(
 
             'hrm_calender' => true,
+            'hrm_leave_approve' => true,
 
             'hrm_delete_others_leaves' => true,
             'hrm_delete_private_leaves' => true,
@@ -175,7 +177,6 @@ class Rt_HRM_Install {
             'hrm_edit_leave_types' => true,
             'hrm_delete_leave_types' => true,
             'hrm_assign_leave_types' => true,
-
 
             'hrm_settings' => true,
             'voxxi_hrm' => true,
