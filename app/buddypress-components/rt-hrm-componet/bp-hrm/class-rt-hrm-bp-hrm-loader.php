@@ -141,7 +141,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 		    if ( current_user_can( 'hrm_edit_leave' ) || current_user_can( 'hrm_edit_leaves' ) ) {
 				// Add the subnav items
 				$sub_nav[] = array(
-					'name'            =>  __( 'Calender' ),
+					'name'            =>  __( 'Calendar' ),
 					'slug'            => 'calender',
 					'parent_url'      => $hrm_link,
 					'parent_slug'     =>  $this->id,
@@ -195,7 +195,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					if ( current_user_can( 'hrm_edit_leaves' ) ) {
 						$this->sub_nav_items = array(
 			                array(
-			                    'name' => __( 'Calender' ),
+			                    'name' => __( 'Calendar' ),
 			                    'slug'  => 'calender',
 			                    'screen_function' => 'bp_hrm_calender',
 			                ),
@@ -213,7 +213,7 @@ if ( !class_exists( 'Rt_Hrm_Bp_Hrm_Loader' ) ) {
 					} else if ( current_user_can( 'hrm_edit_leave' ) ) {
 						$this->sub_nav_items = array(
 			                array(
-			                    'name' => __( 'Calender' ),
+			                    'name' => __( 'Calendar' ),
 			                    'slug'  => 'calender',
 			                    'screen_function' => 'bp_hrm_calender',
 			                )  ,
