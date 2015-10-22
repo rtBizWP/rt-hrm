@@ -50,7 +50,10 @@ if( !class_exists( 'Rt_Hrm_Bp_Hrm_Frontend' ) ) {
 				//wp_enqueue_style('rthrm-frontend-css', RT_HRM_URL . 'app/assets/css/hrm-frontend.css', false, RT_HRM_VERSION, 'all');
 
 
-                if( bp_is_current_action('calender') ){
+                if( bp_is_current_action('calender') ||
+	                ( bp_current_action('leave') && isset( $_REQUEST['action'] ) && 'addnew' === $_REQUEST['action'] )
+                ) {
+
                     wp_enqueue_style( 'rt-bp-hrm-calender-css', RT_HRM_BP_HRM_URL . 'assets/css/calender.css', false );
 
                 }else{
