@@ -15,7 +15,7 @@ if ( !defined( 'RT_HRM_VERSION' ) ) {
     /**
      * define HRM version
      */
-    define( 'RT_HRM_VERSION', '1.0' );
+    define( 'RT_HRM_VERSION', '1.1' );
 }
 if ( !defined( 'RT_HRM_TEXT_DOMAIN' ) ) {
     /**
