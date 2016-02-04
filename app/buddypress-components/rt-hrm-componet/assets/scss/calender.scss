@@ -45,9 +45,6 @@
   .hide{
     display: none;
   }
-  form {
-	  margin: 0 0 7rem;
-  }
 }
 
 .ui-autocomplete{
@@ -62,4 +59,7 @@
     -webkit-box-shadow: 0px 0px 0px #dddddd !important;
 
   }
+}
+#rt-action-panel form {
+	margin: 0 0 7rem;
 }
